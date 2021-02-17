@@ -6,93 +6,55 @@
 #    By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/23 08:54:07 by vscabell          #+#    #+#              #
-#    Updated: 2021/02/09 23:30:53 by vscabell         ###   ########.fr        #
+#    Updated: 2021/02/17 22:56:52 by vscabell         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-SRCS_DIR = srcs
+SRC = ft_itoa.c	ft_putstr_fd.c	ft_strnstr.c \
+ 	ft_memccpy.c ft_split.c	ft_strrchr.c \
+	ft_atoi.c ft_memchr.c ft_strchr.c ft_strtrim.c \
+	ft_bzero.c ft_memcmp.c ft_strdup.c ft_substr.c \
+	ft_calloc.c	ft_memcpy.c	ft_strjoin.c ft_tolower.c \
+	ft_isalnum.c ft_memmove.c ft_strlcat.c ft_toupper.c \
+	ft_isalpha.c ft_memset.c ft_strlcpy.c \
+	ft_isascii.c ft_putchar_fd.c ft_strlen.c \
+	ft_isdigit.c ft_putendl_fd.c ft_strmapi.c \
+	ft_isprint.c ft_putnbr_fd.c	ft_strncmp.c \
+	ft_lstnew.c ft_lstadd_front.c ft_lstsize.c \
+	ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c \
+	ft_lstclear.c ft_lstiter.c ft_lstmap.c \
+	ft_isspace.c ft_strjoin_n_free.c ft_calloc_char.c \
+	ft_itoa_base.c ft_putnbr_base_fd.c ft_swap.c \
+	get_next_line.c
 
-OBJS_DIR = .objs
+OBJ_DIR =	objs
+OBJ =		$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))
 
-INCL_DIR = include
-
-SRCS = $(SRCS_DIR)/ft_itoa.c \
-	$(SRCS_DIR)/ft_putstr_fd.c \
-	$(SRCS_DIR)/ft_strnstr.c \
-	$(SRCS_DIR)/ft_memccpy.c \
-	$(SRCS_DIR)/ft_split.c	\
-	$(SRCS_DIR)/ft_strrchr.c \
-	$(SRCS_DIR)/ft_atoi.c \
-	$(SRCS_DIR)/ft_memchr.c \
-	$(SRCS_DIR)/ft_strchr.c \
-	$(SRCS_DIR)/ft_strtrim.c \
-	$(SRCS_DIR)/ft_bzero.c \
-	$(SRCS_DIR)/ft_memcmp.c \
-	$(SRCS_DIR)/ft_strdup.c \
-	$(SRCS_DIR)/ft_substr.c \
-	$(SRCS_DIR)/ft_calloc.c	\
-	$(SRCS_DIR)/ft_memcpy.c	\
-	$(SRCS_DIR)/ft_strjoin.c \
-	$(SRCS_DIR)/ft_tolower.c \
-	$(SRCS_DIR)/ft_isalnum.c \
-	$(SRCS_DIR)/ft_memmove.c \
-	$(SRCS_DIR)/ft_strlcat.c \
-	$(SRCS_DIR)/ft_toupper.c \
-	$(SRCS_DIR)/ft_isalpha.c \
-	$(SRCS_DIR)/ft_memset.c \
-	$(SRCS_DIR)/ft_strlcpy.c \
-	$(SRCS_DIR)/ft_isascii.c \
-	$(SRCS_DIR)/ft_putchar_fd.c \
-	$(SRCS_DIR)/ft_strlen.c \
-	$(SRCS_DIR)/ft_isdigit.c \
-	$(SRCS_DIR)/ft_putendl_fd.c \
-	$(SRCS_DIR)/ft_strmapi.c \
-	$(SRCS_DIR)/ft_isprint.c \
-	$(SRCS_DIR)/ft_putnbr_fd.c \
-	$(SRCS_DIR)/ft_strncmp.c \
-	$(SRCS_DIR)/ft_lstnew.c \
-	$(SRCS_DIR)/ft_lstadd_front.c \
-	$(SRCS_DIR)/ft_lstsize.c \
-	$(SRCS_DIR)/ft_lstlast.c \
-	$(SRCS_DIR)/ft_lstadd_back.c \
-	$(SRCS_DIR)/ft_lstdelone.c \
-	$(SRCS_DIR)/ft_lstclear.c \
-	$(SRCS_DIR)/ft_lstiter.c \
-	$(SRCS_DIR)/ft_lstmap.c \
-	$(SRCS_DIR)/ft_isspace.c \
-	$(SRCS_DIR)/ft_strjoin_n_free.c \
-	$(SRCS_DIR)/ft_calloc_char.c \
-	$(SRCS_DIR)/ft_itoa_base.c \
-	$(SRCS_DIR)/ft_swap.c \
-	$(SRCS_DIR)/get_next_line.c
-
-OBJS = $(patsubst $(SRCS_DIR)%.c, $(OBJS_DIR)%.o, $(SRCS))
+INCLUDES = .
 
 CC = clang
 
-HEAD = -I./$(INCL_DIR)
-
-CFLAGS = -Wall -Werror -Wextra -g -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -g
 
 RM = /bin/rm -rf
 
+$(NAME): $(OBJ)
+	ar rc $(NAME) $(OBJ)
+	ranlib $@
+
+$(OBJ_DIR)/%.o: %.c
+	mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -I $(INCLUDES) -c $< -o $@
+
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	@ ar rc $(NAME) $(OBJS)
-	@ ranlib $(NAME)
-
-$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
-	mkdir -p $(OBJS_DIR)
-	$(CC) $(CFLAGS) $(HEAD) -c $< -o $@
-
 clean:
-	@ $(RM) $(OBJS_DIR)
+	$(RM) $(OBJ_DIR)
 
 fclean: clean
-	@ $(RM) $(NAME)
+	$(RM) $(NAME)
 
 re: fclean all
 

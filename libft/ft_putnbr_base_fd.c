@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc_char.c                                   :+:      :+:    :+:   */
+/*   ft_putnbr_base_fd.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/08 10:10:34 by vscabell          #+#    #+#             */
-/*   Updated: 2020/07/28 16:36:08 by vscabell         ###   ########.fr       */
+/*   Created: 2020/08/04 16:48:19 by vscabell          #+#    #+#             */
+/*   Updated: 2020/08/11 03:50:36 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_calloc_char(size_t count, char c)
-{
-	unsigned char	*ptr;
-	size_t			mem;
+/*
+**	unsigned values
+*/
 
-	mem = count * sizeof(char);
-	if (!(ptr = malloc(mem + 1)))
-		return (NULL);
-	ft_memset(ptr, c, mem);
-	ptr[mem] = '\0';
-	return ((void *)ptr);
+void	ft_putnbr_base_fd(unsigned int n, char *base, int fd)
+{
+	size_t	size_base;
+
+	size_base = ft_strlen(base);
+	if (n / size_base > 0)
+		ft_putnbr_base_fd(n / size_base, base, fd);
+	ft_putchar_fd(base[n % size_base], fd);
 }

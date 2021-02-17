@@ -6,24 +6,19 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:11:03 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/09 22:52:37 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/17 23:00:14 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include <fcntl.h>
-# include <sys/types.h>
-# include <sys/uio.h>
 # include <unistd.h>
 # include <stdlib.h>
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 100
-# endif
-
+# define BUFFER_SIZE 50
 # define OPEN_MAX 20
+
 
 typedef struct		s_list
 {
@@ -80,6 +75,7 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 char				*ft_strjoin_n_free(char *s1, char *s2);
 void				*ft_calloc_char(size_t count, char c);
 char				*ft_itoa_base(int n, char *base, int size_base);
+void				ft_putnbr_base_fd(unsigned int n, char *base, int fd);
 void				ft_swap(int *a, int *b);
 int					get_next_line(int fd, char **line);
 

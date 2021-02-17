@@ -1,41 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_calloc_char.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/21 15:25:28 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/09 23:23:22 by vscabell         ###   ########.fr       */
+/*   Created: 2020/04/08 10:10:34 by vscabell          #+#    #+#             */
+/*   Updated: 2020/06/10 01:23:58 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int			ft_atoi(const char *str)
+void	*ft_calloc_char(size_t count, char c)
 {
-	long	n;
-	int		i;
-	int		sign;
+	void	*ptr;
+	size_t	mem;
 
-	i = 0;
-	sign = 1;
-	while (ft_isspace(str[i]) == 1)
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			sign = -1 * sign;
-		i++;
-	}
-	if (ft_isdigit(str[i]) == 0)
-		return (0);
-	n = str[i] - '0';
-	i++;
-	while (ft_isdigit(str[i]) == 1)
-	{
-		n = 10 * n + (str[i] - '0');
-		i++;
-	}
-	return (n * sign);
+	mem = count * sizeof(char);
+	if (!(ptr = malloc(mem + 1)))
+		return (NULL);
+	ft_memset(ptr, c, mem);
+	return (ptr);
 }
