@@ -1,47 +1,41 @@
 NAME = minishell
 
-SRCS = main.c
-OBJS = main.o
-
+SRCS_DIR =	srcs
+OBJS_DIR =	.objs
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-LIBFTPRINTF_DIR = ft_printf
-LIBFTPRINTF = $(LIBFTPRINTF_DIR)/libftprintf.a
+SRC_FILES =	main.c \
+			token.c
 
-HEAD = -I./$(LIBFT_DIR) -I./$(LIBFTPRINTF_DIR) -I./include
+SRCS = $(addprefix $(SRCS_DIR)/,$(SRC_FILES))
+OBJS = $(patsubst $(SRCS_DIR)%.c, $(OBJS_DIR)%.o, $(SRCS))
 
+HEAD = -I./$(LIBFT_DIR) -I./include
 CC = clang
-
-CFLAGS = -Wall -Werror -Wextra -w
-
-LFLAGS = -L ./$(LIBFT_DIR) -lft \
-		-L ./$(LIBFTPRINTF_DIR) -lftprintf
+CFLAGS = -Wall -Werror -Wextra -g -w
+LFLAGS = -L ./$(LIBFT_DIR) -lft
+RM = /bin/rm -rf
 
 all: $(NAME)
 
-$(NAME) : $(OBJS) $(LIBFT) $(LIBFTPRINTF_DIR)
+$(NAME) : $(OBJS) $(LIBFT)
 	$(CC) $(OBJS) $(HEAD) $(CFLAG) $(LFLAGS) -o $@
 
-%.o: %.c
-	$(CC) $(CFLAGS) $(HEAD) -c $< -o $@
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
+		mkdir -p $(OBJS_DIR)
+		$(CC) $(CFLAGS) $(HEAD) -c $< -o $@
 
 $(LIBFT):
 	make -C libft
 
-$(LIBFTPRINTF_DIR):
-	make -C ft_printf
-
-
 clean:
 	make clean -C $(LIBFT_DIR)
-	make clean -C $(LIBFTPRINTF_DIR)
-	rm -rf $(OBJS)
+	$(RM) $(OBJS)
 
 fclean: clean
 	make fclean -C $(LIBFT_DIR)
-	make fclean -C $(LIBFTPRINTF_DIR)
-	rm -rf $(NAME)
+	$(RM) $(NAME)
 
 re: fclean all
 
