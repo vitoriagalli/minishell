@@ -20,7 +20,6 @@ typedef struct	s_lexer {
 typedef struct	s_minishell {
 	t_token		*head;
 	char		*input;
-
 }				t_minishell;
 
 
@@ -28,6 +27,9 @@ t_token	*ft_tkn_new(char *data);
 void	tkn_add_front(t_token **head, t_token *new);
 void	tkn_add_back(t_token **head, t_token *new);
 int		ft_tkn_size(t_token *head);
+
+void	ft_free(char *elem);
+void	ft_tkn_clear(t_token **lst, void (*del)(char*));
 
 void	ft_tkn_print(t_token *head);
 

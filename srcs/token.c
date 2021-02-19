@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 22:21:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/19 01:53:13 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/19 14:37:16 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,25 @@ t_token	*ft_tkn_new(char *data)
 	return (elem);
 }
 
-void	tkn_add_front(t_token **head, t_token *new)
+void	tkn_add_front(t_token **lst, t_token *new)
 {
 	if (!new)
 		return ;
-	if (*head)
-		new->next = *head;
-	*head = new;
+	if (*lst)
+		new->next = *lst;
+	*lst = new;
 }
 
-void tkn_add_back(t_token **head, t_token *new)
+void tkn_add_back(t_token **lst, t_token *new)
 {
 
 	t_token *tmp;
 
-	tmp = *head;
+	tmp = *lst;
 	if (!new)
 		return ;
-	if (!*head)
-		*head = new;
+	if (!*lst)
+		*lst = new;
 	else
 	{
 		while (tmp->next)
@@ -52,34 +52,58 @@ void tkn_add_back(t_token **head, t_token *new)
 	}
 }
 
-int	ft_tkn_size(t_token *head)
+int	ft_tkn_size(t_token *lst)
 {
 	int		count;
 
 	count = 0;
-	while (head)
+	while (lst)
 	{
 		count++;
-		head = head->next;
+		lst = lst->next;
 	}
 	return (count);
 }
 
+void	ft_free(char *elem)
+{
+	free(elem);
+}
+
+
+void	ft_tkn_clear(t_token **lst, void (*del)(char*))
+{
+	t_token	*to_free;
+
+	to_free = *lst;
+	if (!*lst || !lst || !del)
+		return ;
+	while (to_free)
+	{
+		*lst = to_free->next;
+		del(to_free->data);
+		free(to_free);
+		to_free = *lst;
+	}
+	*lst = NULL;
+}
+
+
 
 // TEMPORARY FUNCTION
 
-void	ft_tkn_print(t_token *head)
+void	ft_tkn_print(t_token *lst)
 {
 	int count;
 
 	count = 0;
-	while (head)
+	while (lst)
 	{
 		ft_printf("--- element %i ----\n", count);
-		ft_printf("data: %s\n", head->data);
-		ft_printf("type: %i\n", head->type);
-		ft_printf("next: %p\n", head->next);
-		head = head->next;
+		ft_printf("data: %s\n", lst->data);
+		ft_printf("type: %i\n", lst->type);
+		ft_printf("next: %p\n", lst->next);
+		lst = lst->next;
 		count++;
 	}
 

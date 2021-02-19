@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 21:54:39 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/19 02:36:16 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/19 15:10:42 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,13 @@ char *read_line(void) {
 	return(line);
 }
 
-t_token create_and_atribute_tkn(t_minishell *sh, int i)
+t_token create_and_atribute_tkn(t_minishell *sh, int i, int *init_tkn)
 {
 	char *tkn_data;
-	static int init_tkn = 0;		// bugado, arrumar
 
-
-	tkn_data = ft_substr(sh->input, init_tkn, i - init_tkn);
+	tkn_data = ft_substr(sh->input, *init_tkn, i - *init_tkn);
 	tkn_add_back(&sh->head, ft_tkn_new(tkn_data));
-	init_tkn = i + 1;
+	*init_tkn = i + 1;
 }
 
 int lexer(t_minishell *sh) {
@@ -43,20 +41,22 @@ int lexer(t_minishell *sh) {
 	t_token	tk;
 	int i = 0;
 	int next_token;
+	int init_tkn;
 
+	init_tkn = 0;
 	next_token = TRUE;
 	while (sh->input[i])
 	{
 		if (sh->input[i] == '\'' || sh->input[i] == '\"' )
 			next_token = TRUE ? FALSE : TRUE;
 		else if (sh->input[i] == ' ' && next_token)
-			create_and_atribute_tkn(sh, i);
+			create_and_atribute_tkn(sh, i, &init_tkn);
 		i++;
 	}
-	create_and_atribute_tkn(sh, i);
-
+	create_and_atribute_tkn(sh, i, &init_tkn);
 
 	ft_tkn_print(sh->head);
+	ft_tkn_clear(&sh->head, ft_free);
 }
 
 
@@ -69,8 +69,7 @@ int	main(int argc, char **argv, char **envp) {
 		ft_printf(">");
 		sh.input = read_line();
 		lexer(&sh);
-		printf("%s\n", sh.input);
-
+		// printf("%s\n", sh.input);
+		free(sh.input);
 	}
-
 }
