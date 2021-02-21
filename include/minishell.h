@@ -7,6 +7,20 @@
 # define TRUE 1
 # define FALSE 0
 
+enum token_type {
+	CHAR_PIPE = '|',
+	CHAR_SEMICOLON = ';',
+	CHAR_ESCAPE = '\\',
+	CHAR_GREATER = '>',
+	CHAR_LESSER = '<',
+	CHAR_SPACE = ' ',
+	CHAR_TAB = '\t',
+	CHAR_SIMPLE_QUOTE = '\'',
+	CHAR_DOUBLE_QUOTE = '\"',
+	CHAR_NULL = 0,
+	TOKEN = -1,
+};
+
 typedef struct	s_token {
 	int			type;
 	char 		*data;
@@ -18,8 +32,9 @@ typedef struct	s_lexer {
 }				t_lexer;
 
 typedef struct	s_minishell {
-	t_token		*head;
 	char		*input;
+	t_token		*head;
+	int			n_tokens;
 }				t_minishell;
 
 
@@ -27,11 +42,14 @@ t_token	*ft_tkn_new(char *data);
 void	tkn_add_front(t_token **head, t_token *new);
 void	tkn_add_back(t_token **head, t_token *new);
 int		ft_tkn_size(t_token *head);
-
 void	ft_free(char *elem);
 void	ft_tkn_clear(t_token **lst, void (*del)(char*));
 
+
+int		lexer(t_minishell *sh);
+
 void	ft_tkn_print(t_token *head);
+
 
 
 #endif

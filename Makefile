@@ -6,7 +6,8 @@ LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 SRC_FILES =	main.c \
-			token.c
+			token.c \
+			lexer.c
 
 SRCS = $(addprefix $(SRCS_DIR)/,$(SRC_FILES))
 OBJS = $(patsubst $(SRCS_DIR)%.c, $(OBJS_DIR)%.o, $(SRCS))
