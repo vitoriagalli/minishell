@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 22:21:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/21 20:28:29 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/21 21:19:29 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ t_token	*ft_tkn_new(char *data)
 	if (!elem)
 		return (NULL);
 	elem->data = data;
-	elem->type = 0;
+	if (is_tk_char(data[0]))
+		elem->type = data[0];
+	else
+		elem->type = CHAR_GENERAL;
 	elem->next = NULL;
 	return (elem);
 }

@@ -6,49 +6,23 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 14:29:35 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/21 20:45:47 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/21 21:21:50 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		is_quote_char(int c)
-{
-	if (c == CHAR_SIMPLE_QUOTE ||
-		c == CHAR_DOUBLE_QUOTE)
-		return TRUE;
-	return FALSE;
-}
-
-int		is_space_char(int c)
-{
-	if (c == CHAR_SPACE ||
-		c == CHAR_SPACE)
-		return TRUE;
-	return FALSE;
-}
-
-int		is_job_char(int c)
-{
-	if (c == CHAR_PIPE ||
-		c == CHAR_SEMICOLON ||
-		c == CHAR_ESCAPE ||
-		c == CHAR_GREATER ||
-		c == CHAR_LESSER)
-		return TRUE;
-	return FALSE;
-}
 
 int		is_next_token(int c)
 {
-	int i;
-	int all_tk_type[11] = {CHAR_PIPE, CHAR_SEMICOLON, CHAR_ESCAPE, CHAR_GREATER,
+	char *tk_types[11] = {CHAR_PIPE, CHAR_SEMICOLON, CHAR_ESCAPE, CHAR_GREATER,
 	CHAR_LESSER, CHAR_SPACE, CHAR_TAB};
+	int i;
 
 	i = 0;
 	while (i < 11)
 	{
-		if (c == all_tk_type[i])
+		if (c == tk_types[i])
 			return TRUE;
 		i++;
 	}
@@ -103,8 +77,6 @@ int lexer(t_minishell *sh)
 {
 
 	sh->head = put_input_into_tkn_lst(sh->input);
-	// classify_type_of_token();
-
 	ft_tkn_print(sh->head);
 	ft_tkn_clear(&sh->head, ft_free);
 }
