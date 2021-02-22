@@ -8,7 +8,8 @@ LIBFT = $(LIBFT_DIR)/libft.a
 SRC_FILES =	main.c \
 			token_lst.c \
 			token_utils.c \
-			lexer.c
+			lexer.c \
+			buildin.c
 
 SRCS = $(addprefix $(SRCS_DIR)/,$(SRC_FILES))
 OBJS = $(patsubst $(SRCS_DIR)%.c, $(OBJS_DIR)%.o, $(SRCS))

@@ -2,10 +2,8 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include <stdbool.h>
 # include <unistd.h>
-
-# define TRUE 1
-# define FALSE 0
 
 enum token_type {
 	CHAR_PIPE = '|',
@@ -17,9 +15,9 @@ enum token_type {
 	CHAR_TAB = '\t',
 	CHAR_SIMPLE_QUOTE = '\'',
 	CHAR_DOUBLE_QUOTE = '\"',
-	CHAR_GENERAL = 0,
+	CHAR_NULL = 0,
+	CHAR_GENERAL = -1,
 };
-
 
 
 typedef struct	s_token {
@@ -28,16 +26,30 @@ typedef struct	s_token {
 	struct		s_token *next;
 }				t_token;
 
-// typedef struct	s_lexer {
-// 	int			i;
-// }				t_lexer;
 
-typedef struct	s_minishell {
+typedef struct	shell {
+	t_token		*tks;
+	// t_builtin	*buildtin;
 	char		*input;
-	t_token		*head;
-	char		all_tk_types[11];
-	int			n_tokens;
-}				t_minishell;
+	int			status;
+
+}				t_shell;
+
+
+
+
+// COMMANDS
+int	execute(char **args);
+int	ft_cd(char **args);
+int	ft_echo(char **args);
+int	ft_cd(char **args);
+int	ft_pwd(char **args);
+int	ft_export(char **args);
+int	ft_unset(char **args);
+int	ft_env(char **args);
+int	ft_exit(char **args);
+
+// TOKENS
 
 
 t_token	*ft_tkn_new(char *data);
@@ -52,7 +64,7 @@ int		is_quote_char(int c);
 int		is_space_char(int c);
 int		is_job_char(int c);
 
-int		lexer(t_minishell *sh);
+int		lexer(t_shell *sh);
 
 void	ft_tkn_print(t_token *head);
 
