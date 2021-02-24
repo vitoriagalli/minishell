@@ -5,6 +5,20 @@
 # include <stdbool.h>
 # include <unistd.h>
 
+typedef struct	s_token {
+	int			type;
+	char		*data;
+	struct		s_token *next;
+}				t_token;
+
+typedef struct	s_shell {
+	t_token		*tks;
+	char		*input;
+	int			status;
+}				t_shell;
+
+typedef int		(*builtin_funct)(t_shell *);
+
 enum token_type {
 	CHAR_PIPE = '|',
 	CHAR_SEMICOLON = ';',
@@ -19,35 +33,6 @@ enum token_type {
 	CHAR_GENERAL = -1,
 };
 
-
-typedef struct	s_token {
-	int			type;
-	char 		*data;
-	struct		s_token *next;
-}				t_token;
-
-
-typedef struct	shell {
-	t_token		*tks;
-	// t_builtin	*buildtin;
-	char		*input;
-	int			status;
-
-}				t_shell;
-
-
-
-
-// COMMANDS
-int	execute(char **args);
-int	ft_cd(char **args);
-int	ft_echo(char **args);
-int	ft_cd(char **args);
-int	ft_pwd(char **args);
-int	ft_export(char **args);
-int	ft_unset(char **args);
-int	ft_env(char **args);
-int	ft_exit(char **args);
 
 // TOKENS
 
@@ -68,6 +53,19 @@ int		lexer(t_shell *sh);
 
 void	ft_tkn_print(t_token *head);
 
+
+
+// COMMANDS - BUILDINS
+
+int	execute(t_shell *sh);
+int	ft_cd(t_shell *sh);
+int	ft_echo(t_shell *sh);
+int	ft_cd(t_shell *sh);
+int	ft_pwd(t_shell *sh);
+int	ft_export(t_shell *sh);
+int	ft_unset(t_shell *sh);
+int	ft_env(t_shell *sh);
+int	ft_exit(t_shell *sh);
 
 
 #endif
