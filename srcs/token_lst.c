@@ -6,13 +6,13 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 22:21:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/25 22:05:43 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/26 21:44:56 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*ft_tkn_new(char *data)
+t_token	*ft_tkn_new(char *data, int type)
 {
 	t_token	*elem;
 
@@ -20,10 +20,7 @@ t_token	*ft_tkn_new(char *data)
 	if (!elem)
 		return (NULL);
 	elem->data = data;
-	if (is_tk_char(data[0]))
-		elem->type = data[0];
-	else
-		elem->type = GENERAL;
+	elem->type = type;
 	elem->next = NULL;
 	return (elem);
 }

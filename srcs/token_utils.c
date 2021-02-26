@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 21:20:53 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/25 22:05:32 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/26 20:34:26 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int		is_job_char(int c)
 {
 	if (c == PIPE ||
 		c == SEMICOLON ||
-		c == ESCAPE ||
 		c == GREATER ||
 		c == LESSER)
 		return true;

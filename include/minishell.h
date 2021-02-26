@@ -44,7 +44,7 @@ enum token_type {
 // TOKENS
 
 
-t_token	*ft_tkn_new(char *data);
+t_token	*ft_tkn_new(char *data, int type);
 void	tkn_add_back(t_token **head, t_token *new);
 int		ft_tkn_size(t_token *head);
 void	ft_free(char *elem);

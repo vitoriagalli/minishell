@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 14:29:35 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/26 01:59:58 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/26 20:31:15 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,6 @@ int		lexer(t_shell *sh, char **envp)
 
 	// ft_env_print(sh->env);
 	// ft_env_clear(&sh->env, ft_free);
-	// ft_tkn_print(sh->tks);
+	ft_tkn_print(sh->tks);
 	// ft_tkn_clear(&sh->tks, ft_free);
 }

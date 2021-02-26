@@ -6,59 +6,97 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 22:12:38 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/25 22:13:29 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/26 22:33:21 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		is_next_token(int c)
+int		get_tk_state(char c, int *state)
 {
-	char	*tk_types[6] = {PIPE, SEMICOLON, GREATER,
-	LESSER, SPACE, TAB};
-	int i;
+	if (!state)
+		return (0);
+	if (c == '\'' || c == '\"')
+	{
+		if (*state == 1)
+			*state = 0;
+		else
+			*state = 1;
+	}
+	return (0);
+}
+
+void	handle_escape(char *data, int type)
+{
+	int		i;
 
 	i = 0;
-	while (i < 6)
+	if (type == DOUBLE_QUOTE)
 	{
-		if (c == tk_types[i])
-			return (true);
-		i++;
+		while (data[i])
+		{
+			if (data[i] == ESCAPE && data[i + 1] == ESCAPE)
+				ft_memmove(&data[i], &data[i + 1], ft_strlen(&data[i]));
+			i++;
+		}
 	}
-	return (false);
+	else if (type == GENERAL)
+	{
+		while (data[i])
+		{
+			if (data[i] == ESCAPE)
+			{
+				ft_memmove(&data[i], &data[i + 1], ft_strlen(&data[i]));
+				if (data[i + 1] == ESCAPE)
+					i++;
+			}
+			i++;
+		}
+	}
+}
+
+void	atribute_new_token(t_token **tk, char *input, int i, int len)
+{
+	char	*data;
+	t_token	*new_tk;
+	int		type;
+
+	if (len > 0)
+	{
+		data = ft_substr(input, i, len);
+		if (is_tk_char(data[0]))
+			type = data[0];
+		else
+			type = GENERAL;
+		handle_escape(data, type);
+		new_tk = ft_tkn_new(data, type);
+		tkn_add_back(tk, new_tk);
+	}
 }
 
 t_token	*put_input_into_tkn_lst(char *input)
 {
-	t_token	*tk = NULL;
-	int i = 0;
-	int init_tkn = 0;
-	int quote_state = false;
-	char *data;
+	t_token	*tk;
+	int		i;
+	int		init_tkn;
+	int		quote_state;
 
-	while (1)
+	tk = NULL;
+	i = 0;
+	init_tkn = 0;
+	quote_state = false;
+	while (input[i])
 	{
-		if (!input[i])
+		get_tk_state(input[i], &quote_state);
+		if ((is_job_char(input[i]) || is_space_char(input[i])) && !quote_state)
 		{
-			if (i > init_tkn)
-				tkn_add_back(&tk, ft_tkn_new(ft_substr(input, init_tkn, i - init_tkn)));
-			return (tk);
-		}
-		else if (is_quote_char(input[i]))
-		{
-			if (quote_state == true)
-				quote_state = false;
-			else
-				quote_state = true;
-		}
-		else if (is_next_token(input[i]) && quote_state == false)
-		{
-			if (i > init_tkn)
-				tkn_add_back(&tk, ft_tkn_new(ft_substr(input, init_tkn, i - init_tkn)));
+			atribute_new_token(&tk, input, init_tkn, i - init_tkn);
 			if (is_job_char(input[i]))
-				tkn_add_back(&tk, ft_tkn_new(ft_substr(input, i, 1)));
+				atribute_new_token(&tk, input, i, 1);
 			init_tkn = i + 1;
 		}
 		i++;
 	}
+	atribute_new_token(&tk, input, init_tkn, i - init_tkn);
+	return (tk);
 }
