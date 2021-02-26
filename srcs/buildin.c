@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:16:54 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/24 02:19:49 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/26 01:48:27 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 int		ft_echo(t_shell *sh)
 {
+	if (!(ft_strcmp(sh->tks->next->data, "-n")))
+		ft_putstr_fd(sh->tks->next->next->data, STDOUT_FILENO);
+	else
+		ft_putendl_fd(sh->tks->next->data, STDOUT_FILENO);
 	return (0);
 }
 

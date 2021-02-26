@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 21:54:39 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/24 02:20:37 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/26 01:47:44 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ int	main(int argc, char **argv, char **envp) {
 	{
 		ft_printf("$ ");
 		sh.input = read_line();
-		lexer(&sh);				// in progress
+		lexer(&sh, envp);				// in progress
 		execute(&sh);
-
-		free(sh.input);
 	}
 }

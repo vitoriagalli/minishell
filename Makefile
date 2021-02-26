@@ -6,6 +6,8 @@ LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 SRC_FILES =	main.c \
+			env_lst.c \
+			token.c \
 			token_lst.c \
 			token_utils.c \
 			lexer.c \

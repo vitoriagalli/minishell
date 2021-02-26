@@ -6,77 +6,72 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 14:29:35 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/23 01:04:25 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/26 01:59:58 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-int		is_next_token(int c)
+t_env	*put_env_into_lst(char **env_content)
 {
-	char *tk_types[11] = {CHAR_PIPE, CHAR_SEMICOLON, CHAR_ESCAPE, CHAR_GREATER,
-	CHAR_LESSER, CHAR_SPACE, CHAR_TAB};
-	int i;
+	t_env	*env = NULL;
+	char	**split;
 
-	i = 0;
-	while (i < 11)
+	while (*env_content)
 	{
-		if (c == tk_types[i])
-			return true;
-		i++;
+		split = ft_split(*env_content, '=');
+		env_add_back(&env, ft_env_new(split[0], split[1]));
+		*env_content++;
 	}
-	return false;
+	return env;
 }
 
-void	create_tk_atribute_data(int i, int init_tkn, char *input, t_token *tk)
+char		*check_for_env(t_env *env, char *data)
 {
-	char *data;
+	char	*new_tk_value = NULL;
+	char	*env_var = NULL;
+	char	*before_env = NULL;
+	char	*after_env = NULL;
 
-	data = ft_substr(input, init_tkn, i - init_tkn);
-	if (i > init_tkn)
-		tkn_add_back(&tk, ft_tkn_new(data));
-}
-
-t_token	*put_input_into_tkn_lst(char *input)
-{
-	t_token	*tk = NULL;
-	int i = 0;
-	int init_tkn = 0;
-	int quote_state = false;
-	char *data;
-
-	while (1)
+	while (env)
 	{
-		if (!input[i])
+		env_var = ft_strnstr(data, env->name, ft_strlen(data));
+		if (env_var && *(env_var-1) == '$')
 		{
-			if (i > init_tkn)
-				tkn_add_back(&tk, ft_tkn_new(ft_substr(input, init_tkn, i - init_tkn)));
-			return (tk);
+			before_env = ft_substr(data, 0, (env_var - data - 1));
+			after_env = ft_substr(env_var, ft_strlen(env->name), ft_strlen(env_var) - ft_strlen(env->name));
+			new_tk_value = ft_strjoin_n_free(before_env, ft_strjoin_n_free(ft_strdup(env->value), after_env));
+			free(data);
+			return (new_tk_value);
 		}
-		else if (is_quote_char(input[i]))
-		{
-			if (quote_state == true)
-				quote_state = false;
-			else
-				quote_state = true;
-		}
-		else if (is_next_token(input[i]) && quote_state == false)
-		{
-			if (i > init_tkn)
-				tkn_add_back(&tk, ft_tkn_new(ft_substr(input, init_tkn, i - init_tkn)));
-			if (is_job_char(input[i]))
-				tkn_add_back(&tk, ft_tkn_new(ft_substr(input, i, 1)));
-			init_tkn = i + 1;
-		}
-		i++;
+		env = env->next;
+	}
+	return (NULL);
+}
+
+void	substitute_tokens(t_shell *sh)
+{
+	char	*is_env;
+	t_token	*tmp;
+
+	tmp = sh->tks;
+	while (tmp)
+	{
+		if (is_env = check_for_env(sh->env, tmp->data))
+			tmp->data = is_env;
+		else
+			tmp = tmp->next;
 	}
 }
 
-int lexer(t_shell *sh)
+int		lexer(t_shell *sh, char **envp)
 {
-
+	sh->env = put_env_into_lst(envp);
 	sh->tks = put_input_into_tkn_lst(sh->input);
+	substitute_tokens(sh);
+
+	// ft_env_print(sh->env);
+	// ft_env_clear(&sh->env, ft_free);
 	// ft_tkn_print(sh->tks);
 	// ft_tkn_clear(&sh->tks, ft_free);
 }

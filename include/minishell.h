@@ -5,14 +5,21 @@
 # include <stdbool.h>
 # include <unistd.h>
 
-typedef struct	s_token {
-	int			type;
-	char		*data;
-	struct		s_token *next;
-}				t_token;
+typedef struct		s_token {
+	char			*data;
+	int				type;
+	struct s_token	*next;
+}					t_token;
+
+typedef struct		s_env {
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}					t_env;
 
 typedef struct	s_shell {
 	t_token		*tks;
+	t_env		*env;
 	char		*input;
 	int			status;
 }				t_shell;
@@ -20,17 +27,17 @@ typedef struct	s_shell {
 typedef int		(*builtin_funct)(t_shell *);
 
 enum token_type {
-	CHAR_PIPE = '|',
-	CHAR_SEMICOLON = ';',
-	CHAR_ESCAPE = '\\',
-	CHAR_GREATER = '>',
-	CHAR_LESSER = '<',
-	CHAR_SPACE = ' ',
-	CHAR_TAB = '\t',
-	CHAR_SIMPLE_QUOTE = '\'',
-	CHAR_DOUBLE_QUOTE = '\"',
-	CHAR_NULL = 0,
-	CHAR_GENERAL = -1,
+	PIPE = '|',
+	SEMICOLON = ';',
+	ESCAPE = '\\',
+	GREATER = '>',
+	LESSER = '<',
+	SPACE = ' ',
+	TAB = '\t',
+	SIMPLE_QUOTE = '\'',
+	DOUBLE_QUOTE = '\"',
+	NULL_CHAR = 0,
+	GENERAL = -1,
 };
 
 
@@ -38,21 +45,32 @@ enum token_type {
 
 
 t_token	*ft_tkn_new(char *data);
-void	tkn_add_front(t_token **head, t_token *new);
 void	tkn_add_back(t_token **head, t_token *new);
 int		ft_tkn_size(t_token *head);
 void	ft_free(char *elem);
 void	ft_tkn_clear(t_token **lst, void (*del)(char*));
+void	ft_tkn_print(t_token *head);
 
 int		is_tk_char(int c);
 int		is_quote_char(int c);
 int		is_space_char(int c);
 int		is_job_char(int c);
 
-int		lexer(t_shell *sh);
+int		lexer(t_shell *sh, char** envp);
+t_token	*put_input_into_tkn_lst(char *input);
+void	substitute_tokens(t_shell *sh);
 
-void	ft_tkn_print(t_token *head);
 
+
+
+// ENV
+
+t_env	*ft_env_new(char *name, char *value);
+void	env_add_back(t_env **head, t_env *new);
+int		ft_env_size(t_env *head);
+void	ft_free(char *elem);
+void	ft_env_clear(t_env **lst, void (*del)(char*));
+void	ft_env_print(t_env *lst);
 
 
 // COMMANDS - BUILDINS
