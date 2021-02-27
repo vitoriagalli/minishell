@@ -12,6 +12,7 @@ SRC_FILES =	main.c \
 			token_utils.c \
 			lexer.c \
 			exec.c \
+			path.c \
 			buildin.c
 
 SRCS = $(addprefix $(SRCS_DIR)/,$(SRC_FILES))

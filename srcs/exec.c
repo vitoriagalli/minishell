@@ -6,15 +6,14 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 17:15:17 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/27 21:24:33 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <sys/wait.h>
 
-				// change to full path
-int	launch(char *command_name, char **args)
+int	launch(char *path, char **args, char **envp)
 {
 	int		pid;
 	int		wpid;
@@ -23,7 +22,7 @@ int	launch(char *command_name, char **args)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (execvp(command_name, args) == -1)
+		if (execve(path, args, envp) == -1)
 			exit (EXIT_FAILURE);
 		exit (EXIT_SUCCESS);
 	}
@@ -57,16 +56,12 @@ char	**put_tk_lst_into_array_pointers(t_token *tks)
 	return (args);
 }
 
-
 int	launch_process(t_shell *sh)
 {
-	// sh->exec->argv = put_tk_lst_into_array_pointers(sh->tks);
-	// sh->exec->path->argv[0];
-
-	char **args = put_tk_lst_into_array_pointers(sh->tks);
-	return (launch(args[0], args));
+	sh->argv = put_tk_lst_into_array_pointers(sh->tks);
+	sh->path = find_bin_path(sh->env, sh->argv[0]);
+	return (launch(sh->path, sh->argv, sh->envp));
 }
-
 
 int		execute(t_shell *sh)
 {

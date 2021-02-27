@@ -17,19 +17,22 @@ typedef struct		s_env {
 	struct s_env	*next;
 }					t_env;
 
-typedef struct		s_exec {
+// typedef struct		s_exec {
+// 	char			*path;
+// 	char			**argv;
+// 	char			**envp;
+// }					t_exec;
+
+typedef struct		s_shell {
+	t_token			*tks;
+	t_env			*env;
+	char			*input;
+	int				status;
+
 	char			*path;
 	char			**argv;
 	char			**envp;
-}					t_exec;
-
-
-typedef struct	s_shell {
-	t_token		*tks;
-	t_env		*env;
-	char		*input;
-	int			status;
-}				t_shell;
+}					t_shell;
 
 typedef int		(*builtin_funct)(t_shell *);
 
@@ -49,7 +52,6 @@ enum token_type {
 
 
 // TOKENS
-
 
 t_token	*ft_tkn_new(char *data, int type);
 void	tkn_add_back(t_token **head, t_token *new);
@@ -82,14 +84,17 @@ void	ft_env_print(t_env *lst);
 
 int	execute(t_shell *sh);
 
-int	ft_cd(t_shell *sh);
-int	ft_echo(t_shell *sh);
-int	ft_cd(t_shell *sh);
-int	ft_pwd(t_shell *sh);
-int	ft_export(t_shell *sh);
-int	ft_unset(t_shell *sh);
-int	ft_env(t_shell *sh);
-int	ft_exit(t_shell *sh);
+int		ft_cd(t_shell *sh);
+int		ft_echo(t_shell *sh);
+int		ft_cd(t_shell *sh);
+int		ft_pwd(t_shell *sh);
+int		ft_export(t_shell *sh);
+int		ft_unset(t_shell *sh);
+int		ft_env(t_shell *sh);
+int		ft_exit(t_shell *sh);
 
+// PATH
+
+char	*find_bin_path(t_env *env, char *command);
 
 #endif
