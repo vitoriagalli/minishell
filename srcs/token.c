@@ -6,16 +6,16 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 22:12:38 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 02:41:59 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/27 03:15:26 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		get_tk_state(char c, int *state)
+void	get_tk_state(char c, int *state)
 {
 	if (!state)
-		return (0);
+		return ;
 	if (is_quote_char(c))
 	{
 		if (*state == 1)
@@ -23,7 +23,6 @@ int		get_tk_state(char c, int *state)
 		else
 			*state = 1;
 	}
-	return (0);
 }
 
 void	handle_escape(char *data, int type)

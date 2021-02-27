@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 14:29:35 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 02:19:26 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/27 15:37:30 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,20 @@ void	substitute_tokens(t_shell *sh)
 	}
 }
 
+void	check_syntax(t_shell *sh)
+{
+	if (is_job_char(sh->tks->type))
+	{
+		ft_printf("bash: syntax error near unexpected token");
+		exit(EXIT_FAILURE);
+	}
+}
+
 int		lexer(t_shell *sh, char **envp)
 {
 	sh->tks = put_input_into_tkn_lst(sh->input);
 	substitute_tokens(sh);
+	check_syntax(sh);			// to implement
 	// ft_env_print(sh->env);
 	// ft_tkn_print(sh->tks);
 }
