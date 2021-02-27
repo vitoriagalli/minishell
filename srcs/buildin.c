@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:16:54 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 15:37:03 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/27 15:46:07 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,34 +71,5 @@ int		ft_env(t_shell *sh)
 
 int		ft_exit(t_shell *sh)
 {
-	return (0);
-}
-
-int		execute(t_shell *sh)
-{
-	static int				*f_name[7] = {"echo",
-										"cd",
-										"pwd",
-										"export",
-										"unset",
-										"env",
-										"exit"};
-	static builtin_funct	f_call[7] = {ft_echo,
-									ft_cd,
-									ft_pwd,
-									ft_export,
-									ft_unset,
-									ft_env,
-									ft_exit};
-	int						i;
-
-	i = 0;
-	while (i < 7)
-	{
-		if (!(ft_strcmp(sh->tks->data, f_name[i])))
-			return ((*f_call[i])(sh));
-		i++;
-	}
-	// return fork_process() // to implement
 	return (0);
 }

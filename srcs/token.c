@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 22:12:38 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 03:15:26 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/27 17:16:11 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	atribute_new_token(t_token **tk, char *input, int i, int len)
 	t_token	*new_tk;
 	int		type;
 
+	data = NULL;
+	new_tk = NULL;
 	if (len > 0)
 	{
 		if (is_tk_char(input[i]))

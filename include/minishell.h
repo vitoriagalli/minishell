@@ -17,6 +17,13 @@ typedef struct		s_env {
 	struct s_env	*next;
 }					t_env;
 
+typedef struct		s_exec {
+	char			*path;
+	char			**argv;
+	char			**envp;
+}					t_exec;
+
+
 typedef struct	s_shell {
 	t_token		*tks;
 	t_env		*env;
@@ -61,8 +68,6 @@ t_token	*put_input_into_tkn_lst(char *input);
 void	substitute_tokens(t_shell *sh);
 
 
-
-
 // ENV
 
 t_env	*ft_env_new(char *name, char *value);
@@ -76,6 +81,7 @@ void	ft_env_print(t_env *lst);
 // COMMANDS - BUILDINS
 
 int	execute(t_shell *sh);
+
 int	ft_cd(t_shell *sh);
 int	ft_echo(t_shell *sh);
 int	ft_cd(t_shell *sh);
