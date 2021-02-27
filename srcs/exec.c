@@ -6,35 +6,22 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 21:24:33 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/27 21:58:36 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <sys/wait.h>
 
 int	launch(char *path, char **args, char **envp)
 {
-	int		pid;
-	int		wpid;
-	int		status;
-
-	pid = fork();
-	if (pid == 0)
+	if (!fork())
 	{
-		if (execve(path, args, envp) == -1)
-			exit (EXIT_FAILURE);
-		exit (EXIT_SUCCESS);
+		if (execve(path, args, envp))
+			exit(0);
+		exit(0);
 	}
-	else if (pid < 0)
-		exit (EXIT_FAILURE);
 	else
-	{
-		do {
-			wpid = waitpid(pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
-	}
-	return (1);
+		wait(1);
 }
 
 char	**put_tk_lst_into_array_pointers(t_token *tks)

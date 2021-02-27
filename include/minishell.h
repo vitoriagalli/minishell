@@ -5,6 +5,8 @@
 # include <stdbool.h>
 # include <unistd.h>
 
+#include <sys/wait.h>
+
 typedef struct		s_token {
 	char			*data;
 	int				type;
