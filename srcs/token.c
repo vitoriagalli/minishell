@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 22:12:38 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/26 22:33:21 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/27 02:41:59 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		get_tk_state(char c, int *state)
 {
 	if (!state)
 		return (0);
-	if (c == '\'' || c == '\"')
+	if (is_quote_char(c))
 	{
 		if (*state == 1)
 			*state = 0;
@@ -63,11 +63,14 @@ void	atribute_new_token(t_token **tk, char *input, int i, int len)
 
 	if (len > 0)
 	{
-		data = ft_substr(input, i, len);
-		if (is_tk_char(data[0]))
-			type = data[0];
+		if (is_tk_char(input[i]))
+			type = input[i];
 		else
 			type = GENERAL;
+		if (type == SIMPLE_QUOTE || type == DOUBLE_QUOTE)
+			data = ft_substr(input, i + 1, len - 2);
+		else
+			data = ft_substr(input, i, len);
 		handle_escape(data, type);
 		new_tk = ft_tkn_new(data, type);
 		tkn_add_back(tk, new_tk);

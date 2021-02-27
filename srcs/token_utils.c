@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 21:20:53 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/26 20:34:26 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/27 02:43:07 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,24 @@ int		is_tk_char(int c)
 		c == TAB ||
 		c == SIMPLE_QUOTE ||
 		c == DOUBLE_QUOTE)
-		return true;
-	return false;
+		return (true);
+	return (false);
 }
 
 int		is_quote_char(int c)
 {
 	if (c == SIMPLE_QUOTE ||
 		c == DOUBLE_QUOTE)
-		return true;
-	return false;
+		return (true);
+	return (false);
 }
 
 int		is_space_char(int c)
 {
 	if (c == SPACE ||
 		c == TAB)
-		return true;
-	return false;
+		return (true);
+	return (false);
 }
 
 int		is_job_char(int c)
@@ -48,6 +48,6 @@ int		is_job_char(int c)
 		c == SEMICOLON ||
 		c == GREATER ||
 		c == LESSER)
-		return true;
-	return false;
+		return (true);
+	return (false);
 }

@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 21:19:21 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/25 21:32:34 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/27 02:51:51 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,8 @@ t_env	*ft_env_new(char *name, char *value)
 	return (elem);
 }
 
-void env_add_back(t_env **lst, t_env *new)
+void	env_add_back(t_env **lst, t_env *new)
 {
-
 	t_env *tmp;
 
 	tmp = *lst;
@@ -43,7 +42,7 @@ void env_add_back(t_env **lst, t_env *new)
 	}
 }
 
-int	ft_env_size(t_env *lst)
+int		ft_env_size(t_env *lst)
 {
 	int		count;
 
@@ -74,7 +73,9 @@ void	ft_env_clear(t_env **lst, void (*del)(char*))
 	*lst = NULL;
 }
 
-// TEMPORARY FUNCTION
+/*
+** temporary function
+*/
 
 void	ft_env_print(t_env *lst)
 {
@@ -90,5 +91,4 @@ void	ft_env_print(t_env *lst)
 		lst = lst->next;
 		count++;
 	}
-
 }

@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 22:21:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/26 21:44:56 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/27 02:52:35 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,8 @@ t_token	*ft_tkn_new(char *data, int type)
 	return (elem);
 }
 
-void	tkn_add_front(t_token **lst, t_token *new)
+void	tkn_add_back(t_token **lst, t_token *new)
 {
-	if (!new)
-		return ;
-	if (*lst)
-		new->next = *lst;
-	*lst = new;
-}
-
-void tkn_add_back(t_token **lst, t_token *new)
-{
-
 	t_token *tmp;
 
 	tmp = *lst;
@@ -52,7 +42,7 @@ void tkn_add_back(t_token **lst, t_token *new)
 	}
 }
 
-int	ft_tkn_size(t_token *lst)
+int		ft_tkn_size(t_token *lst)
 {
 	int		count;
 
@@ -71,7 +61,6 @@ void	ft_free(char *elem)
 		free(elem);
 }
 
-
 void	ft_tkn_clear(t_token **lst, void (*del)(char*))
 {
 	t_token	*to_free;
@@ -89,9 +78,9 @@ void	ft_tkn_clear(t_token **lst, void (*del)(char*))
 	*lst = NULL;
 }
 
-
-
-// TEMPORARY FUNCTION
+/*
+** temporary function
+*/
 
 void	ft_tkn_print(t_token *lst)
 {
@@ -107,6 +96,4 @@ void	ft_tkn_print(t_token *lst)
 		lst = lst->next;
 		count++;
 	}
-
 }
-
