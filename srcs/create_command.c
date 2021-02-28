@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:55:53 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/02/26 21:19:26 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/02/27 23:57:14 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	init_command(t_cmd *cmd, t_minishell *msh)
 	
 	ft_bzero(cmd, sizeof(t_cmd));
 	msh->cmds->nb_tk = size_token_list(msh->head_tk);
-	cmd->args = malloc(sizeof(msh->cmds->nb_tk - msh->cmds->curr_tk));
+	cmd->args = malloc(sizeof(char*) * msh->cmds->nb_tk - msh->cmds->curr_tk);
 	cmd->next = NULL;
 	msh->cmds->got_cmd_name = false;
 	msh->cmds->curr_arg = 0;

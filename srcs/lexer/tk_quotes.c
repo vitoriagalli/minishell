@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 19:58:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/02/25 22:04:00 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/02/27 17:00:52 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	get_from_stdin(t_lexer *lx, char to_check)
 			ret = 0;
 		free(line);
 	}
-	lx->line[ft_strlen(lx->line)] = '\0';
+	lx->line[ft_strlen(lx->line) - 1] = '\0';
 }
 
 
@@ -56,7 +56,10 @@ void	quoted_state(t_tokens *tk, t_lexer *lx)
 		lx->i++;
 	}
 	else if (lx->line[lx->i] == '\0')
+	{
 		get_from_stdin(lx, SINGLE_QUOTE);
+		lx->i--;
+	}	
 }
 
 void	double_quoted_state(t_tokens *tk, t_lexer *lx, t_minishell *msh)
@@ -78,5 +81,8 @@ void	double_quoted_state(t_tokens *tk, t_lexer *lx, t_minishell *msh)
 		lx->i++;
 	}
 	else if (lx->line[lx->i] == '\0')
+	{
 		get_from_stdin(lx, DOUBLE_QUOTE);
+		lx->i--;
+	}	
 }

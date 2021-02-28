@@ -6,30 +6,13 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/02/26 21:48:53 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/02/28 00:03:04 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execute_cmd_inbuild(char **args)
-{
-	int i;
-	static t_inbuild func_inbuild[7] = {ft_echo, ft_cd, ft_pwd, ft_export,
-		ft_unset, ft_env, ft_exit};
-	char **inbuild;
 
-	inbuild = ft_split("echo:cd:pwd:export:unset:env:exit", ':');
-	i = 0;
-	if (!args[0])
-		return ;
-	while (i < 7 && ft_strncmp(args[0], inbuild[i], ft_strlen(inbuild[i])))
-		i++;
-	if (i < 7)
-		(*func_inbuild[i])(args);
-	else
-		ft_printf("minishell: command not found: %s\n", args[0]);
-}
 
 char *read_line(void)
 {

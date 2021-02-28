@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/02/26 23:59:43 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/02/27 20:26:50 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,6 @@ typedef struct s_exec
 	char	*path_home;
 }				t_exec;
 
-
 typedef struct	s_minishell
 {
 	t_tokens		*head_tk;
@@ -132,17 +131,18 @@ typedef struct	s_minishell
 	char			*path_home;
 	char 			*line;
 	int				last_ret_cmd;
+	bool			force_ret_buildin;
 }				t_minishell;
 
-typedef void	(*t_inbuild)(char **);
+typedef void	(*t_inbuild)(t_cmd *, t_exec *, t_minishell *);
 
-void	ft_echo(char **args);
-void	ft_cd(char **args);
-void 	ft_pwd(char **args);
-void	ft_export(char **args);
-void	ft_unset(char **args);
-void	ft_env(char **args);
-void	ft_exit(char **args);
+void	ft_echo(t_cmd *cmd, t_exec *exec, t_minishell *msh);
+void	ft_cd(t_cmd *cmd, t_exec *exec, t_minishell *msh);
+void 	ft_pwd(t_cmd *cmd, t_exec *exec, t_minishell *msh);
+void	ft_export(t_cmd *cmd, t_exec *exec, t_minishell *msh);
+void	ft_unset(t_cmd *cmd, t_exec *exec, t_minishell *msh);
+void	ft_env(t_cmd *cmd, t_exec *exec, t_minishell *msh);
+void	ft_exit(t_cmd *cmd, t_exec *exec, t_minishell *msh);
 int		get_next_line(int fd, char **line);
 
 void	lexer(t_minishell *msh);
@@ -163,4 +163,7 @@ void	create_command(t_minishell *msh);
 //void	execute_command(t_minishell *msh, t_cmd *head_cmd);
 
 void 	exec_cmd_v2(t_minishell *msh, t_cmd *head_cmd);
+
+bool	is_buildin_cmd(char *cmd);
+void	call_exec_buildin(t_cmd *cmd, t_exec *exec, t_minishell *msh);
 #endif

@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 16:55:29 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/02/26 21:35:27 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/02/28 00:04:46 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char *substitution_env(t_env *env, char *str)
 		temp = ft_strdup("$");
 		return (temp);
 	}	
-	while (env->name != NULL)
+	while (env->next)
 	{
 		if (!ft_strncmp(env->name, str + 1, ft_strlen(str) + 1))
 		{
