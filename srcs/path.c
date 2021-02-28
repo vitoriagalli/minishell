@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 20:41:59 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 21:21:35 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/28 00:56:59 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 
 char	*find_bin_path(t_env *env, char *command)
 {
-	return ft_strjoin("/bin/", command); // gambiarra
+	(void)env;
+	return (ft_strjoin("/bin/", command)); // gambiarra
 }

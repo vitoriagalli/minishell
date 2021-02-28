@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 11:11:03 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/23 00:54:05 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/27 23:45:14 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,6 @@ void				ft_putnbr_base_fd(unsigned int n, char *base, int fd);
 void				ft_swap(int *a, int *b);
 int					get_next_line(int fd, char **line);
 int					ft_strcmp(const char *s1, const char *s2);
+int					ft_printf(const char *format, ...);
 
 #endif

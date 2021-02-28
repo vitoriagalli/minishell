@@ -20,7 +20,7 @@ OBJS = $(patsubst $(SRCS_DIR)%.c, $(OBJS_DIR)%.o, $(SRCS))
 
 HEAD = -I./$(LIBFT_DIR) -I./include
 CC = clang
-CFLAGS = -Wall -Werror -Wextra -g -w
+CFLAGS = -Wall -Werror -Wextra -g #-w
 LFLAGS = -L ./$(LIBFT_DIR) -lft
 RM = /bin/rm -rf
 

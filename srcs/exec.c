@@ -6,22 +6,23 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 21:58:36 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/28 00:55:57 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	launch(char *path, char **args, char **envp)
+int	launch(t_exec *exec)
 {
 	if (!fork())
 	{
-		if (execve(path, args, envp))
+		if (execve(exec->path, exec->argv, exec->envp))
 			exit(0);
 		exit(0);
 	}
 	else
-		wait(1);
+		wait(0);
+	return (0);
 }
 
 char	**put_tk_lst_into_array_pointers(t_token *tks)
@@ -45,14 +46,16 @@ char	**put_tk_lst_into_array_pointers(t_token *tks)
 
 int	launch_process(t_shell *sh)
 {
-	sh->argv = put_tk_lst_into_array_pointers(sh->tks);
-	sh->path = find_bin_path(sh->env, sh->argv[0]);
-	return (launch(sh->path, sh->argv, sh->envp));
+	sh->exec = ft_calloc(1, sizeof(t_exec));
+	sh->exec->envp = sh->envp;
+	sh->exec->argv = put_tk_lst_into_array_pointers(sh->tks);
+	sh->exec->path = find_bin_path(sh->env, sh->exec->argv[0]);
+	return (launch(sh->exec));
 }
 
 int		execute(t_shell *sh)
 {
-	static int				*f_name[7] = {"echo",
+	static char				*f_name[7] = {"echo",
 										"cd",
 										"pwd",
 										"export",
@@ -75,5 +78,5 @@ int		execute(t_shell *sh)
 			return ((*f_call[i])(sh));
 		i++;
 	}
-	return launch_process(sh); // to implement
+	return (launch_process(sh)); // to implement
 }

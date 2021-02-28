@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 22:21:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 02:52:35 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/27 23:47:30 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	tkn_add_back(t_token **lst, t_token *new)
 	t_token *tmp;
 
 	tmp = *lst;
-	if (!new || new->data == "")
+	if (!new)
 		return ;
 	if (!*lst)
 		*lst = new;

@@ -19,21 +19,19 @@ typedef struct		s_env {
 	struct s_env	*next;
 }					t_env;
 
-// typedef struct		s_exec {
-// 	char			*path;
-// 	char			**argv;
-// 	char			**envp;
-// }					t_exec;
+typedef struct		s_exec {
+	char			*path;
+	char			**argv;
+	char			**envp;
+	int				status;
+}					t_exec;
 
 typedef struct		s_shell {
 	t_token			*tks;
 	t_env			*env;
-	char			*input;
-	int				status;
-
-	char			*path;
-	char			**argv;
+	t_exec			*exec;
 	char			**envp;
+	char			*input;
 }					t_shell;
 
 typedef int		(*builtin_funct)(t_shell *);
@@ -67,7 +65,7 @@ int		is_quote_char(int c);
 int		is_space_char(int c);
 int		is_job_char(int c);
 
-int		lexer(t_shell *sh, char** envp);
+int		lexer(t_shell *sh);
 t_token	*put_input_into_tkn_lst(char *input);
 void	substitute_tokens(t_shell *sh);
 
@@ -81,6 +79,7 @@ void	ft_free(char *elem);
 void	ft_env_clear(t_env **lst, void (*del)(char*));
 void	ft_env_print(t_env *lst);
 
+t_env	*put_env_into_lst(char **env_content);
 
 // COMMANDS - BUILDINS
 

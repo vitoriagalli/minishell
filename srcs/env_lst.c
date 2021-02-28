@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 21:19:21 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 02:51:51 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/27 23:47:08 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	env_add_back(t_env **lst, t_env *new)
 	t_env *tmp;
 
 	tmp = *lst;
-	if (!new || (new->name == "" && new->value == ""))
+	if (!new)
 		return ;
 	if (!*lst)
 		*lst = new;

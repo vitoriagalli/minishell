@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:16:54 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 15:46:07 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/28 00:55:27 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,20 +56,24 @@ int		ft_pwd(t_shell *sh)
 
 int		ft_export(t_shell *sh)
 {
+	(void)sh;
 	return (0);
 }
 
 int		ft_unset(t_shell *sh)
 {
+	(void)sh;
 	return (0);
 }
 
 int		ft_env(t_shell *sh)
 {
+	(void)sh;
 	return (0);
 }
 
 int		ft_exit(t_shell *sh)
 {
+	(void)sh;
 	return (0);
 }

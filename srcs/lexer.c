@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 14:29:35 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 15:37:30 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/02/28 00:52:50 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_env	*put_env_into_lst(char **env_content)
 		value = ft_substr(*env_content, addr - *env_content + 1,
 			ft_strlen(*env_content) - (addr - *env_content));
 		env_add_back(&env, ft_env_new(name, value));
-		*env_content++;
+		env_content++;
 	}
 	return (env);
 }
@@ -93,11 +93,12 @@ void	check_syntax(t_shell *sh)
 	}
 }
 
-int		lexer(t_shell *sh, char **envp)
+int		lexer(t_shell *sh)
 {
 	sh->tks = put_input_into_tkn_lst(sh->input);
 	substitute_tokens(sh);
 	check_syntax(sh);			// to implement
 	// ft_env_print(sh->env);
 	// ft_tkn_print(sh->tks);
+	return (0);
 }
