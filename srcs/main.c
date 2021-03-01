@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 21:54:39 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/01 17:34:38 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/02 00:42:16 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	loop(t_shell *sh)
 		ft_printf("$ ");
 		sh->input = read_line();
 		lexer(sh);
-		// execute(sh);
+		execute(sh);
 		// clear_memory(sh);
 	}
 }
@@ -57,8 +57,7 @@ int		main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	sh = (t_shell) {0};
-	sh.envp = envp;
-	sh.env = put_env_into_lst(envp);
+	sh.env = put_env_into_lst(__environ);
 	loop(&sh);
 	return (0);
 }

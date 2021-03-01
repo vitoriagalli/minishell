@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 22:21:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/01 21:17:07 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/02 00:49:14 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_token	*ft_tkn_new(t_list *args, int sep)
 		return (NULL);
 	if (args)
 		elem->cmd = ft_strdup(args->content);
-	elem->args = args;
+	elem->args_lst = args;
 	elem->sep = sep;
 	elem->next = NULL;
 	return (elem);
@@ -80,24 +80,6 @@ void	ft_tkn_clear(t_token **lst, void (*del)(char*))
 	*lst = NULL;
 }
 
-char	**put_tk_lst_into_array_pointers(t_token *tks)
-{
-	char	**args;
-	int		len;
-	int		i;
-
-	len = ft_tkn_size(tks);
-	args = (char **)calloc(len + 1, sizeof(char *));
-	i = 0;
-	while (i < len)
-	{
-		args[i] = tks->cmd;
-		tks = tks->next;
-		i++;
-	}
-	args[i] = NULL;
-	return (args);
-}
 
 /*
 ** temporary function
@@ -128,8 +110,8 @@ void	ft_tkn_print(t_token *lst)
 		ft_printf("cmd: %s\n", lst->cmd);
 		ft_printf("type: %i\n", lst->sep);
 		ft_printf("next: %p\n", lst->next);
-			ft_printf("args: %p\n", lst->args);
-		ft_lst_print(lst->args);
+			ft_printf("args: %p\n", lst->args_lst);
+		ft_lst_print(lst->args_lst);
 		lst = lst->next;
 		count++;
 	}
