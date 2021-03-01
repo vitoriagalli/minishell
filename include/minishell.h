@@ -6,6 +6,12 @@
 # include <unistd.h>
 # include <sys/wait.h>
 
+typedef struct		s_env {
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}					t_env;
+
 typedef struct		s_token
 {
 	char			*cmd;
@@ -16,6 +22,7 @@ typedef struct		s_token
 
 typedef struct		s_shell {
 	t_token			*cmd;
+	t_env			*env;
 	char			**envp;
 	char			*input;
 }					t_shell;
@@ -55,11 +62,21 @@ int		is_space_char(int c);
 int		is_job_char(int c);
 
 int		lexer(t_shell *sh);
-t_list	*args_lst(char *input, int *i, int *init_tkn, int *sep);
 
 
 
-t_token	*put_input_into_tkn_lst(t_shell *sh);
+t_token	*put_input_into_tkn_struct(t_shell *sh);
 void	ft_lst_print(t_list *lst);
+
+
+// ENV
+
+t_env	*ft_env_new(char *name, char *value);
+void	env_add_back(t_env **head, t_env *new);
+int		ft_env_size(t_env *head);
+void	ft_free(char *elem);
+void	ft_env_clear(t_env **lst, void (*del)(char*));
+void	ft_env_print(t_env *lst);
+t_env	*put_env_into_lst(char **env_content);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 21:54:39 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/01 03:39:51 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/01 17:34:38 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		main(int argc, char **argv, char **envp)
 	(void)argv;
 	sh = (t_shell) {0};
 	sh.envp = envp;
-	// sh.env = put_env_into_lst(envp);
+	sh.env = put_env_into_lst(envp);
 	loop(&sh);
 	return (0);
 }
