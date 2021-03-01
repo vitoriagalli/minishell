@@ -6,21 +6,17 @@ LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 SRC_FILES =	main.c \
-			env_lst.c \
 			token.c \
 			token_lst.c \
 			token_utils.c \
-			lexer.c \
-			exec.c \
-			path.c \
-			buildin.c
+			lexer.c
 
 SRCS = $(addprefix $(SRCS_DIR)/,$(SRC_FILES))
 OBJS = $(patsubst $(SRCS_DIR)%.c, $(OBJS_DIR)%.o, $(SRCS))
 
 HEAD = -I./$(LIBFT_DIR) -I./include
 CC = clang
-CFLAGS = -Wall -Werror -Wextra -g #-w
+CFLAGS = -Wall -Werror -Wextra -g -w
 LFLAGS = -L ./$(LIBFT_DIR) -lft
 RM = /bin/rm -rf
 

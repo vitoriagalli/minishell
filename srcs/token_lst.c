@@ -6,21 +6,23 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 22:21:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 23:47:30 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/01 03:28:32 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*ft_tkn_new(char *data, int type)
+t_token	*ft_tkn_new(t_list *args, int sep)
 {
 	t_token	*elem;
 
 	elem = malloc(sizeof(t_token));
 	if (!elem)
 		return (NULL);
-	elem->data = data;
-	elem->type = type;
+	if (args)
+		elem->cmd = ft_strdup(args->content);
+	elem->args = args;
+	elem->sep = sep;
 	elem->next = NULL;
 	return (elem);
 }
@@ -71,16 +73,50 @@ void	ft_tkn_clear(t_token **lst, void (*del)(char*))
 	while (to_free)
 	{
 		*lst = to_free->next;
-		del(to_free->data);
+		del(to_free->cmd);
 		free(to_free);
 		to_free = *lst;
 	}
 	*lst = NULL;
 }
 
+char	**put_tk_lst_into_array_pointers(t_token *tks)
+{
+	char	**args;
+	int		len;
+	int		i;
+
+	len = ft_tkn_size(tks);
+	args = (char **)calloc(len + 1, sizeof(char *));
+	i = 0;
+	while (i < len)
+	{
+		args[i] = tks->cmd;
+		tks = tks->next;
+		i++;
+	}
+	args[i] = NULL;
+	return (args);
+}
+
 /*
 ** temporary function
 */
+
+void	ft_lst_print(t_list *lst)
+{
+	int count;
+
+	count = 0;
+	while (lst)
+	{
+		ft_printf("--- args %i ----\n", count);
+		ft_printf("content: %s\n", lst->content);
+		// ft_printf("next: %p\n", lst->next);
+		lst = lst->next;
+		count++;
+	}
+}
 
 void	ft_tkn_print(t_token *lst)
 {
@@ -89,11 +125,15 @@ void	ft_tkn_print(t_token *lst)
 	count = 0;
 	while (lst)
 	{
-		ft_printf("--- element %i ----\n", count);
-		ft_printf("data: %s\n", lst->data);
-		ft_printf("type: %i\n", lst->type);
+		ft_printf("------ element %i -------\n", count);
+		ft_printf("cmd: %s\n", lst->cmd);
+		ft_printf("type: %i\n", lst->sep);
+		ft_printf("args: %p\n", lst->args);
+		ft_lst_print(lst->args);
 		ft_printf("next: %p\n", lst->next);
 		lst = lst->next;
 		count++;
 	}
 }
+
+

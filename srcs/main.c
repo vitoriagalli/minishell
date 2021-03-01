@@ -6,20 +6,20 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 21:54:39 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/28 00:08:28 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/01 03:39:51 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	clear_memory(t_shell *sh)
-{
-	// ft_env_clear(&sh->env, ft_free);
-	// free(sh->env);
-	ft_tkn_clear(&sh->tks, ft_free);
-	free(sh->tks);
-	free(sh->input);
-}
+// void	clear_memory(t_shell *sh)
+// {
+// 	// ft_env_clear(&sh->env, ft_free);
+// 	// free(sh->env);
+// 	ft_tkn_clear(&sh->tks, ft_free);
+// 	free(sh->tks);
+// 	free(sh->input);
+// }
 
 void	exit_minishell(int exit_status)
 {
@@ -28,7 +28,7 @@ void	exit_minishell(int exit_status)
 
 char	*read_line(void)
 {
-	char *line;
+	char	*line;
 
 	if (get_next_line(STDIN_FILENO, &line) < 0)
 	{
@@ -36,6 +36,18 @@ char	*read_line(void)
 		exit_minishell(EXIT_FAILURE);
 	}
 	return (line);
+}
+
+void	loop(t_shell *sh)
+{
+	while (true)
+	{
+		ft_printf("$ ");
+		sh->input = read_line();
+		lexer(sh);
+		// execute(sh);
+		// clear_memory(sh);
+	}
 }
 
 int		main(int argc, char **argv, char **envp)
@@ -46,14 +58,7 @@ int		main(int argc, char **argv, char **envp)
 	(void)argv;
 	sh = (t_shell) {0};
 	sh.envp = envp;
-	sh.env = put_env_into_lst(envp);
-	while (true)
-	{
-		ft_printf("$ ");
-		sh.input = read_line();
-		lexer(&sh);
-		execute(&sh);
-		// clear_memory(&sh);
-	}
+	// sh.env = put_env_into_lst(envp);
+	loop(&sh);
 	return (0);
 }

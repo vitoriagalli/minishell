@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 22:12:38 by vscabell          #+#    #+#             */
-/*   Updated: 2021/02/27 17:16:11 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/01 03:39:10 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ void	handle_escape(char *data, int type)
 	}
 }
 
-void	atribute_new_token(t_token **tk, char *input, int i, int len)
+void	atribute_new_list(t_list **tk, char *input, int i, int len)
 {
 	char	*data;
-	t_token	*new_tk;
+	t_list	*new_tk;
 	int		type;
 
 	data = NULL;
@@ -73,34 +73,50 @@ void	atribute_new_token(t_token **tk, char *input, int i, int len)
 		else
 			data = ft_substr(input, i, len);
 		handle_escape(data, type);
-		new_tk = ft_tkn_new(data, type);
-		tkn_add_back(tk, new_tk);
+		new_tk = ft_lstnew(data);
+		ft_lstadd_back(tk, new_tk);
 	}
 }
 
-t_token	*put_input_into_tkn_lst(char *input)
+t_list	*args_lst(char *input, int *i, int *init_tkn, int *sep)
 {
-	t_token	*tk;
-	int		i;
-	int		init_tkn;
+	t_list	*tk;
 	int		quote_state;
 
 	tk = NULL;
-	i = 0;
-	init_tkn = 0;
 	quote_state = false;
-	while (input[i])
+	while (input[*i])
 	{
-		get_tk_state(input[i], &quote_state);
-		if ((is_job_char(input[i]) || is_space_char(input[i])) && !quote_state)
+		get_tk_state(input[*i], &quote_state);
+		if ((is_job_char(input[*i]) || is_space_char(input[*i])) && !quote_state)
 		{
-			atribute_new_token(&tk, input, init_tkn, i - init_tkn);
-			if (is_job_char(input[i]))
-				atribute_new_token(&tk, input, i, 1);
-			init_tkn = i + 1;
+			atribute_new_list(&tk, input, *init_tkn, *i - *init_tkn);
+			*init_tkn = *i + 1;
+			if (is_job_char(input[*i]))
+			{
+				(*i)++;
+				*sep = input[*i];
+				return(tk);
+			}
 		}
-		i++;
+		(*i)++;
 	}
-	atribute_new_token(&tk, input, init_tkn, i - init_tkn);
+	atribute_new_list(&tk, input, *init_tkn, *i - *init_tkn);
 	return (tk);
+}
+
+t_token	*put_input_into_tkn_lst(t_shell *sh)
+{
+	t_token	*tk = NULL;
+	t_list	*args = NULL;
+	int		i = 0;
+	int		init_tkn = 0;
+	int		sep = 0;
+
+	while (sh->input[i])
+	{
+		args = ft_tkn_new(args_lst(sh->input, &i, &init_tkn, &sep), sep);
+		tkn_add_back(&tk, args);
+	}
+	return(tk);
 }
