@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 22:12:38 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/01 21:24:12 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/02 20:59:11 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,21 +131,25 @@ t_list	*args_lst(t_shell *sh, int *i, int *init_tkn, int *sep)
 	while (sh->input[*i])
 	{
 		get_tk_state(sh->input[*i], &quote_state);
-		if ((is_job_char(sh->input[*i]) || is_space_char(sh->input[*i])) && !quote_state)
+		if (is_tk_char(sh->input[*i]) && !quote_state)
 		{
-			atribute_new_list(sh, &tk, *init_tkn, *i - *init_tkn);
-			*init_tkn = *i + 1;
-			if (is_job_char(sh->input[*i]))
+			if (*init_tkn != *i)
+				atribute_new_list(sh, &tk, *init_tkn, *i - *init_tkn);
+			if (sh->input[*i] == GREATER || sh->input[*i] == LESSER)
+				atribute_new_list(sh, &tk, *i, 1);
+			if (sh->input[*i] == PIPE || sh->input[*i] == SEMICOLON)
 			{
 				*sep = sh->input[*i];
+				*init_tkn = *i + 1;
 				(*i)++;
 				return (tk);
 			}
+			*init_tkn = *i + 1;
 		}
 		(*i)++;
 	}
 	atribute_new_list(sh, &tk, *init_tkn, *i - *init_tkn);
-	*sep = '\0';
+	*sep = sh->input[*i];
 	return (tk);
 }
 

@@ -20,6 +20,8 @@ typedef struct		s_token
 	char			*cmd;
 	t_list			*args_lst;
 	int				sep;
+	char			*file_in;
+	char			*file_out;
 	struct s_token	*next;
 }					t_token;
 

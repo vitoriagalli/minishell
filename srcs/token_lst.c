@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 22:21:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/02 00:49:14 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/02 20:51:25 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	ft_tkn_print(t_token *lst)
 	{
 		ft_printf("-------- element %i ---------\n", count);
 		ft_printf("cmd: %s\n", lst->cmd);
-		ft_printf("type: %i\n", lst->sep);
+		ft_printf("sep: %i\n", lst->sep);
 		ft_printf("next: %p\n", lst->next);
 			ft_printf("args: %p\n", lst->args_lst);
 		ft_lst_print(lst->args_lst);
