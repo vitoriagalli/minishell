@@ -17,11 +17,9 @@ typedef struct		s_env {
 
 typedef struct		s_token
 {
-	char			*cmd;
+	char			*tk_cmd;
 	t_list			*args_lst;
 	int				sep;
-	char			*file_in;
-	char			*file_out;
 	struct s_token	*next;
 }					t_token;
 
@@ -31,9 +29,20 @@ typedef struct		s_exec {
 	int				status;
 }					t_exec;
 
+typedef struct		s_cmd {
+	char			*cmd;
+	char			**args;
+	char			*file_in;
+	char			*file_out;
+	// int				redirection;
+	int				separator;
+	struct s_cmd	*next;
+}					t_cmd;
+
 typedef struct		s_shell {
 	t_token			*tk;
 	t_env			*env;
+	t_cmd			*cmd;
 	char			*input;
 }					t_shell;
 
@@ -89,6 +98,11 @@ t_env	*put_env_into_lst(char **env_content);
 
 
 // COMMANDS - BUILDINS
+
+void	cmd_add_back(t_cmd **lst, t_cmd *new);
+t_cmd	*ft_cmd_new(void);
+void	ft_cmd_print(t_cmd *lst);
+
 
 int	execute(t_shell *sh);
 

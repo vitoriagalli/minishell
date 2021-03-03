@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 22:21:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/02 20:51:25 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/02 21:30:27 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_token	*ft_tkn_new(t_list *args, int sep)
 	if (!elem)
 		return (NULL);
 	if (args)
-		elem->cmd = ft_strdup(args->content);
+		elem->tk_cmd = ft_strdup(args->content);
 	elem->args_lst = args;
 	elem->sep = sep;
 	elem->next = NULL;
@@ -73,7 +73,7 @@ void	ft_tkn_clear(t_token **lst, void (*del)(char*))
 	while (to_free)
 	{
 		*lst = to_free->next;
-		del(to_free->cmd);
+		del(to_free->tk_cmd);
 		free(to_free);
 		to_free = *lst;
 	}
@@ -107,7 +107,7 @@ void	ft_tkn_print(t_token *lst)
 	while (lst)
 	{
 		ft_printf("-------- element %i ---------\n", count);
-		ft_printf("cmd: %s\n", lst->cmd);
+		ft_printf("cmd: %s\n", lst->tk_cmd);
 		ft_printf("sep: %i\n", lst->sep);
 		ft_printf("next: %p\n", lst->next);
 			ft_printf("args: %p\n", lst->args_lst);

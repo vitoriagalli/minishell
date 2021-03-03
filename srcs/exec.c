@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/02 00:57:28 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/03 03:52:13 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	launch_process(t_token *tk)
 	t_exec	exec;
 
 	exec.argv = put_lst_into_array_pointers(tk->args_lst);
-	exec.path = ft_strjoin("/bin/", tk->cmd);
+	exec.path = ft_strjoin("/bin/", tk->tk_cmd);
 
 	return (launch(&exec));
 }
@@ -74,7 +74,7 @@ int		execute_single_command(t_shell *sh, t_token *tk)
 	i = 0;
 	while (i < 7)
 	{
-		if (!(ft_strcmp(tk->cmd, f_name[i])))
+		if (!(ft_strcmp(tk->tk_cmd, f_name[i])))
 			return ((*f_call[i])(tk));
 		i++;
 	}
