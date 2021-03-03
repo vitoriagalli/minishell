@@ -23,12 +23,6 @@ typedef struct		s_token
 	struct s_token	*next;
 }					t_token;
 
-typedef struct		s_exec {
-	char			*path;
-	char			**argv;
-	int				status;
-}					t_exec;
-
 typedef struct		s_cmd {
 	char			*cmd;
 	char			**args;
@@ -38,6 +32,12 @@ typedef struct		s_cmd {
 	int				separator;
 	struct s_cmd	*next;
 }					t_cmd;
+
+typedef struct		s_exec {
+	char			*path;
+	char			**argv;
+	int				status;
+}					t_exec;
 
 typedef struct		s_shell {
 	t_token			*tk;
@@ -107,12 +107,12 @@ void	ft_cmd_print(t_cmd *lst);
 int	execute(t_shell *sh);
 
 
-int		ft_echo(t_token  *tk);
-int		ft_cd(t_token  *tk);
-int		ft_pwd(t_token  *tk);
-int		ft_export(t_token  *tk);
-int		ft_unset(t_token  *tk);
-int		ft_env(t_token  *tk);
-int		ft_exit(t_token  *tk);
+int		ft_echo(t_cmd  *cmd);
+int		ft_cd(t_cmd  *cmd);
+int		ft_pwd(t_cmd  *cmd);
+int		ft_export(t_cmd  *cmd);
+int		ft_unset(t_cmd  *cmd);
+int		ft_env(t_cmd  *cmd);
+int		ft_exit(t_cmd  *cmd);
 
 #endif

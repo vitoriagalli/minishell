@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/03 03:52:13 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/03 13:01:22 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,36 +24,17 @@ int	launch(t_exec *exec)
 	return (0);
 }
 
-char	**put_lst_into_array_pointers(t_list *lst)
-{
-	char	**args;
-	int		len;
-	int		i;
-
-	len = ft_lstsize(lst);
-	args = (char **)calloc(len + 1, sizeof(char *));
-	i = 0;
-	while (i < len)
-	{
-		args[i] = lst->content;
-		lst = lst->next;
-		i++;
-	}
-	args[i] = NULL;
-	return (args);
-}
-
-int	launch_process(t_token *tk)
+int	launch_process(t_cmd *cmd)
 {
 	t_exec	exec;
 
-	exec.argv = put_lst_into_array_pointers(tk->args_lst);
-	exec.path = ft_strjoin("/bin/", tk->tk_cmd);
+	exec.argv = cmd->args;
+	exec.path = ft_strjoin("/bin/", cmd->cmd);
 
 	return (launch(&exec));
 }
 
-int		execute_single_command(t_shell *sh, t_token *tk)
+int		execute_single_command(t_shell *sh, t_cmd *cmd)
 {
 	static char				*f_name[7] = {"echo",
 										"cd",
@@ -74,19 +55,19 @@ int		execute_single_command(t_shell *sh, t_token *tk)
 	i = 0;
 	while (i < 7)
 	{
-		if (!(ft_strcmp(tk->tk_cmd, f_name[i])))
-			return ((*f_call[i])(tk));
+		if (!(ft_strcmp(cmd->cmd, f_name[i])))
+			return ((*f_call[i])(cmd));
 		i++;
 	}
-	return (launch_process(tk)); // to implement
+	return (launch_process(cmd)); // to implement
 }
 
 // implementar tipos de separadores
 int		execute(t_shell *sh)
 {
-	t_token *tmp;
+	t_cmd *tmp;
 
-	tmp = sh->tk;
+	tmp = sh->cmd;
 	while (tmp)
 	{
 		execute_single_command(sh, tmp);

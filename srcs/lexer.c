@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/28 22:48:01 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/03 03:57:56 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/03 12:54:13 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ char	**args_list_into_array_pointers(t_list *args_lst)
 	while (i < len)
 	{
 		args[i] = ft_strdup(args_lst->content);
-		ft_printf("%i: %s\n",i, args[i]);
 		args_lst = args_lst->next;
 		i++;
 	}
@@ -41,11 +40,16 @@ void	handle_redirection(char **in, char **out, t_list *lst)
 	{
 		if (!ft_strcmp(tmp->next->content, ">"))
 		{
-			*out = tmp->next->next->content;
-			// tmp->next = NULL;
+			*out = ft_strdup(tmp->next->next->content);
+			ft_lstclear(&tmp->next, ft_free);
+			break ;
 		}
 		if (!ft_strcmp(tmp->next->content, "<"))
-			*in = lst->next->next->content;
+		{
+			*in = ft_strdup(tmp->next->next->content);
+			ft_lstclear(&tmp->next, ft_free);
+			break ;
+		}
 		tmp = tmp->next;
 	}
 }
@@ -93,7 +97,7 @@ int		lexer(t_shell *sh)
 	sh->cmd = transform_tkn_into_cmds(sh);
 
 	// ft_tkn_print(sh->tk);
-	ft_cmd_print(sh->cmd);
+	// ft_cmd_print(sh->cmd);
 
 
 	return (0);

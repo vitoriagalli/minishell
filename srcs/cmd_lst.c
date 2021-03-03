@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 02:21:34 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/03 03:29:59 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/03 12:28:30 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	ft_cmd_print(t_cmd *lst)
 			ft_printf("arg %i: %s\n", i, lst->args[i]);
 			i++;
 		}
+		i = 0;
 		lst = lst->next;
 		count++;
 	}
