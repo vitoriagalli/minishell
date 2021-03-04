@@ -36,6 +36,7 @@ typedef struct		s_cmd {
 typedef struct		s_exec {
 	char			*path;
 	char			**argv;
+	int				fd[2];
 	int				status;
 }					t_exec;
 
@@ -46,7 +47,7 @@ typedef struct		s_shell {
 	char			*input;
 }					t_shell;
 
-typedef int		(*builtin_funct)(t_shell *);
+typedef int		(*builtin_funct)(t_cmd *);
 
 enum token_type {
 	PIPE = '|',
