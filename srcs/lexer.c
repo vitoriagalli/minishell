@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/28 22:48:01 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/03 12:54:13 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/04 22:04:00 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,29 +31,38 @@ char	**args_list_into_array_pointers(t_list *args_lst)
 	return (args);
 }
 
-void	handle_redirection(char **in, char **out, t_list *lst)
+int		store_redirection_info(t_cmd **cmd, int type, char *file, t_list **tmp)
+{
+	(*cmd)->redirection = type;
+	if (type == GREATER || type == GGREATER)
+		(*cmd)->file_out = ft_strdup(file);
+	else
+		(*cmd)->file_in = ft_strdup(file);
+	ft_lstclear(tmp, ft_free);
+	return (0);
+}
+
+int		handle_redirection(t_cmd **cmd, t_list *lst)
 {
 	t_list	*tmp;
 
 	tmp = lst;
 	while (tmp && tmp->next && tmp->next->next)
 	{
-		if (!ft_strcmp(tmp->next->content, ">"))
-		{
-			*out = ft_strdup(tmp->next->next->content);
-			ft_lstclear(&tmp->next, ft_free);
-			break ;
-		}
-		if (!ft_strcmp(tmp->next->content, "<"))
-		{
-			*in = ft_strdup(tmp->next->next->content);
-			ft_lstclear(&tmp->next, ft_free);
-			break ;
-		}
+		if (!ft_strcmp(tmp->next->content, ">") &&
+			!ft_strcmp(tmp->next->next->content, ">"))
+			return (store_redirection_info(cmd, GGREATER,
+			tmp->next->next->next->content, &tmp->next));
+		else if (!ft_strcmp(tmp->next->content, ">"))
+			return (store_redirection_info(cmd, GREATER,
+			tmp->next->next->content, &tmp->next));
+		else if (!ft_strcmp(tmp->next->content, "<"))
+			return (store_redirection_info(cmd, LESSER,
+			tmp->next->next->content, &tmp->next));
 		tmp = tmp->next;
 	}
+	return (0);
 }
-
 
 t_cmd	*build_cmd(t_token *tk)
 {
@@ -63,13 +72,10 @@ t_cmd	*build_cmd(t_token *tk)
 	args = NULL;
 	cmd = ft_cmd_new();
 	cmd->cmd = tk->tk_cmd;
-
-	handle_redirection(&cmd->file_in, &cmd->file_out, tk->args_lst); // cortar fim quando redirection
+	handle_redirection(&cmd, tk->args_lst);
 	cmd->args = args_list_into_array_pointers(tk->args_lst);
-
 	return (cmd);
 }
-
 
 t_cmd	*transform_tkn_into_cmds(t_shell *sh)
 {
@@ -93,12 +99,8 @@ int		lexer(t_shell *sh)
 {
 	sh->tk = put_input_into_tkn_struct(sh);
 	// check_syntax(sh);			// to implement
-
 	sh->cmd = transform_tkn_into_cmds(sh);
-
 	// ft_tkn_print(sh->tk);
 	// ft_cmd_print(sh->cmd);
-
-
 	return (0);
 }

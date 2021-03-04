@@ -6,12 +6,31 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/04 01:16:40 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/04 22:18:54 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+builtin_funct	*is_builldin(char *cmd)
+{
+	static char				*rel_path[7] = {"echo", "cd", "pwd", "export",
+		"unset", "env", "exit"};
+	static char				*abs_path[7] = {"/bin/echo", "/bin/cd", "/bin/pwd",
+		"/bin/export", "/bin/unset", "/bin/env", "/bin/exit"};
+	static builtin_funct	f_call[7] = {ft_echo, ft_cd, ft_pwd, ft_export,
+		ft_unset, ft_env, ft_exit};
+	int						i;
+
+	i = 0;
+	while (i < 7)
+	{
+		if (!(ft_strcmp(cmd, rel_path[i])) || !(ft_strcmp(cmd, abs_path[i])))
+			return (&f_call[i]);
+		i++;
+	}
+	return (NULL);
+}
 
 // funcao repetida em dois lugares no código
 // REFATORAR
@@ -25,9 +44,7 @@ char	**get_env_path()
 	while (tmp)
 	{
 		if (!ft_strcmp("PATH", tmp->name))
-		{
-			return(ft_split(tmp->value, ':'));
-		}
+			return (ft_split(tmp->value, ':'));
 		tmp = tmp->next;
 	}
 	return (NULL);
@@ -43,7 +60,28 @@ char	*join_path(char *env, char *path)
 	return (tmp);
 }
 
-int	launch_relative_path(t_exec *exec)
+void	set_redirection(t_cmd *cmd)
+{
+	int	fd;
+
+	if (cmd->redirection == LESSER)
+	{
+		fd = open(cmd->file_in, O_RDONLY);
+		dup2(fd, STDIN_FILENO);
+	}
+	else if (cmd->redirection == GREATER)
+	{
+		fd = open(cmd->file_out, O_WRONLY | O_CREAT, 0664);
+		dup2(fd, STDOUT_FILENO);
+	}
+	else if (cmd->redirection == GGREATER)
+	{
+		fd = open(cmd->file_out, O_WRONLY | O_CREAT | O_APPEND, 0664);
+		dup2(fd, STDOUT_FILENO);
+	}
+}
+
+int	launch_relative_path(t_exec *exec, t_cmd *cmd)
 {
 	char	**env_path;
 	char	*tmp;
@@ -82,55 +120,35 @@ int	launch_absolute_path(t_exec *exec)
 	return (0);
 }
 
-
-builtin_funct	*is_builldin(char *cmd)
-{
-	static char				*f_name[7] = {"echo",
-										"cd",
-										"pwd",
-										"export",
-										"unset",
-										"env",
-										"exit"};
-	static builtin_funct	f_call[7] = {ft_echo,
-										ft_cd,
-										ft_pwd,
-										ft_export,
-										ft_unset,
-										ft_env,
-										ft_exit};
-	int						i;
-
-	i = 0;
-	while (i < 7)
-	{
-		if (!(ft_strcmp(cmd, f_name[i])))
-			return (&f_call[i]);
-		i++;
-	}
-	return (NULL);
-}
-
 int		execute_single_command(t_shell *sh, t_cmd *cmd)
 {
-	t_exec	exec;
-	builtin_funct *f_buildin;
+	t_exec			exec;
+	builtin_funct	*f_buildin;
+	int				fd[2];
 
 	f_buildin = NULL;
 
 	exec.argv = cmd->args;
 	exec.path = cmd->cmd;
 
+	fd[0] = dup(STDIN_FILENO);
+	fd[1] = dup(STDOUT_FILENO);
+
+	if (cmd->file_in || cmd->file_out)
+		set_redirection(cmd);
 	if (f_buildin = is_builldin(cmd->cmd))
 		(*f_buildin)(cmd);
 	else if (ft_strchr("./~", cmd->cmd[0]))
 		launch_absolute_path(&exec);
 	else
-		launch_relative_path(&exec);
+		launch_relative_path(&exec, cmd);
+
+	dup2(fd[0], 0);
+	dup2(fd[1], 1);
+
 	return (0);
 }
 
-// implementar tipos de separadores
 int		execute(t_shell *sh)
 {
 	t_cmd *tmp;

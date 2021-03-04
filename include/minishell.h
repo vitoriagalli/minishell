@@ -4,7 +4,13 @@
 # include "libft.h"
 # include <stdbool.h>
 # include <unistd.h>
+# include <sys/types.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <errno.h>
+
+
 
 // -exec set follow-fork-mode-child
 
@@ -28,7 +34,7 @@ typedef struct		s_cmd {
 	char			**args;
 	char			*file_in;
 	char			*file_out;
-	// int				redirection;
+	int				redirection;
 	int				separator;
 	struct s_cmd	*next;
 }					t_cmd;
@@ -49,18 +55,19 @@ typedef struct		s_shell {
 
 typedef int		(*builtin_funct)(t_cmd *);
 
-enum token_type {
-	PIPE = '|',
-	SEMICOLON = ';',
-	ESCAPE = '\\',
-	GREATER = '>',
-	LESSER = '<',
-	SPACE = ' ',
-	TAB = '\t',
-	SIMPLE_QUOTE = '\'',
-	DOUBLE_QUOTE = '\"',
-	NULL_CHAR = 0,
-	GENERAL = -1,
+enum			token_type {
+				PIPE = '|',
+				SEMICOLON = ';',
+				ESCAPE = '\\',
+				LESSER = '<',
+				GREATER = '>',
+				GGREATER = 'G',
+				SPACE = ' ',
+				TAB = '\t',
+				SIMPLE_QUOTE = '\'',
+				DOUBLE_QUOTE = '\"',
+				NULL_CHAR = 0,
+				GENERAL = -1,
 };
 
 
