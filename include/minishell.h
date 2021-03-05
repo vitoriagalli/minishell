@@ -98,15 +98,7 @@ void	ft_lst_print(t_list *lst);
 char	**global_env;
 void	initialize_global_env(void);
 char	**reallocate(char **buffer, int len_arr);
-// list of env
-t_env	*ft_env_new(char *name, char *value);
-void	env_add_back(t_env **head, t_env *new);
-int		ft_env_size(t_env *head);
-void	ft_free(char *elem);
-void	ft_env_clear(t_env **lst, void (*del)(char*));
-void	ft_env_print(t_env *lst);
-t_env	*put_env_into_lst(char **env_content);
-
+void	store_value_and_name(char **value, char **name, int i);
 
 // COMMANDS - BUILDINS
 

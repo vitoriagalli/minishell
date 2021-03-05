@@ -9,7 +9,6 @@ SRC_FILES =	main.c \
 			token.c \
 			token_lst.c \
 			token_utils.c \
-			env_lst.c \
 			lexer.c \
 			cmd_lst.c \
 			exec.c \

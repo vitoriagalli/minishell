@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/05 23:56:03 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 00:57:01 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,18 @@ builtin_funct	*is_builldin(char *cmd)
 	return (NULL);
 }
 
-// funcao similar em dois lugares no código
 char	**get_env_path()
 {
-	t_env	*env;
-	t_env	*tmp;
+	char	*name = NULL;
+	char	*value = NULL;
+	int	i;
 
-	env = put_env_into_lst(__environ);
-	tmp = env;
-	while (tmp)
+	while (global_env[i])
 	{
-		if (!ft_strcmp("PATH", tmp->name))
-			return (ft_split(tmp->value, ':'));
-		tmp = tmp->next;
+		store_value_and_name(&value, &name, i);
+		if (!ft_strcmp("PATH", name))
+			return (ft_split(value, ':'));
+		i++;
 	}
 	return (NULL);
 }
@@ -112,7 +111,7 @@ int	launch_absolute_path(t_exec *exec)
 	pid = fork();
 	if (pid == 0)
 	{
-		execve(exec->path, exec->argv, __environ);
+		execve(exec->path, exec->argv, global_env);
 	}
 	else
 		wait(0);

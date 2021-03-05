@@ -6,20 +6,11 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 21:54:39 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/05 23:48:40 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 00:54:27 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// void	clear_memory(t_shell *sh)
-// {
-// 	// ft_env_clear(&sh->env, ft_free);
-// 	// free(sh->env);
-// 	ft_tkn_clear(&sh->tks, ft_free);
-// 	free(sh->tks);
-// 	free(sh->input);
-// }
 
 void	exit_minishell(int exit_status)
 {
@@ -46,7 +37,6 @@ void	loop(t_shell *sh)
 		sh->input = read_line();
 		lexer(sh);
 		execute(sh);
-		// clear_memory(sh);
 	}
 }
 
@@ -58,7 +48,7 @@ int		main(int argc, char **argv, char **envp)
 	(void)argv;
 	sh = (t_shell) {0};
 	initialize_global_env();
-	sh.env = put_env_into_lst(__environ);
+	// sh.env = put_env_into_lst(global_env);
 	loop(&sh);
 	return (0);
 }
