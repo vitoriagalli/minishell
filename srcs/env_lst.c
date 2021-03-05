@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 21:19:21 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/01 13:18:05 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 00:19:29 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void	ft_env_clear(t_env **lst, void (*del)(char*))
 	*lst = NULL;
 }
 
+
+// nao precisa de parametro MUDAR
 t_env	*put_env_into_lst(char **env_content)
 {
 	t_env	*env;

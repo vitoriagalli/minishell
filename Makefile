@@ -13,7 +13,8 @@ SRC_FILES =	main.c \
 			lexer.c \
 			cmd_lst.c \
 			exec.c \
-			buildin.c
+			buildin.c \
+			env_array.c
 
 SRCS = $(addprefix $(SRCS_DIR)/,$(SRC_FILES))
 OBJS = $(patsubst $(SRCS_DIR)%.c, $(OBJS_DIR)%.o, $(SRCS))

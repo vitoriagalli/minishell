@@ -42,7 +42,7 @@ typedef struct		s_cmd {
 typedef struct		s_exec {
 	char			*path;
 	char			**argv;
-	int				fd[2];
+	// int				fd[2];
 	int				status;
 }					t_exec;
 
@@ -95,7 +95,10 @@ void	ft_lst_print(t_list *lst);
 
 
 // ENV
-
+char	**global_env;
+void	initialize_global_env(void);
+char	**reallocate(char **buffer, int len_arr);
+// list of env
 t_env	*ft_env_new(char *name, char *value);
 void	env_add_back(t_env **head, t_env *new);
 int		ft_env_size(t_env *head);
@@ -112,7 +115,7 @@ t_cmd	*ft_cmd_new(void);
 void	ft_cmd_print(t_cmd *lst);
 
 
-int	execute(t_shell *sh);
+int		execute(t_shell *sh);
 
 
 int		ft_echo(t_cmd  *cmd);
@@ -122,5 +125,6 @@ int		ft_export(t_cmd  *cmd);
 int		ft_unset(t_cmd  *cmd);
 int		ft_env(t_cmd  *cmd);
 int		ft_exit(t_cmd  *cmd);
+
 
 #endif

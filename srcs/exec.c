@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/04 22:18:54 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/05 23:56:03 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ builtin_funct	*is_builldin(char *cmd)
 	return (NULL);
 }
 
-// funcao repetida em dois lugares no código
-// REFATORAR
+// funcao similar em dois lugares no código
 char	**get_env_path()
 {
 	t_env	*env;
@@ -96,7 +95,7 @@ int	launch_relative_path(t_exec *exec, t_cmd *cmd)
 		while (env_path[i])
 		{
 			tmp = join_path(env_path[i], exec->path);
-			execve(tmp, exec->argv, __environ);
+			execve(tmp, exec->argv, global_env);
 			i++;
 		}
 	}

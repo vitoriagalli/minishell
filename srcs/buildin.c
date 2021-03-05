@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:16:54 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/03 21:50:29 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 00:23:16 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,21 +54,84 @@ int		ft_pwd(t_cmd *cmd)
 	return (0);
 }
 
+
+// sem argumentos, printa as variaveis do shell presente
+// com argumentos, seta a variavel no shell presente
 int		ft_export(t_cmd *cmd)
 {
-	(void)cmd;
+	int		i;
+	int		len;
+	int		exist;
+	char	**new_add_env;
+
+	i = 0;
+	len = 0;
+	exist = false;
+	if (cmd->args[1])
+	{
+		len = ft_strrchr(cmd->args[1], '=') - cmd->args[1];
+		while (global_env[i])
+		{
+			if (cmd->args[1] && !ft_strncmp(global_env[i], cmd->args[1], len + 1))
+			{
+				global_env[i] = cmd->args[1];
+				exist = true;
+			}
+			i++;
+		}
+		if (exist == false)
+		{
+			len = 0;
+			while (global_env[len])
+				len++;
+			new_add_env = reallocate(global_env, len);
+			new_add_env[len] = cmd->args[1];
+			global_env = new_add_env;
+		}
+	}
+	else
+	{
+		while (global_env[i])
+		{
+			// verificar formato -declare
+			ft_putendl_fd(global_env[i++], STDOUT_FILENO);
+		}
+	}
+
 	return (0);
 }
 
 int		ft_unset(t_cmd *cmd)
 {
-	(void)cmd;
+	int		i;
+	int		len;
+
+	i = 0;
+	len = 0;
+	if (cmd->args[1])
+		len = ft_strrchr(cmd->args[1], '=') - cmd->args[1];
+	while (global_env[i])
+	{
+		if (cmd->args[1] && !ft_strncmp(global_env[i], cmd->args[1], len + 1))
+		{
+			// ver o que vai fazer aqui!
+			free(global_env[i]); // nao precisa liberar!
+		}
+		i++;
+	}
+
+
 	return (0);
 }
 
+
 int		ft_env(t_cmd *cmd)
 {
-	(void)cmd;
+	int i;
+
+	i = 0;
+	while (global_env[i])
+		ft_putendl_fd(global_env[i++], STDOUT_FILENO);
 	return (0);
 }
 
@@ -77,34 +140,3 @@ int		ft_exit(t_cmd *cmd)
 	(void)cmd;
 	return (0);
 }
-
-
-
-
-// void	call_exec_path(t_cmd *cmd, t_exec *exec, t_minishell *msh, int fd_dup)
-// {
-// 	int i;
-// 	char *tmp;
-
-// 	i = 0;
-// 	exec->child_pid = fork();
-// 	if (exec->child_pid == 0)
-// 	{
-// 		dup2(exec->pipefds[fd_dup], fd_dup);
-// 		if (cmd->redirection != 0)
-// 			set_redirection(cmd, exec);
-// 		else if (cmd->separator == PIPE)
-// 			close(exec->pipefds[0]);
-// 		if (is_buildin_cmd(cmd->cmd_name))
-// 			call_exec_buildin(cmd, exec, msh);
-//     	while (exec->path_cmd[i])
-// 		{
-// 			tmp = add_path_command(exec->path_cmd[i++], cmd->cmd_name);
-// 			execve(tmp, cmd->args, __environ);
-// 		}
-// 		free(tmp);
-// 		dup2(exec->save_stdout, STDOUT_FILENO);
-// 		ft_printf("%s: command not found\n", cmd->cmd_name);
-// 		exit(exit_status());
-// 	}
-// }
