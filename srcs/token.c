@@ -6,61 +6,68 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 22:12:38 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 01:54:58 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 03:44:59 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void store_value_and_name(char **value, char **name, int i)
+void	store_value_and_name(char **value, char **name, int i)
 {
 	char *addr;
 
-	addr = ft_strrchr(global_env[i], '=');
-	*name = ft_substr(global_env[i], 0, addr - global_env[i]);
-	*value = ft_substr(global_env[i], addr - global_env[i] + 1,
-	ft_strlen(global_env[i]) - (addr - global_env[i]));
+	addr = ft_strrchr(g_env[i], '=');
+	*name = ft_substr(g_env[i], 0, addr - g_env[i]);
+	*value = ft_substr(g_env[i], addr - g_env[i] + 1,
+	ft_strlen(g_env[i]) - (addr - g_env[i]));
 }
 
-char	*check_for_env(t_env *env, char *data)
+char	*substitute_value(char *data, char *env_var, char *name, char *value)
 {
-	(void)env;
 	char	*new_tk_value;
-	char	*env_var;
 	char	*before_env;
 	char	*after_env;
-	char	*name = NULL;
-	char	*value = NULL;
 
 	new_tk_value = NULL;
-	env_var = NULL;
-	before_env = NULL;
-	after_env = NULL;
+	before_env = ft_substr(data, 0, (env_var - data - 1));
+	after_env = ft_substr(env_var, ft_strlen(name),
+		ft_strlen(env_var) - ft_strlen(name));
+	if (before_env)
+		new_tk_value = ft_strjoin_n_free(before_env, ft_strdup(value));
+	else
+		new_tk_value = ft_strdup(value);
+	if (after_env)
+		new_tk_value = ft_strjoin_n_free(new_tk_value, after_env);
+	return (new_tk_value);
+}
 
-	int i = 0;
-	while (global_env[i])
+char	*check_for_env(char *data)
+{
+	char	*env_var;
+	char	*name;
+	char	*value;
+	int		i;
+
+	env_var = NULL;
+	name = NULL;
+	value = NULL;
+	i = 0;
+	while (g_env[i])
 	{
 		store_value_and_name(&value, &name, i);
 		env_var = ft_strnstr(data, name, ft_strlen(data));
 		if (env_var && *(env_var - 1) == '$')
-		{
-			before_env = ft_substr(data, 0, (env_var - data - 1));
-			after_env = ft_substr(env_var, ft_strlen(name),
-				ft_strlen(env_var) - ft_strlen(name));
-			new_tk_value = ft_strjoin_n_free(before_env,
-				ft_strjoin_n_free(ft_strdup(value), after_env));
-			return (new_tk_value);
-		}
+			return (substitute_value(data, env_var, name, value));
 		i++;
 	}
 	return (NULL);
 }
 
-char	*handle_env(char *data, t_env *env)
+char	*handle_env(char *data)
 {
 	char	*is_env;
 
-	is_env = check_for_env(env, data);
+	is_env = check_for_env(data);
 	if (is_env != NULL)
 	{
 		free(data);
@@ -131,7 +138,7 @@ void	atribute_new_list(t_shell *sh, t_list **tk, int i, int len)
 			data = ft_substr(sh->input, i, len);
 		handle_escape(data, type);
 		if (type != SIMPLE_QUOTE)
-			data = handle_env(data, sh->env);
+			data = handle_env(data);
 		new_tk = ft_lstnew(data);
 		ft_lstadd_back(tk, new_tk);
 	}
@@ -144,7 +151,7 @@ t_list	*args_lst(t_shell *sh, int *i, int *init_tkn, int *sep)
 
 	tk = NULL;
 	quote_state = false;
-	while (sh->input[*i])
+	while (sh->input[(*i)])
 	{
 		get_tk_state(sh->input[*i], &quote_state);
 		if (is_tk_char(sh->input[*i]) && !quote_state)

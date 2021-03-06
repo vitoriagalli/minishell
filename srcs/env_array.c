@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 21:38:03 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 00:22:19 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 03:52:44 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,14 @@ void	initialize_global_env(void)
 	len_arr = 0;
 	while (__environ[len_arr])
 		len_arr++;
-	global_env = ft_calloc(len_arr + 1, sizeof(char *));
+	g_env = ft_calloc(len_arr + 1, sizeof(char *));
 	i = 0;
 	while (i < len_arr)
 	{
-		global_env[i] = ft_strdup(__environ[i]);
+		g_env[i] = ft_strdup(__environ[i]);
 		i++;
 	}
 }
-
 
 char	**reallocate(char **buffer, int len_arr)
 {

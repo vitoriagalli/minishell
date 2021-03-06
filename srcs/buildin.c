@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:16:54 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 00:23:16 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 04:07:42 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ int		ft_export(t_cmd *cmd)
 	if (cmd->args[1])
 	{
 		len = ft_strrchr(cmd->args[1], '=') - cmd->args[1];
-		while (global_env[i])
+		while (g_env[i])
 		{
-			if (cmd->args[1] && !ft_strncmp(global_env[i], cmd->args[1], len + 1))
+			if (cmd->args[1] && !ft_strncmp(g_env[i], cmd->args[1], len + 1))
 			{
-				global_env[i] = cmd->args[1];
+				g_env[i] = cmd->args[1];
 				exist = true;
 			}
 			i++;
@@ -82,19 +82,19 @@ int		ft_export(t_cmd *cmd)
 		if (exist == false)
 		{
 			len = 0;
-			while (global_env[len])
+			while (g_env[len])
 				len++;
-			new_add_env = reallocate(global_env, len);
+			new_add_env = reallocate(g_env, len);
 			new_add_env[len] = cmd->args[1];
-			global_env = new_add_env;
+			g_env = new_add_env;
 		}
 	}
 	else
 	{
-		while (global_env[i])
+		while (g_env[i])
 		{
 			// verificar formato -declare
-			ft_putendl_fd(global_env[i++], STDOUT_FILENO);
+			ft_putendl_fd(g_env[i++], STDOUT_FILENO);
 		}
 	}
 
@@ -107,20 +107,23 @@ int		ft_unset(t_cmd *cmd)
 	int		len;
 
 	i = 0;
-	len = 0;
 	if (cmd->args[1])
-		len = ft_strrchr(cmd->args[1], '=') - cmd->args[1];
-	while (global_env[i])
+		len = ft_strlen(cmd->args[1]);
+	while (g_env[i])
 	{
-		if (cmd->args[1] && !ft_strncmp(global_env[i], cmd->args[1], len + 1))
+		// arrumar! comprar ate o final
+		if (cmd->args[1] && !ft_strncmp(g_env[i], cmd->args[1], len))
 		{
-			// ver o que vai fazer aqui!
-			free(global_env[i]); // nao precisa liberar!
+			free(g_env[i]);
+			while (g_env[i + 1])
+			{
+				g_env[i] = g_env[i + 1];
+				i++;
+			}
+			g_env[i] = NULL;
 		}
 		i++;
 	}
-
-
 	return (0);
 }
 
@@ -130,8 +133,8 @@ int		ft_env(t_cmd *cmd)
 	int i;
 
 	i = 0;
-	while (global_env[i])
-		ft_putendl_fd(global_env[i++], STDOUT_FILENO);
+	while (g_env[i])
+		ft_putendl_fd(g_env[i++], STDOUT_FILENO);
 	return (0);
 }
 

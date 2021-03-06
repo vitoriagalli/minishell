@@ -12,13 +12,6 @@
 
 // -exec set follow-fork-mode-child
 
-
-typedef struct		s_env {
-	char			*name;
-	char			*value;
-	struct s_env	*next;
-}					t_env;
-
 typedef struct		s_token
 {
 	char			*tk_cmd;
@@ -46,7 +39,6 @@ typedef struct		s_exec {
 
 typedef struct		s_shell {
 	t_token			*tk;
-	t_env			*env;
 	t_cmd			*cmd;
 	char			*input;
 }					t_shell;
@@ -93,7 +85,7 @@ void	ft_lst_print(t_list *lst);
 
 
 // ENV
-char	**global_env;
+char	**g_env;
 void	initialize_global_env(void);
 char	**reallocate(char **buffer, int len_arr);
 void	store_value_and_name(char **value, char **name, int i);

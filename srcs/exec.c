@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 01:55:27 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 03:47:43 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,15 @@ builtin_funct	*is_builldin(char *cmd)
 	return (NULL);
 }
 
-char	**get_env_path()
+char	**get_env_path(void)
 {
-	char	*name = NULL;
-	char	*value = NULL;
-	int	i;
+	char	*name;
+	char	*value;
+	int		i;
 
-	while (global_env[i])
+	name = NULL;
+	value = NULL;
+	while (g_env[i])
 	{
 		store_value_and_name(&value, &name, i);
 		if (!ft_strcmp("PATH", name))
@@ -54,7 +56,6 @@ char	*join_path(char *env, char *path)
 
 	tmp = ft_strjoin(env, "/");
 	tmp = ft_strjoin(tmp, path);
-
 	return (tmp);
 }
 
@@ -94,7 +95,7 @@ int	launch_relative_path(t_exec *exec, t_cmd *cmd)
 		while (env_path[i])
 		{
 			tmp = join_path(env_path[i], exec->path);
-			execve(tmp, exec->argv, global_env);
+			execve(tmp, exec->argv, g_env);
 			i++;
 		}
 	}
@@ -111,7 +112,7 @@ int	launch_absolute_path(t_exec *exec)
 	pid = fork();
 	if (pid == 0)
 	{
-		execve(exec->path, exec->argv, global_env);
+		execve(exec->path, exec->argv, g_env);
 	}
 	else
 		wait(0);
@@ -125,13 +126,10 @@ int		execute_single_command(t_shell *sh, t_cmd *cmd)
 	int				fd[2];
 
 	f_buildin = NULL;
-
 	exec.argv = cmd->args;
 	exec.path = cmd->cmd;
-
 	fd[0] = dup(STDIN_FILENO);
 	fd[1] = dup(STDOUT_FILENO);
-
 	if (cmd->file_in || cmd->file_out)
 		set_redirection(cmd);
 	if (f_buildin = is_builldin(cmd->cmd))
@@ -140,13 +138,10 @@ int		execute_single_command(t_shell *sh, t_cmd *cmd)
 		launch_absolute_path(&exec);
 	else
 		launch_relative_path(&exec, cmd);
-
 	dup2(fd[0], 0);
 	dup2(fd[1], 1);
-
 	return (0);
 }
-
 
 int		execute(t_shell *sh)
 {
