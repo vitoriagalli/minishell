@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/28 22:48:01 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 00:54:47 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 01:55:14 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int		lexer(t_shell *sh)
 	sh->tk = put_input_into_tkn_struct(sh);
 	// check_syntax(sh);			// to implement
 	sh->cmd = transform_tkn_into_cmds(sh);
+
 	// ft_tkn_print(sh->tk);
 	// ft_cmd_print(sh->cmd);
 	return (0);

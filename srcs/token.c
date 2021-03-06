@@ -6,40 +6,11 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 22:12:38 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 00:45:22 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 01:54:58 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// char	*check_for_env(t_env *env, char *data)
-// {
-// 	char	*new_tk_value;
-// 	char	*env_var;
-// 	char	*before_env;
-// 	char	*after_env;
-
-// 	new_tk_value = NULL;
-// 	env_var = NULL;
-// 	before_env = NULL;
-// 	after_env = NULL;
-// 	while (env)
-// 	{
-// 		env_var = ft_strnstr(data, env->name, ft_strlen(data));
-// 		if (env_var && *(env_var - 1) == '$')
-// 		{
-// 			before_env = ft_substr(data, 0, (env_var - data - 1));
-// 			after_env = ft_substr(env_var, ft_strlen(env->name),
-// 				ft_strlen(env_var) - ft_strlen(env->name));
-// 			new_tk_value = ft_strjoin_n_free(before_env,
-// 				ft_strjoin_n_free(ft_strdup(env->value), after_env));
-// 			return (new_tk_value);
-// 		}
-// 		env = env->next;
-// 	}
-// 	return (NULL);
-// }
-
 
 void store_value_and_name(char **value, char **name, int i)
 {

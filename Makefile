@@ -4,7 +4,6 @@ SRCS_DIR =	srcs
 OBJS_DIR =	.objs
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
-
 SRC_FILES =	main.c \
 			token.c \
 			token_lst.c \

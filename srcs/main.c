@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 21:54:39 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 00:54:27 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 01:55:07 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int		main(int argc, char **argv, char **envp)
 	(void)argv;
 	sh = (t_shell) {0};
 	initialize_global_env();
-	// sh.env = put_env_into_lst(global_env);
 	loop(&sh);
 	return (0);
 }

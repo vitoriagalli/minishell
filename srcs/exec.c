@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 00:57:01 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 01:55:27 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ int		execute_single_command(t_shell *sh, t_cmd *cmd)
 
 	return (0);
 }
+
 
 int		execute(t_shell *sh)
 {
