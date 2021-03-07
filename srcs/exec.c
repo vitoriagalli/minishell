@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 03:47:43 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/07 00:22:52 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ builtin_funct	*is_builldin(char *cmd)
 	return (NULL);
 }
 
-char	**get_env_path(void)
+char	**get_env_value(char *key)
 {
 	char	*name;
 	char	*value;
@@ -40,10 +40,11 @@ char	**get_env_path(void)
 
 	name = NULL;
 	value = NULL;
+	i = 0;
 	while (g_env[i])
 	{
 		store_value_and_name(&value, &name, i);
-		if (!ft_strcmp("PATH", name))
+		if (!ft_strcmp(key, name))
 			return (ft_split(value, ':'));
 		i++;
 	}
@@ -80,7 +81,7 @@ void	set_redirection(t_cmd *cmd)
 	}
 }
 
-int	launch_relative_path(t_exec *exec, t_cmd *cmd)
+int	launch_path(t_exec *exec, t_cmd *cmd)
 {
 	char	**env_path;
 	char	*tmp;
@@ -88,34 +89,47 @@ int	launch_relative_path(t_exec *exec, t_cmd *cmd)
 	int		i;
 
 	i = 0;
-	env_path = get_env_path();
-	pid = fork();
-	if (pid == 0)
+	exec->pid = fork();
+	if (exec->pid == 0)
 	{
+		env_path = get_env_value("PATH");
 		while (env_path[i])
 		{
 			tmp = join_path(env_path[i], exec->path);
 			execve(tmp, exec->argv, g_env);
 			i++;
 		}
+		free(tmp);
+		ft_putstr_fd(exec->path, STDOUT_FILENO);
+		ft_putendl_fd(": command not found", STDOUT_FILENO);
+		exit(EXIT_FAILURE);
 	}
-	else
-		wait(0);
+	// else
+	// 	wait(0);
 	return (0);
 }
 
-int	launch_absolute_path(t_exec *exec)
+int	launch_full_path(t_exec *exec)
 {
+	char	**home_path;
 	char	*tmp;
 	int		pid;
 
-	pid = fork();
-	if (pid == 0)
+	home_path = NULL;
+	exec->pid = fork();
+	if (exec->pid == 0)
 	{
+		if (*exec->path == '~')
+		{
+			ft_memmove(&exec->path[0], &exec->path[1], ft_strlen(exec->path));
+			home_path = get_env_value("HOME");
+			exec->path = ft_strjoin_n_free(*home_path, exec->path);
+		}
+
 		execve(exec->path, exec->argv, g_env);
 	}
-	else
-		wait(0);
+	// else
+	// 	wait(0);
 	return (0);
 }
 
@@ -124,33 +138,58 @@ int		execute_single_command(t_shell *sh, t_cmd *cmd)
 	t_exec			exec;
 	builtin_funct	*f_buildin;
 	int				fd[2];
+	int				child_status;
 
+	exec.pid = 0;
+	child_status = 0;
 	f_buildin = NULL;
 	exec.argv = cmd->args;
 	exec.path = cmd->cmd;
 	fd[0] = dup(STDIN_FILENO);
 	fd[1] = dup(STDOUT_FILENO);
-	if (cmd->file_in || cmd->file_out)
+	if (cmd->redirection)
 		set_redirection(cmd);
 	if (f_buildin = is_builldin(cmd->cmd))
-		(*f_buildin)(cmd);
+	{
+		(*f_buildin)(sh);
+		// (*f_buildin)(cmd);
+	}
 	else if (ft_strchr("./~", cmd->cmd[0]))
-		launch_absolute_path(&exec);
+		launch_full_path(&exec);		// to do
 	else
-		launch_relative_path(&exec, cmd);
+		launch_path(&exec, cmd);
 	dup2(fd[0], 0);
 	dup2(fd[1], 1);
+
+
+	waitpid(exec.pid, &child_status, 0);
+	if (WIFEXITED(child_status))
+		sh->status = WEXITSTATUS(child_status);
+	// else if (WIFSIGNALED(status))
+	// 	sh->status =  WTERMSIG(status);
+
+
+
 	return (0);
 }
 
 int		execute(t_shell *sh)
 {
-	t_cmd *tmp;
+	t_cmd		*tmp;
+	// int			fd[2];
 
+
+	// fd[0] = dup(STDIN_FILENO);
+	// fd[1] = dup(STDOUT_FILENO);
 	tmp = sh->cmd;
 	while (tmp)
 	{
 		execute_single_command(sh, tmp);
 		tmp = tmp->next;
 	}
+	// dup2(fd[0], 0);
+	// dup2(fd[1], 1);
+
+
+	free_shell(sh);
 }

@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 22:12:38 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 03:44:59 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 20:11:56 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,20 @@ void	store_value_and_name(char **value, char **name, int i)
 	ft_strlen(g_env[i]) - (addr - g_env[i]));
 }
 
-char	*substitute_value(char *data, char *env_var, char *name, char *value)
+char	*subst_value(char *data, char *env_var, char *name, char *value)
 {
 	char	*new_tk_value;
 	char	*before_env;
 	char	*after_env;
 
 	new_tk_value = NULL;
-	before_env = ft_substr(data, 0, (env_var - data - 1));
-	after_env = ft_substr(env_var, ft_strlen(name),
-		ft_strlen(env_var) - ft_strlen(name));
+	before_env = NULL;
+	after_env = NULL;
+	if ((env_var - data - 1) > 0)
+		before_env = ft_substr(data, 0, (env_var - data - 1));
+	if ((ft_strlen(env_var) - ft_strlen(name)) > 0)
+		after_env = ft_substr(env_var, ft_strlen(name),
+			ft_strlen(env_var) - ft_strlen(name));
 	if (before_env)
 		new_tk_value = ft_strjoin_n_free(before_env, ft_strdup(value));
 	else
@@ -43,6 +47,7 @@ char	*substitute_value(char *data, char *env_var, char *name, char *value)
 
 char	*check_for_env(char *data)
 {
+	char	*new;
 	char	*env_var;
 	char	*name;
 	char	*value;
@@ -57,21 +62,35 @@ char	*check_for_env(char *data)
 		store_value_and_name(&value, &name, i);
 		env_var = ft_strnstr(data, name, ft_strlen(data));
 		if (env_var && *(env_var - 1) == '$')
-			return (substitute_value(data, env_var, name, value));
+		{
+			new = subst_value(data, env_var, name, value);
+			free(name);
+			free(value);
+			return (new);
+		}
 		i++;
 	}
 	return (NULL);
 }
 
-char	*handle_env(char *data)
+char	*handle_dollar_sign(char *data, int exit_status)
 {
-	char	*is_env;
+	char	*new;
+	char	*addr;
 
-	is_env = check_for_env(data);
-	if (is_env != NULL)
+	addr = ft_strnstr(data, "$?", ft_strlen(data));
+	if (addr)
+	{
+		new = subst_value(data, addr, ft_strdup("$?"), ft_itoa(exit_status));
+		free(data);
+		data = new;
+		new = NULL;
+	}
+	new = check_for_env(data);
+	if (new != NULL)
 	{
 		free(data);
-		return (is_env);
+		return (new);
 	}
 	return (data);
 }
@@ -138,7 +157,7 @@ void	atribute_new_list(t_shell *sh, t_list **tk, int i, int len)
 			data = ft_substr(sh->input, i, len);
 		handle_escape(data, type);
 		if (type != SIMPLE_QUOTE)
-			data = handle_env(data);
+			data = handle_dollar_sign(data, sh->status);
 		new_tk = ft_lstnew(data);
 		ft_lstadd_back(tk, new_tk);
 	}

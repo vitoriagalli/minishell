@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 02:21:34 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/03 12:28:30 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 23:49:33 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ t_cmd	*ft_cmd_new(void)
 	elem->file_in = NULL;
 	elem->file_out = NULL;
 	elem->next = NULL;
+	elem->redirection = 0;
+	elem->separator = 0;
 	return (elem);
 }
 
@@ -43,6 +45,27 @@ void	cmd_add_back(t_cmd **lst, t_cmd *new)
 		tmp->next = new;
 	}
 }
+
+void	ft_cmd_clear(t_cmd **lst, void (*del)(char*))
+{
+	t_cmd	*to_free;
+
+	to_free = *lst;
+	if (!*lst || !lst || !del)
+		return ;
+	while (to_free)
+	{
+		*lst = to_free->next;
+		del(to_free->cmd);
+		del(to_free->file_in);
+		del(to_free->file_out);
+		ft_array_clear(&to_free->args, ft_free);
+		// del(to_free); // cmd é stack, ver se vai ser point
+		to_free = *lst;
+	}
+	*lst = NULL;
+}
+
 
 /*
 ** temporary function

@@ -34,13 +34,14 @@ typedef struct		s_exec {
 	char			*path;
 	char			**argv;
 	// int				fd[2];
-	int				status;
+	int				pid;
 }					t_exec;
 
 typedef struct		s_shell {
 	t_token			*tk;
 	t_cmd			*cmd;
 	char			*input;
+	int				status;
 }					t_shell;
 
 typedef int		(*builtin_funct)(t_cmd *);
@@ -95,18 +96,23 @@ void	store_value_and_name(char **value, char **name, int i);
 void	cmd_add_back(t_cmd **lst, t_cmd *new);
 t_cmd	*ft_cmd_new(void);
 void	ft_cmd_print(t_cmd *lst);
-
+void	ft_cmd_clear(t_cmd **lst, void (*del)(char*));
 
 int		execute(t_shell *sh);
 
 
-int		ft_echo(t_cmd  *cmd);
-int		ft_cd(t_cmd  *cmd);
-int		ft_pwd(t_cmd  *cmd);
-int		ft_export(t_cmd  *cmd);
-int		ft_unset(t_cmd  *cmd);
-int		ft_env(t_cmd  *cmd);
-int		ft_exit(t_cmd  *cmd);
+int		ft_echo(t_cmd *cmd);
+int		ft_cd(t_cmd *cmd);
+int		ft_pwd(t_cmd *cmd);
+int		ft_export(t_cmd *cmd);
+int		ft_unset(t_cmd *cmd);
+int		ft_env(t_cmd *cmd);
+int		ft_exit(t_shell *sh); //******* para liberar depois, ver como arrumar
 
+
+
+void	ft_array_clear(char **arr, void (*del)(char *));
+void	free_shell(t_shell *sh);
+void	ft_free(char *elem);
 
 #endif

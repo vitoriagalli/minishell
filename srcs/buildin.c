@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:16:54 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 04:07:42 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/07 00:19:27 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ int		ft_echo(t_cmd *cmd)
 	}
 	if (!flag)
 		ft_putstr_fd("\n", STDOUT_FILENO);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 int		ft_cd(t_cmd *cmd)
 {
 	if (chdir(cmd->args[1]) != 0)
-		return (0);
-	return (0);
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 int		ft_pwd(t_cmd *cmd)
@@ -49,9 +49,9 @@ int		ft_pwd(t_cmd *cmd)
 
 	(void)cmd;
 	if (!(getcwd(cwd, 1024)))
-		return (0);
+		return (EXIT_FAILURE);
 	ft_putendl_fd(cwd, STDOUT_FILENO);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 
@@ -98,7 +98,7 @@ int		ft_export(t_cmd *cmd)
 		}
 	}
 
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 int		ft_unset(t_cmd *cmd)
@@ -124,7 +124,7 @@ int		ft_unset(t_cmd *cmd)
 		}
 		i++;
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 
@@ -135,11 +135,14 @@ int		ft_env(t_cmd *cmd)
 	i = 0;
 	while (g_env[i])
 		ft_putendl_fd(g_env[i++], STDOUT_FILENO);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
-int		ft_exit(t_cmd *cmd)
+// int		ft_exit(t_cmd *cmd)
+int		ft_exit(t_shell *sh)
 {
-	(void)cmd;
-	return (0);
+	// free_shell(sh);
+	ft_array_clear(g_env, ft_free);
+	exit(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }

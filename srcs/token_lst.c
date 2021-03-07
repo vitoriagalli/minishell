@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 22:21:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/02 21:30:27 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/06 23:51:35 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,6 @@ int		ft_tkn_size(t_token *lst)
 	return (count);
 }
 
-void	ft_free(char *elem)
-{
-	if (elem)
-		free(elem);
-}
-
 void	ft_tkn_clear(t_token **lst, void (*del)(char*))
 {
 	t_token	*to_free;
@@ -74,7 +68,8 @@ void	ft_tkn_clear(t_token **lst, void (*del)(char*))
 	{
 		*lst = to_free->next;
 		del(to_free->tk_cmd);
-		free(to_free);
+		ft_lstclear(&to_free->args_lst, ft_free);
+		del(to_free);
 		to_free = *lst;
 	}
 	*lst = NULL;
