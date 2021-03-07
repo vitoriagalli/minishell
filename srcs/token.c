@@ -6,44 +6,11 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 22:12:38 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 20:11:56 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/07 16:46:23 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	store_value_and_name(char **value, char **name, int i)
-{
-	char *addr;
-
-	addr = ft_strrchr(g_env[i], '=');
-	*name = ft_substr(g_env[i], 0, addr - g_env[i]);
-	*value = ft_substr(g_env[i], addr - g_env[i] + 1,
-	ft_strlen(g_env[i]) - (addr - g_env[i]));
-}
-
-char	*subst_value(char *data, char *env_var, char *name, char *value)
-{
-	char	*new_tk_value;
-	char	*before_env;
-	char	*after_env;
-
-	new_tk_value = NULL;
-	before_env = NULL;
-	after_env = NULL;
-	if ((env_var - data - 1) > 0)
-		before_env = ft_substr(data, 0, (env_var - data - 1));
-	if ((ft_strlen(env_var) - ft_strlen(name)) > 0)
-		after_env = ft_substr(env_var, ft_strlen(name),
-			ft_strlen(env_var) - ft_strlen(name));
-	if (before_env)
-		new_tk_value = ft_strjoin_n_free(before_env, ft_strdup(value));
-	else
-		new_tk_value = ft_strdup(value);
-	if (after_env)
-		new_tk_value = ft_strjoin_n_free(new_tk_value, after_env);
-	return (new_tk_value);
-}
 
 char	*check_for_env(char *data)
 {
@@ -163,7 +130,7 @@ void	atribute_new_list(t_shell *sh, t_list **tk, int i, int len)
 	}
 }
 
-t_list	*args_lst(t_shell *sh, int *i, int *init_tkn, int *sep)
+t_list	*args_lst(int *i, int *init_tkn, int *sep)
 {
 	t_list	*tk;
 	int		quote_state;
@@ -192,21 +159,5 @@ t_list	*args_lst(t_shell *sh, int *i, int *init_tkn, int *sep)
 	}
 	atribute_new_list(sh, &tk, *init_tkn, *i - *init_tkn);
 	*sep = sh->input[*i];
-	return (tk);
-}
-
-t_token	*put_input_into_tkn_struct(t_shell *sh)
-{
-	t_token	*tk;
-	int		i;
-	int		init_tkn;
-	int		sep;
-
-	tk = NULL;
-	i = 0;
-	init_tkn = 0;
-	sep = 0;
-	while (sh->input[i])
-		tkn_add_back(&tk, ft_tkn_new(args_lst(sh, &i, &init_tkn, &sep), sep));
 	return (tk);
 }

@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 20:23:57 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/07 00:08:47 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/07 16:49:50 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_array_clear(char **arr, void (*del)(char *))
 		del(arr[i++]);
 }
 
-void	free_shell(t_shell *sh)
+void	free_shell(void)
 {
 	if (sh->cmd)
 		ft_cmd_clear(&sh->cmd, ft_free);

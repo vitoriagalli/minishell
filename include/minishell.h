@@ -44,76 +44,72 @@ typedef struct		s_shell {
 	int				status;
 }					t_shell;
 
-typedef int		(*builtin_funct)(t_cmd *);
+typedef int			(*builtin_funct)(t_cmd *);
 
-enum			token_type {
-				PIPE = '|',
-				SEMICOLON = ';',
-				ESCAPE = '\\',
-				LESSER = '<',
-				GREATER = '>',
-				GGREATER = 'G',
-				SPACE = ' ',
-				TAB = '\t',
-				SIMPLE_QUOTE = '\'',
-				DOUBLE_QUOTE = '\"',
-				NULL_CHAR = 0,
-				GENERAL = -1,
+enum				token_type {
+					PIPE = '|',
+					SEMICOLON = ';',
+					ESCAPE = '\\',
+					LESSER = '<',
+					GREATER = '>',
+					GGREATER = 'G',
+					SPACE = ' ',
+					TAB = '\t',
+					SIMPLE_QUOTE = '\'',
+					DOUBLE_QUOTE = '\"',
+					NULL_CHAR = 0,
+					GENERAL = -1,
 };
 
 char	**g_env;
-t_shell	sh;
+t_shell	*sh;
 
 
-// TOKENS
+// env
+void		initialize_global_env(void);
+char		**reallocate(char **buffer, int len_arr);
 
-t_token	*ft_tkn_new(t_list *args, int sep);
-void	tkn_add_back(t_token **head, t_token *new);
-int		ft_tkn_size(t_token *head);
-void	ft_free(char *elem);
-void	ft_tkn_clear(t_token **lst, void (*del)(char*));
-void	ft_tkn_print(t_token *head);
+// loop
+int			lexer(void);
+t_token		*put_input_into_tkn_struct(void);
+t_token		*put_input_into_tkn_struct(void);
+int			execute(void);
 
-int		is_tk_char(int c);
-int		is_quote_char(int c);
-int		is_space_char(int c);
-int		is_job_char(int c);
+void		ft_lst_print(t_list *lst);
+void		ft_array_clear(char **arr, void (*del)(char *));
 
-int		lexer(t_shell *sh);
+void		free_shell(void);
+void		ft_free(char *elem);
 
+// tk and tks utils
+t_list		*args_lst(int *i, int *init_tkn, int *sep);
+void		store_value_and_name(char **value, char **name, int i);
+char		*subst_value(char *data, char *env_var, char *name, char *value);
+int			is_tk_char(int c);
+int			is_quote_char(int c);
 
+// token list
+t_token		*ft_tkn_new(t_list *args, int sep);
+void		tkn_add_back(t_token **head, t_token *new);
+int			ft_tkn_size(t_token *head);
+void		ft_free(char *elem);
+void		ft_tkn_clear(t_token **lst, void (*del)(char*));
+void		ft_tkn_print(t_token *head);
 
-t_token	*put_input_into_tkn_struct(t_shell *sh);
-void	ft_lst_print(t_list *lst);
+// cmd list
+void		cmd_add_back(t_cmd **lst, t_cmd *new);
+t_cmd		*ft_cmd_new(void);
+void		ft_cmd_print(t_cmd *lst);
+void		ft_cmd_clear(t_cmd **lst, void (*del)(char*));
 
+// buildins
+int			ft_echo(t_cmd *cmd);
+int			ft_cd(t_cmd *cmd);
+int			ft_pwd(t_cmd *cmd);
+int			ft_export(t_cmd *cmd);
+int			ft_unset(t_cmd *cmd);
+int			ft_env(t_cmd *cmd);
+int			ft_exit(t_cmd *cmd);
 
-// ENV
-void	initialize_global_env(void);
-char	**reallocate(char **buffer, int len_arr);
-void	store_value_and_name(char **value, char **name, int i);
-
-// COMMANDS - BUILDINS
-
-void	cmd_add_back(t_cmd **lst, t_cmd *new);
-t_cmd	*ft_cmd_new(void);
-void	ft_cmd_print(t_cmd *lst);
-void	ft_cmd_clear(t_cmd **lst, void (*del)(char*));
-
-int		execute(t_shell *sh);
-
-
-int		ft_echo(t_cmd *cmd);
-int		ft_cd(t_cmd *cmd);
-int		ft_pwd(t_cmd *cmd);
-int		ft_export(t_cmd *cmd);
-int		ft_unset(t_cmd *cmd);
-int		ft_env(t_cmd *cmd);
-int		ft_exit(t_cmd *cmd);
-
-
-
-void	ft_array_clear(char **arr, void (*del)(char *));
-void	free_shell(t_shell *sh);
-void	ft_free(char *elem);
 
 #endif

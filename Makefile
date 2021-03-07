@@ -5,10 +5,11 @@ OBJS_DIR =	.objs
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 SRC_FILES =	main.c \
+			lexer.c \
 			token.c \
 			token_lst.c \
 			token_utils.c \
-			lexer.c \
+			cmd.c \
 			cmd_lst.c \
 			exec.c \
 			buildin.c \

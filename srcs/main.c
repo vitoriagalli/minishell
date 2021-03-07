@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 21:54:39 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/07 15:58:21 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/07 16:23:51 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,25 +29,23 @@ char	*read_line(void)
 	return (line);
 }
 
-void	loop(t_shell *sh)
+void	sh_loop(void)
 {
 	while (true)
 	{
 		ft_printf("$ ");
 		sh->input = read_line();
-		lexer(sh);
-		execute(sh);
+		lexer();
+		execute();
 	}
 }
 
 int		main(int argc, char **argv, char **envp)
 {
-	// t_shell	sh;
-
 	(void)argc;
 	(void)argv;
-	sh = (t_shell) {0};
+	sh = ft_calloc(1, sizeof(t_shell));
 	initialize_global_env();
-	loop(&sh);
+	sh_loop();
 	return (0);
 }

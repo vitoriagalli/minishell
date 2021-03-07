@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/07 15:57:53 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/07 16:20:41 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ int	launch_full_path(t_exec *exec)
 	return (0);
 }
 
-int		execute_single_command(t_shell *sh, t_cmd *cmd)
+int		execute_single_command(t_cmd *cmd)
 {
 	t_exec			exec;
 	builtin_funct	*f_buildin;
@@ -170,7 +170,7 @@ int		execute_single_command(t_shell *sh, t_cmd *cmd)
 	return (0);
 }
 
-int		execute(t_shell *sh)
+int		execute(void)
 {
 	t_cmd		*tmp;
 	// int			fd[2];
@@ -181,12 +181,12 @@ int		execute(t_shell *sh)
 	tmp = sh->cmd;
 	while (tmp)
 	{
-		execute_single_command(sh, tmp);
+		execute_single_command(tmp);
 		tmp = tmp->next;
 	}
 	// dup2(fd[0], 0);
 	// dup2(fd[1], 1);
 
 
-	// free_shell(sh); // se usar da segfault, VER!
+	// free_shell(); // se usar da segfault, VER!
 }

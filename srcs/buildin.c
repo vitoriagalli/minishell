@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:16:54 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/07 15:50:14 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/07 16:21:04 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int		ft_env(t_cmd *cmd)
 
 int		ft_exit(t_cmd *cmd)
 {
-	// free_shell(sh);
+	// free_shell();
 	ft_array_clear(g_env, ft_free);
 	exit(EXIT_SUCCESS);
 	return (EXIT_SUCCESS);
