@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 02:21:34 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 23:49:33 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/07 02:49:17 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ t_cmd	*ft_cmd_new(void)
 	elem->file_in = NULL;
 	elem->file_out = NULL;
 	elem->next = NULL;
-	elem->redirection = 0;
-	elem->separator = 0;
 	return (elem);
 }
 

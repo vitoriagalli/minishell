@@ -61,6 +61,8 @@ enum			token_type {
 				GENERAL = -1,
 };
 
+char	**g_env;
+t_shell	sh;
 
 
 // TOKENS
@@ -86,7 +88,6 @@ void	ft_lst_print(t_list *lst);
 
 
 // ENV
-char	**g_env;
 void	initialize_global_env(void);
 char	**reallocate(char **buffer, int len_arr);
 void	store_value_and_name(char **value, char **name, int i);
@@ -107,7 +108,7 @@ int		ft_pwd(t_cmd *cmd);
 int		ft_export(t_cmd *cmd);
 int		ft_unset(t_cmd *cmd);
 int		ft_env(t_cmd *cmd);
-int		ft_exit(t_shell *sh); //******* para liberar depois, ver como arrumar
+int		ft_exit(t_cmd *cmd);
 
 
 

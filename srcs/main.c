@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 21:54:39 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 20:16:15 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/07 15:58:21 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	loop(t_shell *sh)
 
 int		main(int argc, char **argv, char **envp)
 {
-	t_shell	sh;
+	// t_shell	sh;
 
 	(void)argc;
 	(void)argv;

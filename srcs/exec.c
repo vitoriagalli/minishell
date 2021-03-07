@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/07 00:22:52 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/07 15:57:53 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,10 +150,7 @@ int		execute_single_command(t_shell *sh, t_cmd *cmd)
 	if (cmd->redirection)
 		set_redirection(cmd);
 	if (f_buildin = is_builldin(cmd->cmd))
-	{
-		(*f_buildin)(sh);
-		// (*f_buildin)(cmd);
-	}
+		(*f_buildin)(cmd);
 	else if (ft_strchr("./~", cmd->cmd[0]))
 		launch_full_path(&exec);		// to do
 	else
@@ -191,5 +188,5 @@ int		execute(t_shell *sh)
 	// dup2(fd[1], 1);
 
 
-	free_shell(sh);
+	// free_shell(sh); // se usar da segfault, VER!
 }

@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:16:54 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/07 00:19:27 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/07 15:50:14 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,7 @@ int		ft_env(t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-// int		ft_exit(t_cmd *cmd)
-int		ft_exit(t_shell *sh)
+int		ft_exit(t_cmd *cmd)
 {
 	// free_shell(sh);
 	ft_array_clear(g_env, ft_free);
