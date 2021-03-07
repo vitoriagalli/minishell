@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_utils.c                                        :+:      :+:    :+:   */
+/*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 16:33:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/07 16:34:38 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/08 00:09:02 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,12 @@ char	**args_list_into_array_pointers(t_list *args_lst)
 int		store_redirection_info(t_cmd **cmd, int type, char *file, t_list **tmp)
 {
 	(*cmd)->redirection = type;
-	if (type == GREATER || type == GGREATER)
-		(*cmd)->file_out = ft_strdup(file);
+	if (type == GREATER)
+		(*cmd)->fd_out = open(file, O_WRONLY | O_CREAT, 0664);
+	else if (type == DGREATER)
+		(*cmd)->fd_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0664);
 	else
-		(*cmd)->file_in = ft_strdup(file);
+		(*cmd)->fd_in = open(file, O_RDONLY);
 	ft_lstclear(tmp, ft_free);
 	return (0);
 }
@@ -51,7 +53,7 @@ int		handle_redirection(t_cmd **cmd, t_list *lst)
 	{
 		if (!ft_strcmp(tmp->next->content, ">") &&
 			!ft_strcmp(tmp->next->next->content, ">"))
-			return (store_redirection_info(cmd, GGREATER,
+			return (store_redirection_info(cmd, DGREATER,
 			tmp->next->next->next->content, &tmp->next));
 		else if (!ft_strcmp(tmp->next->content, ">"))
 			return (store_redirection_info(cmd, GREATER,
@@ -71,7 +73,9 @@ t_cmd	*build_cmd(t_token *tk)
 
 	args = NULL;
 	cmd = ft_cmd_new();
-	cmd->cmd = tk->tk_cmd; //
+	cmd->cmd = tk->tk_cmd; // ver
+	cmd->separator = tk->sep;
+	cmd->pid = 0;
 	handle_redirection(&cmd, tk->args_lst);
 	cmd->args = args_list_into_array_pointers(tk->args_lst);
 	return (cmd);

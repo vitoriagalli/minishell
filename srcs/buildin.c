@@ -6,11 +6,31 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:16:54 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/07 16:21:04 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/08 00:28:04 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+builtin_funct	*is_builldin(char *cmd)
+{
+	static char				*rel_path[7] = {"echo", "cd", "pwd", "export",
+		"unset", "env", "exit"};
+	static char				*abs_path[7] = {"/bin/echo", "/bin/cd", "/bin/pwd",
+		"/bin/export", "/bin/unset", "/bin/env", "/bin/exit"};
+	static builtin_funct	f_call[7] = {ft_echo, ft_cd, ft_pwd, ft_export,
+		ft_unset, ft_env, ft_exit};
+	int						i;
+
+	i = 0;
+	while (i < 7)
+	{
+		if (!(ft_strcmp(cmd, rel_path[i])) || !(ft_strcmp(cmd, abs_path[i])))
+			return (&f_call[i]);
+		i++;
+	}
+	return (NULL);
+}
 
 int		ft_echo(t_cmd *cmd)
 {

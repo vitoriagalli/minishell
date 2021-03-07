@@ -23,10 +23,12 @@ typedef struct		s_token
 typedef struct		s_cmd {
 	char			*cmd;
 	char			**args;
-	char			*file_in;
-	char			*file_out;
 	int				redirection;
 	int				separator;
+	int				fd_in;
+	int				fd_out;
+	int				pfd[2];
+	int				pid;
 	struct s_cmd	*next;
 }					t_cmd;
 
@@ -45,7 +47,7 @@ enum				token_type {
 					ESCAPE = '\\',
 					LESSER = '<',
 					GREATER = '>',
-					GGREATER = 'G',
+					DGREATER = 'G',
 					SPACE = ' ',
 					TAB = '\t',
 					SIMPLE_QUOTE = '\'',
@@ -89,6 +91,10 @@ void		ft_free(char *elem);
 void		ft_tkn_clear(t_token **lst, void (*del)(char*));
 void		ft_tkn_print(t_token *head);
 
+
+// cmd
+t_cmd	*build_cmd(t_token *tk);
+
 // cmd list
 void		cmd_add_back(t_cmd **lst, t_cmd *new);
 t_cmd		*ft_cmd_new(void);
@@ -104,5 +110,6 @@ int			ft_unset(t_cmd *cmd);
 int			ft_env(t_cmd *cmd);
 int			ft_exit(t_cmd *cmd);
 
+builtin_funct	*is_builldin(char *cmd);
 
 #endif

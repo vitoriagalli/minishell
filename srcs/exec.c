@@ -6,31 +6,11 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/07 17:54:55 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/08 00:33:27 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-builtin_funct	*is_builldin(char *cmd)
-{
-	static char				*rel_path[7] = {"echo", "cd", "pwd", "export",
-		"unset", "env", "exit"};
-	static char				*abs_path[7] = {"/bin/echo", "/bin/cd", "/bin/pwd",
-		"/bin/export", "/bin/unset", "/bin/env", "/bin/exit"};
-	static builtin_funct	f_call[7] = {ft_echo, ft_cd, ft_pwd, ft_export,
-		ft_unset, ft_env, ft_exit};
-	int						i;
-
-	i = 0;
-	while (i < 7)
-	{
-		if (!(ft_strcmp(cmd, rel_path[i])) || !(ft_strcmp(cmd, abs_path[i])))
-			return (&f_call[i]);
-		i++;
-	}
-	return (NULL);
-}
 
 char	**get_env_value(char *key)
 {
@@ -62,34 +42,29 @@ char	*join_path(char *env, char *path)
 
 void	set_redirection(t_cmd *cmd)
 {
-	int	fd;
-
 	if (cmd->redirection == LESSER)
-	{
-		fd = open(cmd->file_in, O_RDONLY);
-		dup2(fd, STDIN_FILENO);
-	}
-	else if (cmd->redirection == GREATER)
-	{
-		fd = open(cmd->file_out, O_WRONLY | O_CREAT, 0664);
-		dup2(fd, STDOUT_FILENO);
-	}
-	else if (cmd->redirection == GGREATER)
-	{
-		fd = open(cmd->file_out, O_WRONLY | O_CREAT | O_APPEND, 0664);
-		dup2(fd, STDOUT_FILENO);
-	}
+		dup2(cmd->fd_in, STDIN_FILENO);
+	else
+		dup2(cmd->fd_out, STDOUT_FILENO);
 }
 
-int	launch_path(t_cmd *cmd, int *pid)
+// void	set_pipe(t_cmd *cmd)
+// {
+// 	int	fd;
+
+// 	pipe(cmd->pfd);
+
+// }
+
+int	launch_path(t_cmd *cmd)
 {
 	char	**env_path;
 	char	*tmp;
 	int		i;
 
 	i = 0;
-	*pid = fork();
-	if (*pid == 0)
+	cmd->pid = fork();
+	if (cmd->pid == 0)
 	{
 		env_path = get_env_value("PATH");
 		while (env_path[i])
@@ -103,18 +78,16 @@ int	launch_path(t_cmd *cmd, int *pid)
 		ft_putendl_fd(": command not found", STDOUT_FILENO);
 		exit(EXIT_FAILURE);
 	}
-	// else
-	// 	wait(0);
 	return (0);
 }
 
-int	launch_full_path(t_cmd *cmd, int *pid)
+int	launch_full_path(t_cmd *cmd)
 {
 	char	**home_path;
 
 	home_path = NULL;
-	*pid = fork();
-	if (*pid == 0)
+	cmd->pid = fork();
+	if (cmd->pid == 0)
 	{
 		if (*cmd->cmd == '~')
 		{
@@ -127,39 +100,32 @@ int	launch_full_path(t_cmd *cmd, int *pid)
 		ft_putendl_fd(": command not found", STDOUT_FILENO);
 		exit(EXIT_FAILURE);
 	}
-	// else
-	// 	wait(0);
 	return (0);
 }
 
 int		execute_single_command(t_cmd *cmd)
 {
-	// t_exec			exec;
 	builtin_funct	*f_buildin;
-	int				fd[2];
 	int				child_status;
-	int				pid;
 
-	pid = 0;
+	cmd->pid = 0;
 	child_status = 0;
 	f_buildin = NULL;
-	fd[0] = dup(STDIN_FILENO);
-	fd[1] = dup(STDOUT_FILENO);
+
 	if (cmd->redirection)
 		set_redirection(cmd);
 	if (f_buildin = is_builldin(cmd->cmd))
 		(*f_buildin)(cmd);
 	else if (ft_strchr("./~", cmd->cmd[0]))
-		launch_full_path(cmd, &pid);		// to improve
+		launch_full_path(cmd);		// to improve
 	else
-		launch_path(cmd, &pid);
-	dup2(fd[0], 0);
-	dup2(fd[1], 1);
+		launch_path(cmd);
 
-
-	waitpid(pid, &child_status, 0);
+	waitpid(cmd->pid, &child_status, 0);
 	if (WIFEXITED(child_status))
-		sh->status = WEXITSTATUS(child_status);
+
+
+	// 	sh->status = WEXITSTATUS(child_status);
 	// else if (WIFSIGNALED(status))
 	// 	sh->status =  WTERMSIG(status);
 
@@ -171,20 +137,23 @@ int		execute_single_command(t_cmd *cmd)
 int		execute(void)
 {
 	t_cmd		*tmp;
-	// int			fd[2];
+	int			fd[2];
 
 
-	// fd[0] = dup(STDIN_FILENO);
-	// fd[1] = dup(STDOUT_FILENO);
 	tmp = sh->cmd;
 	while (tmp)
 	{
+		fd[0] = dup(STDIN_FILENO);
+		fd[1] = dup(STDOUT_FILENO);
+
 		execute_single_command(tmp);
+
+		dup2(fd[0], STDIN_FILENO);
+		dup2(fd[1], STDOUT_FILENO);
+
 		tmp = tmp->next;
 	}
-	// dup2(fd[0], 0);
-	// dup2(fd[1], 1);
 
 
-	// free_shell(); // se usar da segfault, VER!
+	// free_shell(); // segfault, VER!
 }
