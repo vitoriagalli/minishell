@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/07 16:20:41 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/07 17:54:55 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,26 +81,25 @@ void	set_redirection(t_cmd *cmd)
 	}
 }
 
-int	launch_path(t_exec *exec, t_cmd *cmd)
+int	launch_path(t_cmd *cmd, int *pid)
 {
 	char	**env_path;
 	char	*tmp;
-	int		pid;
 	int		i;
 
 	i = 0;
-	exec->pid = fork();
-	if (exec->pid == 0)
+	*pid = fork();
+	if (*pid == 0)
 	{
 		env_path = get_env_value("PATH");
 		while (env_path[i])
 		{
-			tmp = join_path(env_path[i], exec->path);
-			execve(tmp, exec->argv, g_env);
+			tmp = join_path(env_path[i], cmd->cmd);
+			execve(tmp, cmd->args, g_env);
 			i++;
 		}
 		free(tmp);
-		ft_putstr_fd(exec->path, STDOUT_FILENO);
+		ft_putstr_fd(cmd->cmd, STDOUT_FILENO);
 		ft_putendl_fd(": command not found", STDOUT_FILENO);
 		exit(EXIT_FAILURE);
 	}
@@ -109,24 +108,24 @@ int	launch_path(t_exec *exec, t_cmd *cmd)
 	return (0);
 }
 
-int	launch_full_path(t_exec *exec)
+int	launch_full_path(t_cmd *cmd, int *pid)
 {
 	char	**home_path;
-	char	*tmp;
-	int		pid;
 
 	home_path = NULL;
-	exec->pid = fork();
-	if (exec->pid == 0)
+	*pid = fork();
+	if (*pid == 0)
 	{
-		if (*exec->path == '~')
+		if (*cmd->cmd == '~')
 		{
-			ft_memmove(&exec->path[0], &exec->path[1], ft_strlen(exec->path));
+			ft_memmove(&cmd->cmd[0], &cmd->cmd[1], ft_strlen(cmd->cmd));
 			home_path = get_env_value("HOME");
-			exec->path = ft_strjoin_n_free(*home_path, exec->path);
+			cmd->cmd = ft_strjoin_n_free(*home_path, cmd->cmd);
 		}
-
-		execve(exec->path, exec->argv, g_env);
+		execve(cmd->cmd, cmd->args, g_env);
+		ft_putstr_fd(cmd->cmd, STDOUT_FILENO);
+		ft_putendl_fd(": command not found", STDOUT_FILENO);
+		exit(EXIT_FAILURE);
 	}
 	// else
 	// 	wait(0);
@@ -135,16 +134,15 @@ int	launch_full_path(t_exec *exec)
 
 int		execute_single_command(t_cmd *cmd)
 {
-	t_exec			exec;
+	// t_exec			exec;
 	builtin_funct	*f_buildin;
 	int				fd[2];
 	int				child_status;
+	int				pid;
 
-	exec.pid = 0;
+	pid = 0;
 	child_status = 0;
 	f_buildin = NULL;
-	exec.argv = cmd->args;
-	exec.path = cmd->cmd;
 	fd[0] = dup(STDIN_FILENO);
 	fd[1] = dup(STDOUT_FILENO);
 	if (cmd->redirection)
@@ -152,14 +150,14 @@ int		execute_single_command(t_cmd *cmd)
 	if (f_buildin = is_builldin(cmd->cmd))
 		(*f_buildin)(cmd);
 	else if (ft_strchr("./~", cmd->cmd[0]))
-		launch_full_path(&exec);		// to do
+		launch_full_path(cmd, &pid);		// to improve
 	else
-		launch_path(&exec, cmd);
+		launch_path(cmd, &pid);
 	dup2(fd[0], 0);
 	dup2(fd[1], 1);
 
 
-	waitpid(exec.pid, &child_status, 0);
+	waitpid(pid, &child_status, 0);
 	if (WIFEXITED(child_status))
 		sh->status = WEXITSTATUS(child_status);
 	// else if (WIFSIGNALED(status))

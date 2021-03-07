@@ -30,13 +30,6 @@ typedef struct		s_cmd {
 	struct s_cmd	*next;
 }					t_cmd;
 
-typedef struct		s_exec {
-	char			*path;
-	char			**argv;
-	// int				fd[2];
-	int				pid;
-}					t_exec;
-
 typedef struct		s_shell {
 	t_token			*tk;
 	t_cmd			*cmd;
