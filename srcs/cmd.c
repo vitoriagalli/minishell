@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 16:33:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/08 00:09:02 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/11 02:20:43 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,8 @@ t_cmd	*build_cmd(t_token *tk)
 
 	args = NULL;
 	cmd = ft_cmd_new();
-	cmd->cmd = tk->tk_cmd; // ver
+	cmd->cmd = find_path(tk->tk_cmd);
 	cmd->separator = tk->sep;
-	cmd->pid = 0;
 	handle_redirection(&cmd, tk->args_lst);
 	cmd->args = args_list_into_array_pointers(tk->args_lst);
 	return (cmd);

@@ -11,6 +11,7 @@ SRC_FILES =	main.c \
 			token_utils.c \
 			cmd.c \
 			cmd_lst.c \
+			path.c \
 			exec.c \
 			buildin.c \
 			env_array.c \

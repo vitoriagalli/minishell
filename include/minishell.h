@@ -24,6 +24,7 @@ typedef struct		s_cmd {
 	char			*cmd;
 	char			**args;
 	int				redirection;
+	char			*file;
 	int				separator;
 	int				fd_in;
 	int				fd_out;
@@ -93,7 +94,7 @@ void		ft_tkn_print(t_token *head);
 
 
 // cmd
-t_cmd	*build_cmd(t_token *tk);
+t_cmd		*build_cmd(t_token *tk);
 
 // cmd list
 void		cmd_add_back(t_cmd **lst, t_cmd *new);
@@ -110,6 +111,8 @@ int			ft_unset(t_cmd *cmd);
 int			ft_env(t_cmd *cmd);
 int			ft_exit(t_cmd *cmd);
 
+// exec
+char	*find_path(char *cmd);
 builtin_funct	*is_builldin(char *cmd);
 
 #endif

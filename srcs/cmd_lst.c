@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 02:21:34 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/08 00:15:07 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/11 02:21:02 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ t_cmd	*ft_cmd_new(void)
 		return (NULL);
 	elem->cmd = NULL;
 	elem->args = NULL;
+	elem->redirection = 0;
+	elem->separator = 0;
+	// elem->fd_in = 0;
+	// elem->fd_out = 1;	// default?? pode deixar assim?
 	// elem->file_in = NULL;
 	// elem->file_out = NULL;
 	elem->next = NULL;
