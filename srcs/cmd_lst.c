@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 02:21:34 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/11 12:31:06 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/12 03:07:50 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@ t_cmd	*ft_cmd_new(void)
 	elem->args = NULL;
 	elem->redirection = 0;
 	elem->separator = 0;
-	// elem->fdin = 0;
-	// elem->fdout = 1;	// default?? pode deixar assim?
-	// elem->file_in = NULL;
-	// elem->file_out = NULL;
 	elem->next = NULL;
 	return (elem);
 }
@@ -59,8 +55,7 @@ void	ft_cmd_clear(t_cmd **lst, void (*del)(char*))
 	{
 		*lst = to_free->next;
 		del(to_free->cmd);
-		// del(to_free->file_in);
-		// del(to_free->file_out);
+		del(to_free->file);
 		ft_array_clear(&to_free->args, ft_free);
 		// del(to_free); // cmd é stack, ver se vai ser point
 		to_free = *lst;
@@ -68,11 +63,9 @@ void	ft_cmd_clear(t_cmd **lst, void (*del)(char*))
 	*lst = NULL;
 }
 
-
 /*
 ** temporary function
 */
-
 
 void	ft_cmd_print(t_cmd *lst)
 {
@@ -85,8 +78,6 @@ void	ft_cmd_print(t_cmd *lst)
 	{
 		ft_printf("-------- command %i ---------\n", count);
 		ft_printf("cmd: %s\n", lst->cmd);
-		// ft_printf("in: %s\n", lst->file_in);
-		// ft_printf("out: %s\n", lst->file_out);
 		ft_printf("red: %i\n", lst->redirection);
 		ft_printf("sep: %i\n", lst->separator);
 		while (lst->args[i])

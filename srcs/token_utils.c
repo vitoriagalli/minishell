@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 21:20:53 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/07 16:43:26 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/12 02:59:45 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		is_tk_char(int c)
 		c == GREATER ||
 		c == LESSER ||
 		c == SPACE ||
-		c == TAB )
+		c == TAB)
 		return (true);
 	return (false);
 }

@@ -26,18 +26,16 @@ typedef struct		s_cmd {
 	int				redirection;
 	char			*file;
 	int				separator;
-	int				fdin;		// arrumar redirection e eliminar daqui essa var
-	int				fdout;
 	struct s_cmd	*next;
 }					t_cmd;
 
 typedef struct		s_exec
 {
+	pid_t			pid;
 	bool			pipe;
 	int				fdin;
 	int				fdout;
 	int				pipefd[2];
-	pid_t			pid;
 	int				status;
 }					t_exec;
 
@@ -65,62 +63,60 @@ enum				token_type {
 					GENERAL = -1,
 };
 
-char	**g_env;
-t_shell	*sh;
-t_exec	*exec;
+char				**g_env;
+t_shell				*sh;
 
 // env
-void		initialize_global_env(void);
-char		**reallocate(char **buffer, int len_arr);
+void				initialize_global_env(void);
+char				**reallocate(char **buffer, int len_arr);
 
 // loop
-int			lexer(void);
-t_token		*put_input_into_tkn_struct(void);
-t_token		*put_input_into_tkn_struct(void);
-int			execute(void);
+int					lexer(void);
+t_token				*put_input_into_tkn_struct(void);
+t_token				*put_input_into_tkn_struct(void);
+int					execute(void);
 
-void		ft_lst_print(t_list *lst);
-void		ft_array_clear(char **arr, void (*del)(char *));
+void				ft_lst_print(t_list *lst);
+void				ft_array_clear(char **arr, void (*del)(char *));
 
-void		free_shell(void);
-void		ft_free(char *elem);
+void				free_shell(void);
+void				ft_free(char *elem);
 
 // tk and tks utils
-t_list		*args_lst(int *i, int *init_tkn, int *sep);
-void		store_value_and_name(char **value, char **name, int i);
-char		*subst_value(char *data, char *env_var, char *name, char *value);
-int			is_tk_char(int c);
-int			is_quote_char(int c);
+t_list				*args_lst(int *i, int *init_tkn, int *sep);
+void				store_value_and_name(char **value, char **name, int i);
+char				*subst_value(char *data, char *env_var, char *name, char *value);
+int					is_tk_char(int c);
+int					is_quote_char(int c);
 
 // token list
-t_token		*ft_tkn_new(t_list *args, int sep);
-void		tkn_add_back(t_token **head, t_token *new);
-int			ft_tkn_size(t_token *head);
-void		ft_free(char *elem);
-void		ft_tkn_clear(t_token **lst, void (*del)(char*));
-void		ft_tkn_print(t_token *head);
-
+t_token				*ft_tkn_new(t_list *args, int sep);
+void				tkn_add_back(t_token **head, t_token *new);
+int					ft_tkn_size(t_token *head);
+void				ft_free(char *elem);
+void				ft_tkn_clear(t_token **lst, void (*del)(char*));
+void				ft_tkn_print(t_token *head);
 
 // cmd
-t_cmd		*build_cmd(t_token *tk);
+t_cmd				*build_cmd(t_token *tk);
 
 // cmd list
-void		cmd_add_back(t_cmd **lst, t_cmd *new);
-t_cmd		*ft_cmd_new(void);
-void		ft_cmd_print(t_cmd *lst);
-void		ft_cmd_clear(t_cmd **lst, void (*del)(char*));
+void				cmd_add_back(t_cmd **lst, t_cmd *new);
+t_cmd				*ft_cmd_new(void);
+void				ft_cmd_print(t_cmd *lst);
+void				ft_cmd_clear(t_cmd **lst, void (*del)(char*));
 
 // buildins
-int			ft_echo(t_cmd *cmd);
-int			ft_cd(t_cmd *cmd);
-int			ft_pwd(t_cmd *cmd);
-int			ft_export(t_cmd *cmd);
-int			ft_unset(t_cmd *cmd);
-int			ft_env(t_cmd *cmd);
-int			ft_exit(t_cmd *cmd);
+int					ft_echo(t_cmd *cmd);
+int					ft_cd(t_cmd *cmd);
+int					ft_pwd(t_cmd *cmd);
+int					ft_export(t_cmd *cmd);
+int					ft_unset(t_cmd *cmd);
+int					ft_env(t_cmd *cmd);
+int					ft_exit(t_cmd *cmd);
 
 // exec
-char	*find_path(char *cmd);
-builtin_funct	*is_builldin(char *cmd);
+char				*find_path(char *cmd);
+builtin_funct		*is_builldin(char *cmd);
 
 #endif

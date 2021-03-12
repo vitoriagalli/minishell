@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 22:21:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/06 23:51:35 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/12 03:09:20 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void	ft_tkn_clear(t_token **lst, void (*del)(char*))
 	*lst = NULL;
 }
 
-
 /*
 ** temporary function
 */
@@ -105,11 +104,9 @@ void	ft_tkn_print(t_token *lst)
 		ft_printf("cmd: %s\n", lst->tk_cmd);
 		ft_printf("sep: %i\n", lst->sep);
 		ft_printf("next: %p\n", lst->next);
-			ft_printf("args: %p\n", lst->args_lst);
+		ft_printf("args: %p\n", lst->args_lst);
 		ft_lst_print(lst->args_lst);
 		lst = lst->next;
 		count++;
 	}
 }
-
-

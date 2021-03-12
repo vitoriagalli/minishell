@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 00:41:48 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/11 23:41:40 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/12 03:01:11 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@ char	**get_env_value(char *key)
 }
 
 bool	file_exists(char *filepath)
- {
+{
 	struct stat		buffer;
-	return (stat (filepath, &buffer) == 0);
+
+	return (stat(filepath, &buffer) == 0);
 }
 
 char	*join_path(char *env, char *path)
@@ -53,19 +54,23 @@ char	*relative_path(char *cmd)
 	int		i;
 
 	i = 0;
-	env_path = get_env_value("PATH");		// ver seg fault quando unset
-	while (env_path[i])
+	env_path = get_env_value("PATH");
+	if (env_path)
 	{
-		tmp = join_path(env_path[i], cmd);
-		if (file_exists(tmp))
-			return (tmp);
-		free(tmp);
-		i++;
+		while (env_path[i])
+		{
+			tmp = join_path(env_path[i], cmd);
+			if (file_exists(tmp))
+				return (tmp);
+			free(tmp);
+			i++;
+		}
 	}
 	ft_putstr_fd(cmd, STDOUT_FILENO);
 	ft_putendl_fd(": command not found", STDOUT_FILENO);
 	return (NULL);
 }
+
 char	*absolute_path(char *cmd)
 {
 	char	**home_path;

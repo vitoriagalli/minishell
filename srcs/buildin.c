@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:16:54 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/12 02:26:56 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/12 03:08:15 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int		ft_pwd(t_cmd *cmd)
 	ft_putendl_fd(cwd, STDOUT_FILENO);
 	return (EXIT_SUCCESS);
 }
-
 
 // sem argumentos, printa as variaveis do shell presente
 // com argumentos, seta a variavel no shell presente
@@ -146,7 +145,6 @@ int		ft_unset(t_cmd *cmd)
 	}
 	return (EXIT_SUCCESS);
 }
-
 
 int		ft_env(t_cmd *cmd)
 {
