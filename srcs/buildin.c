@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:16:54 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/08 00:28:04 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/12 02:26:56 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int		ft_unset(t_cmd *cmd)
 		len = ft_strlen(cmd->args[1]);
 	while (g_env[i])
 	{
-		// arrumar! comprar ate o final
+		// arrumar! comparar ate o final
 		if (cmd->args[1] && !ft_strncmp(g_env[i], cmd->args[1], len))
 		{
 			free(g_env[i]);

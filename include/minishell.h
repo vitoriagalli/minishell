@@ -26,12 +26,20 @@ typedef struct		s_cmd {
 	int				redirection;
 	char			*file;
 	int				separator;
-	int				fd_in;
-	int				fd_out;
-	int				pfd[2];
-	int				pid;
+	int				fdin;		// arrumar redirection e eliminar daqui essa var
+	int				fdout;
 	struct s_cmd	*next;
 }					t_cmd;
+
+typedef struct		s_exec
+{
+	bool			pipe;
+	int				fdin;
+	int				fdout;
+	int				pipefd[2];
+	pid_t			pid;
+	int				status;
+}					t_exec;
 
 typedef struct		s_shell {
 	t_token			*tk;
@@ -59,7 +67,7 @@ enum				token_type {
 
 char	**g_env;
 t_shell	*sh;
-
+t_exec	*exec;
 
 // env
 void		initialize_global_env(void);

@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 16:33:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/11 02:20:43 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/12 02:29:32 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,13 @@ char	**args_list_into_array_pointers(t_list *args_lst)
 int		store_redirection_info(t_cmd **cmd, int type, char *file, t_list **tmp)
 {
 	(*cmd)->redirection = type;
-	if (type == GREATER)
-		(*cmd)->fd_out = open(file, O_WRONLY | O_CREAT, 0664);
-	else if (type == DGREATER)
-		(*cmd)->fd_out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0664);
-	else
-		(*cmd)->fd_in = open(file, O_RDONLY);
+	(*cmd)->file = ft_strdup(file);
+	// if (type == GREATER)
+	// 	(*cmd)->fdout = open(file, O_WRONLY | O_CREAT, 0664);
+	// else if (type == DGREATER)
+	// 	(*cmd)->fdout = open(file, O_WRONLY | O_CREAT | O_APPEND, 0664);
+	// else
+	// 	(*cmd)->fdin = open(file, O_RDONLY);
 	ft_lstclear(tmp, ft_free);
 	return (0);
 }

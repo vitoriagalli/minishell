@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 00:41:48 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/11 02:23:04 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/11 23:41:40 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*relative_path(char *cmd)
 	int		i;
 
 	i = 0;
-	env_path = get_env_value("PATH");
+	env_path = get_env_value("PATH");		// ver seg fault quando unset
 	while (env_path[i])
 	{
 		tmp = join_path(env_path[i], cmd);
@@ -87,6 +87,11 @@ char	*absolute_path(char *cmd)
 
 char	*find_path(char *cmd)
 {
+	builtin_funct	*f_buildin;
+
+	f_buildin = NULL;
+	if (f_buildin = is_builldin(cmd))
+		return (cmd);
 	if (ft_strchr("./~", cmd[0]))
 		return (absolute_path(cmd));
 	else
