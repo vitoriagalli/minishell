@@ -13,7 +13,8 @@ SRC_FILES =	main.c \
 			cmd_lst.c \
 			path.c \
 			exec.c \
-			buildin.c \
+			buildin_1.c \
+			buildin_2.c \
 			env_array.c \
 			free.c
 

@@ -68,7 +68,8 @@ t_shell				*sh;
 
 // env
 void				initialize_global_env(void);
-char				**reallocate(char **buffer, int len_arr);
+char				**duplicate_array(char **buffer, int len_arr);
+char				**reallocate_array(char **buffer, int len_arr);
 
 // loop
 int					lexer(void);

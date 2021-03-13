@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 21:38:03 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/12 02:59:19 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/13 14:56:49 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	initialize_global_env(void)
 	}
 }
 
-char	**reallocate(char **buffer, int len_arr)
+char	**duplicate_array(char **buffer, int len_arr)
 {
 	char	**new_buffer;
 	int		i;
@@ -43,6 +43,14 @@ char	**reallocate(char **buffer, int len_arr)
 		new_buffer[i] = buffer[i];
 		i++;
 	}
+	return (new_buffer);
+}
+
+char	**reallocate_array(char **buffer, int len_arr)
+{
+	char	**new_buffer;
+
+	new_buffer = duplicate_array(buffer, len_arr);
 	free(buffer);
 	return (new_buffer);
 }

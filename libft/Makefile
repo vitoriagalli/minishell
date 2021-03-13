@@ -6,7 +6,7 @@
 #    By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/23 08:54:07 by vscabell          #+#    #+#              #
-#    Updated: 2021/02/23 00:58:20 by vscabell         ###   ########.fr        #
+#    Updated: 2021/03/13 16:26:48 by vscabell         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ SRC = ft_itoa.c \
 	ft_swap.c \
 	get_next_line.c \
 	ft_strcmp.c \
+	ft_sort_string_tab.c \
 	ft_printf.c \
 	.print_char.c \
 	.print_string.c \

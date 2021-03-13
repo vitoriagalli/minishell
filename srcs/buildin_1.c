@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   buildin.c                                          :+:      :+:    :+:   */
+/*   buildin_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:16:54 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/12 03:08:15 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/13 16:23:29 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,88 +71,6 @@ int		ft_pwd(t_cmd *cmd)
 	if (!(getcwd(cwd, 1024)))
 		return (EXIT_FAILURE);
 	ft_putendl_fd(cwd, STDOUT_FILENO);
-	return (EXIT_SUCCESS);
-}
-
-// sem argumentos, printa as variaveis do shell presente
-// com argumentos, seta a variavel no shell presente
-int		ft_export(t_cmd *cmd)
-{
-	int		i;
-	int		len;
-	int		exist;
-	char	**new_add_env;
-
-	i = 0;
-	len = 0;
-	exist = false;
-	if (cmd->args[1])
-	{
-		len = ft_strrchr(cmd->args[1], '=') - cmd->args[1];
-		while (g_env[i])
-		{
-			if (cmd->args[1] && !ft_strncmp(g_env[i], cmd->args[1], len + 1))
-			{
-				g_env[i] = cmd->args[1];
-				exist = true;
-			}
-			i++;
-		}
-		if (exist == false)
-		{
-			len = 0;
-			while (g_env[len])
-				len++;
-			new_add_env = reallocate(g_env, len);
-			new_add_env[len] = cmd->args[1];
-			g_env = new_add_env;
-		}
-	}
-	else
-	{
-		while (g_env[i])
-		{
-			// verificar formato -declare
-			ft_putendl_fd(g_env[i++], STDOUT_FILENO);
-		}
-	}
-
-	return (EXIT_SUCCESS);
-}
-
-int		ft_unset(t_cmd *cmd)
-{
-	int		i;
-	int		len;
-
-	i = 0;
-	if (cmd->args[1])
-		len = ft_strlen(cmd->args[1]);
-	while (g_env[i])
-	{
-		// arrumar! comparar ate o final
-		if (cmd->args[1] && !ft_strncmp(g_env[i], cmd->args[1], len))
-		{
-			free(g_env[i]);
-			while (g_env[i + 1])
-			{
-				g_env[i] = g_env[i + 1];
-				i++;
-			}
-			g_env[i] = NULL;
-		}
-		i++;
-	}
-	return (EXIT_SUCCESS);
-}
-
-int		ft_env(t_cmd *cmd)
-{
-	int i;
-
-	i = 0;
-	while (g_env[i])
-		ft_putendl_fd(g_env[i++], STDOUT_FILENO);
 	return (EXIT_SUCCESS);
 }
 
