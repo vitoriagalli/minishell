@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 00:41:48 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/12 03:01:11 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/13 14:31:14 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,15 @@ bool	file_exists(char *filepath)
 	struct stat		buffer;
 
 	return (stat(filepath, &buffer) == 0);
+}
+
+bool	is_directory(char *filepath)
+{
+	struct stat		buffer;
+
+	if (stat(filepath, &buffer) != 0)
+		return (false);
+	return S_ISDIR(buffer.st_mode);
 }
 
 char	*join_path(char *env, char *path)
@@ -78,16 +87,23 @@ char	*absolute_path(char *cmd)
 	home_path = NULL;
 	if (cmd[0] == '~')
 	{
-		ft_memmove(&cmd[0], &cmd[1], ft_strlen(cmd));
 		home_path = get_env_value("HOME");
-		cmd = ft_strjoin_n_free(*home_path, cmd);
+		cmd = ft_strjoin(home_path[0], &cmd[1]);
 		ft_array_clear(home_path, ft_free);
 	}
-	if (file_exists(cmd))
-		return (cmd);
-	ft_putstr_fd(cmd, STDOUT_FILENO);
-	ft_putendl_fd(": command not found", STDOUT_FILENO);
-	return (NULL);
+	if (!file_exists(cmd))
+	{
+		ft_putstr_fd(cmd, STDOUT_FILENO);
+		ft_putendl_fd(": command not found", STDOUT_FILENO);
+		return (NULL);
+	}
+	else if (is_directory(cmd))
+	{
+		ft_putstr_fd(cmd, STDOUT_FILENO);
+		ft_putendl_fd(": Is a directory", STDOUT_FILENO);
+		return (NULL);
+	}
+	return (cmd);
 }
 
 char	*find_path(char *cmd)
