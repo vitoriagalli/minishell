@@ -6,13 +6,13 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 16:23:09 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/13 16:37:58 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/13 19:08:33 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_env_declare_mode(void)
+int		print_env_declare_mode(void)
 {
 	char	**sorted_env;
 	int		i;
@@ -25,6 +25,7 @@ void	print_env_declare_mode(void)
 	i = 0;
 	while (sorted_env[i])
 		ft_printf("declare -x %s\n", sorted_env[i++]);
+	return (EXIT_SUCCESS);
 }
 
 int		ft_export(t_cmd *cmd)
@@ -32,55 +33,46 @@ int		ft_export(t_cmd *cmd)
 	int		i;
 	int		len;
 	bool	exist;
-	char	**new_add_env;
 
+	if (!cmd->args[1])
+		return (print_env_declare_mode());
+	if ((len = ft_strrchr(cmd->args[1], '=') - cmd->args[1]) < 0)
+		return (EXIT_SUCCESS);
 	i = 0;
-	len = 0;
 	exist = false;
-	if (cmd->args[1])
+	while (g_env[i])
 	{
-		len = ft_strrchr(cmd->args[1], '=') - cmd->args[1];
-		if (len > 0)
+		if (!ft_strncmp(g_env[i], cmd->args[1], len + 1))
 		{
-			while (g_env[i])
-			{
-				if (cmd->args[1] && !ft_strncmp(g_env[i], cmd->args[1], len + 1))
-				{
-					free(g_env[i]);
-					g_env[i] = ft_strdup(cmd->args[1]);
-					exist = true;
-				}
-				i++;
-			}
-			if (exist == false)
-			{
-				len = 0;
-				while (g_env[len])
-					len++;
-				new_add_env = reallocate_array(g_env, len);
-				new_add_env[len] = cmd->args[1];
-				g_env = new_add_env;
-			}
+			free(g_env[i]);
+			g_env[i] = ft_strdup(cmd->args[1]);
+			exist = true;
 		}
+		i++;
 	}
-	else
-		print_env_declare_mode();
+	if (exist == false)
+		g_env = reallocate_array(g_env, cmd->args[1]);
 	return (EXIT_SUCCESS);
 }
 
 int		ft_unset(t_cmd *cmd)
 {
 	int		i;
-	int		len;
+	int		l;
 
+	if (!cmd->args[1])
+		return (EXIT_SUCCESS);
+	if (ft_strrchr(cmd->args[1], '='))
+	{
+		ft_printf("bash: unset: %s: not a valid identifier\n", cmd->args[1]);
+		return (EXIT_FAILURE);
+	}
 	i = 0;
-	if (cmd->args[1])
-		len = ft_strlen(cmd->args[1]);
+	l = ft_strlen(cmd->args[1]);
 	while (g_env[i])
 	{
-		if (cmd->args[1] && !ft_strncmp(g_env[i], cmd->args[1], len) && g_env[i][len] == '=')
+		if (!ft_strncmp(g_env[i], cmd->args[1], l) && g_env[i][l] == '=')
 		{
-			ft_printf("%c\n", g_env[i][len]);
 			free(g_env[i]);
 			while (g_env[i + 1])
 			{

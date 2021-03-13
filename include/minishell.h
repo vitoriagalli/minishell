@@ -69,7 +69,7 @@ t_shell				*sh;
 // env
 void				initialize_global_env(void);
 char				**duplicate_array(char **buffer, int len_arr);
-char				**reallocate_array(char **buffer, int len_arr);
+char				**reallocate_array(char **buffer, char *new_string);
 
 // loop
 int					lexer(void);
@@ -79,7 +79,6 @@ int					execute(void);
 
 void				ft_lst_print(t_list *lst);
 void				ft_array_clear(char **arr, void (*del)(char *));
-
 void				free_shell(void);
 void				ft_free(char *elem);
 

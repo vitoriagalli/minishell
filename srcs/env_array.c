@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 21:38:03 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/13 14:56:49 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/13 19:10:14 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	**duplicate_array(char **buffer, int len_arr)
 
 	if (!buffer || !(*buffer))
 		return (NULL);
-	new_buffer = ft_calloc(len_arr + 2, sizeof(char *));
+	new_buffer = ft_calloc(len_arr + 1, sizeof(char *));
 	i = 0;
 	while (i < len_arr)
 	{
@@ -46,11 +46,16 @@ char	**duplicate_array(char **buffer, int len_arr)
 	return (new_buffer);
 }
 
-char	**reallocate_array(char **buffer, int len_arr)
+char	**reallocate_array(char **buffer, char *new_string)
 {
 	char	**new_buffer;
+	int		len_arr;
 
-	new_buffer = duplicate_array(buffer, len_arr);
+	len_arr = 0;
+	while (buffer[len_arr])
+		len_arr++;
+	new_buffer = duplicate_array(buffer, len_arr + 1);
+	new_buffer[len_arr] = new_string;
 	free(buffer);
 	return (new_buffer);
 }
