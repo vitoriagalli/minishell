@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 21:54:39 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/13 14:11:45 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/14 02:47:07 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ void	sh_loop(void)
 		read_line(&sh->input);
 		lexer();
 		execute();
+
+		// ft_tkn_print(sh->tk);
+		// ft_cmd_print(sh->cmd);
 	}
 }
 

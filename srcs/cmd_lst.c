@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 02:21:34 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/12 03:07:50 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/14 03:59:49 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ t_cmd	*ft_cmd_new(void)
 		return (NULL);
 	elem->cmd = NULL;
 	elem->args = NULL;
-	elem->redirection = 0;
+	elem->red = NULL;
+	// elem->redirection = 0;
 	elem->separator = 0;
 	elem->next = NULL;
 	return (elem);
@@ -55,7 +56,6 @@ void	ft_cmd_clear(t_cmd **lst, void (*del)(char*))
 	{
 		*lst = to_free->next;
 		del(to_free->cmd);
-		del(to_free->file);
 		ft_array_clear(&to_free->args, ft_free);
 		// del(to_free); // cmd é stack, ver se vai ser point
 		to_free = *lst;
@@ -78,13 +78,14 @@ void	ft_cmd_print(t_cmd *lst)
 	{
 		ft_printf("-------- command %i ---------\n", count);
 		ft_printf("cmd: %s\n", lst->cmd);
-		ft_printf("red: %i\n", lst->redirection);
+		// ft_printf("red: %i\n", lst->redirection);
 		ft_printf("sep: %i\n", lst->separator);
 		while (lst->args[i])
 		{
 			ft_printf("arg %i: %s\n", i, lst->args[i]);
 			i++;
 		}
+		ft_lst_print(lst->red);
 		i = 0;
 		lst = lst->next;
 		count++;

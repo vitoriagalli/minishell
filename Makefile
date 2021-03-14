@@ -12,6 +12,7 @@ SRC_FILES =	main.c \
 			cmd.c \
 			cmd_lst.c \
 			path.c \
+			redirection.c \
 			exec.c \
 			buildin_1.c \
 			buildin_2.c \

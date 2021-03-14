@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/28 22:48:01 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/12 22:26:06 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/14 02:46:48 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,5 @@ int		lexer(void)
 {
 	sh->tk = put_input_into_tkn_struct();
 	sh->cmd = transform_tkn_into_cmds();
-	// ft_tkn_print(sh->tk);
-	// ft_cmd_print(sh->cmd);
 	return (0);
 }

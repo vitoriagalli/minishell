@@ -23,8 +23,7 @@ typedef struct		s_token
 typedef struct		s_cmd {
 	char			*cmd;
 	char			**args;
-	int				redirection;
-	char			*file;
+	t_list			*red;
 	int				separator;
 	struct s_cmd	*next;
 }					t_cmd;
@@ -99,6 +98,8 @@ void				ft_tkn_print(t_token *head);
 
 // cmd
 t_cmd				*build_cmd(t_token *tk);
+
+void				set_redirection(t_cmd *cmd);
 
 // cmd list
 void				cmd_add_back(t_cmd **lst, t_cmd *new);

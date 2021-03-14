@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 16:33:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/13 14:26:21 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/14 03:56:52 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,31 +31,20 @@ char	**args_list_into_array_pointers(t_list *args_lst)
 	return (args);
 }
 
-int		store_redirection_info(t_cmd **cmd, int type, char *file, t_list **tmp)
-{
-	(*cmd)->redirection = type;
-	(*cmd)->file = ft_strdup(file);
-	ft_lstclear(tmp, ft_free);
-	return (0);
-}
-
 int		handle_redirection(t_cmd **cmd, t_list *lst)
 {
 	t_list	*tmp;
 
 	tmp = lst;
-	while (tmp && tmp->next && tmp->next->next)
+	while (tmp && tmp->next)
 	{
-		if (!ft_strcmp(tmp->next->content, ">") &&
-			!ft_strcmp(tmp->next->next->content, ">"))
-			return (store_redirection_info(cmd, DGREATER,
-			tmp->next->next->next->content, &tmp->next));
-		else if (!ft_strcmp(tmp->next->content, ">"))
-			return (store_redirection_info(cmd, GREATER,
-			tmp->next->next->content, &tmp->next));
-		else if (!ft_strcmp(tmp->next->content, "<"))
-			return (store_redirection_info(cmd, LESSER,
-			tmp->next->next->content, &tmp->next));
+		if (!ft_strcmp(tmp->next->content, ">") ||
+			!ft_strcmp(tmp->next->content, "<"))
+			{
+				(*cmd)->red = tmp->next;
+				tmp->next = NULL;
+				return (NULL);
+			}
 		tmp = tmp->next;
 	}
 	return (0);

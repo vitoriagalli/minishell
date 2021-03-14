@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 22:21:50 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/12 03:09:20 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/14 02:15:56 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,7 @@ void	ft_lst_print(t_list *lst)
 	count = 0;
 	while (lst)
 	{
-		ft_printf("--- args %i ----\n", count);
-		ft_printf("content: %s\n", lst->content);
+		ft_printf("lst %i: %s\n", count, lst->content);
 		lst = lst->next;
 		count++;
 	}

@@ -6,35 +6,11 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/12 02:38:07 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/14 02:38:25 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	set_redirection(t_cmd *cmd)
-{
-	int	fd;
-
-	if (cmd->redirection == LESSER)
-	{
-		fd = open(cmd->file, O_RDONLY);
-		dup2(fd, STDIN_FILENO);
-		close(fd);
-	}
-	else if (cmd->redirection == GREATER)
-	{
-		fd = open(cmd->file, O_WRONLY | O_CREAT, 0664);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
-	else if (cmd->redirection == DGREATER)
-	{
-		fd = open(cmd->file, O_WRONLY | O_CREAT | O_APPEND, 0664);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
-}
 
 void	set_pipe(t_cmd *cmd, t_exec *exec)
 {
@@ -95,8 +71,7 @@ int		execute(void)
 	{
 		if (cmd->cmd)
 		{
-			if (cmd->redirection)
-				set_redirection(cmd);
+			set_redirection(cmd);
 			set_pipe(cmd, &exec);
 			execute_command(cmd, &exec);
 			waitpid(exec.pid, &exec.status, 0);
