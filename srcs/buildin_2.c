@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 16:23:09 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/13 19:08:33 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/14 19:03:58 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int		print_env_declare_mode(void)
 
 int		ft_export(t_cmd *cmd)
 {
-	int		i;
-	int		len;
 	bool	exist;
+	int		len;
+	int		i;
 
 	if (!cmd->args[1])
 		return (print_env_declare_mode());

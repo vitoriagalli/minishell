@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 22:12:38 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/07 16:46:23 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/14 19:02:31 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,22 @@ char	*check_for_env(char *data)
 {
 	char	*new;
 	char	*env_var;
-	char	*name;
+	char	*key;
 	char	*value;
 	int		i;
 
 	env_var = NULL;
-	name = NULL;
+	key = NULL;
 	value = NULL;
 	i = 0;
 	while (g_env[i])
 	{
-		store_value_and_name(&value, &name, i);
-		env_var = ft_strnstr(data, name, ft_strlen(data));
+		store_key_and_value(&value, &key, g_env[i]);
+		env_var = ft_strnstr(data, key, ft_strlen(data));
 		if (env_var && *(env_var - 1) == '$')
 		{
-			new = subst_value(data, env_var, name, value);
-			free(name);
+			new = subst_value(data, env_var, key, value);
+			free(key);
 			free(value);
 			return (new);
 		}
@@ -104,6 +104,27 @@ void	handle_escape(char *data, int type)
 	}
 }
 
+void	remove_quotes(char *str, int type)
+{
+	int	len;
+	int	i;
+
+	if (!is_quote_char(type))
+		return ;
+	i = 0;
+	len = ft_strlen(str);
+	while (str[i])
+	{
+		if (str[i] == type)
+		{
+			ft_memmove(&str[i], &str[i + 1], ft_strlen(&str[i + 1]));
+			str[len - 1] = '\0';
+			len--;
+		}
+		i++;
+	}
+}
+
 void	atribute_new_list(t_shell *sh, t_list **tk, int i, int len)
 {
 	char	*data;
@@ -114,14 +135,18 @@ void	atribute_new_list(t_shell *sh, t_list **tk, int i, int len)
 	new_tk = NULL;
 	if (len > 0)
 	{
-		if (is_tk_char(sh->input[i]))
-			type = sh->input[i];
-		else
-			type = GENERAL;
-		if (type == SIMPLE_QUOTE || type == DOUBLE_QUOTE)
-			data = ft_substr(sh->input, i + 1, len - 2);
-		else
-			data = ft_substr(sh->input, i, len);
+		data = ft_substr(sh->input, i, len);
+		i = 0;
+		type = GENERAL;
+		while (data[i++])
+		{
+			if (is_quote_char(data[i]))
+			{
+				type = data[i];
+				break;
+			}
+		}
+		remove_quotes(data, type);
 		handle_escape(data, type);
 		if (type != SIMPLE_QUOTE)
 			data = handle_dollar_sign(data, sh->status);

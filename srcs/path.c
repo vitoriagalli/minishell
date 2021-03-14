@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 00:41:48 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/13 14:31:14 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/14 19:07:39 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	**get_env_value(char *key)
 	i = 0;
 	while (g_env[i])
 	{
-		store_value_and_name(&value, &name, i);
+		store_key_and_value(&value, &name, g_env[i]);
 		if (!ft_strcmp(key, name))
 			return (ft_split(value, ':'));
 		i++;
@@ -44,7 +44,7 @@ bool	is_directory(char *filepath)
 
 	if (stat(filepath, &buffer) != 0)
 		return (false);
-	return S_ISDIR(buffer.st_mode);
+	return (S_ISDIR(buffer.st_mode));
 }
 
 char	*join_path(char *env, char *path)
@@ -75,8 +75,7 @@ char	*relative_path(char *cmd)
 			i++;
 		}
 	}
-	ft_putstr_fd(cmd, STDOUT_FILENO);
-	ft_putendl_fd(": command not found", STDOUT_FILENO);
+	ft_printf("bash: %s: command not found\n", cmd);
 	return (NULL);
 }
 
@@ -93,14 +92,12 @@ char	*absolute_path(char *cmd)
 	}
 	if (!file_exists(cmd))
 	{
-		ft_putstr_fd(cmd, STDOUT_FILENO);
-		ft_putendl_fd(": command not found", STDOUT_FILENO);
+		ft_printf("bash: %s: command not found\n", cmd);
 		return (NULL);
 	}
 	else if (is_directory(cmd))
 	{
-		ft_putstr_fd(cmd, STDOUT_FILENO);
-		ft_putendl_fd(": Is a directory", STDOUT_FILENO);
+		ft_printf("bash: %s: Is a directory\n", cmd);
 		return (NULL);
 	}
 	return (cmd);

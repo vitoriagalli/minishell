@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 21:20:53 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/12 02:59:45 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/14 17:17:17 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ int		is_quote_char(int c)
 	return (false);
 }
 
-void	store_value_and_name(char **value, char **name, int i)
+void	store_key_and_value(char **value, char **key, char *str)
 {
 	char *addr;
 
-	addr = ft_strrchr(g_env[i], '=');
-	*name = ft_substr(g_env[i], 0, addr - g_env[i]);
-	*value = ft_substr(g_env[i], addr - g_env[i] + 1,
-	ft_strlen(g_env[i]) - (addr - g_env[i]));
+	addr = ft_strrchr(str, '=');
+	*key = ft_substr(str, 0, addr - str);
+	*value = ft_substr(str, addr - str + 1,
+	ft_strlen(str) - (addr - str));
 }
 
 char	*subst_value(char *data, char *env_var, char *name, char *value)

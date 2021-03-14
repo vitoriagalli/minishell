@@ -83,7 +83,7 @@ void				ft_free(char *elem);
 
 // tk and tks utils
 t_list				*args_lst(int *i, int *init_tkn, int *sep);
-void				store_value_and_name(char **value, char **name, int i);
+void				store_key_and_value(char **value, char **name, char *str);
 char				*subst_value(char *data, char *env_var, char *name, char *value);
 int					is_tk_char(int c);
 int					is_quote_char(int c);
