@@ -17,6 +17,7 @@ SRC_FILES =	main.c \
 			buildin_1.c \
 			buildin_2.c \
 			env_array.c \
+			signal.c \
 			free.c
 
 SRCS = $(addprefix $(SRCS_DIR)/,$(SRC_FILES))

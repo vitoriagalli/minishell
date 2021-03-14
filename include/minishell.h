@@ -9,6 +9,7 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <errno.h>
+# include <signal.h>
 
 // -exec set follow-fork-mode-child
 
@@ -119,5 +120,8 @@ int					ft_exit(t_cmd *cmd);
 // exec
 char				*find_path(char *cmd);
 builtin_funct		*is_builldin(char *cmd);
+
+
+void				handle_signal(int sig);
 
 #endif
