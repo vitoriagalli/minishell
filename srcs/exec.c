@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 15:45:12 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/14 22:59:37 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/17 03:02:08 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ int		execute_command(t_cmd *cmd, t_exec *exec)
 	else
 	{
 		exec->pid = fork();
-		signal(SIGINT, handle_signal);
-		signal(SIGQUIT, handle_signal);
+		signal(SIGINT, handle_signal2);
+		signal(SIGQUIT, handle_signal2);
 		if (exec->pid == 0)
 		{
 			if (cmd->separator == PIPE)

@@ -18,7 +18,8 @@ SRC_FILES =	main.c \
 			buildin_2.c \
 			env_array.c \
 			signal.c \
-			free.c
+			free.c \
+			read_line.c
 
 SRCS = $(addprefix $(SRCS_DIR)/,$(SRC_FILES))
 OBJS = $(patsubst $(SRCS_DIR)%.c, $(OBJS_DIR)%.o, $(SRCS))
@@ -26,7 +27,8 @@ OBJS = $(patsubst $(SRCS_DIR)%.c, $(OBJS_DIR)%.o, $(SRCS))
 HEAD = -I./$(LIBFT_DIR) -I./include
 CC = clang
 CFLAGS = -Wall -Werror -Wextra -g -w
-LFLAGS = -L ./$(LIBFT_DIR) -lft
+LFLAGS = -L ./$(LIBFT_DIR) -lft \
+		-l ncurses
 RM = /bin/rm -rf
 
 all: $(NAME)
@@ -39,7 +41,7 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 		$(CC) $(CFLAGS) $(HEAD) -c $< -o $@
 
 $(LIBFT):
-	make -C libft
+	make -C $(LIBFT_DIR)
 
 clean:
 	make clean -C $(LIBFT_DIR)

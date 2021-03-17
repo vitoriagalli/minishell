@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 21:54:39 by vscabell          #+#    #+#             */
-/*   Updated: 2021/03/14 22:58:13 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/17 03:01:46 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@ void	exit_minishell(int exit_status)
 
 void	*read_line(char	**line)
 {
+	ft_printf("$ ");
 	if (line && *line)
 		free(*line);
 	if (get_next_line(STDIN_FILENO, line) < 0)
+	// if ((line = rl("$ ")) == NULL)
 	{
 		free(*line);
 		exit_minishell(EXIT_FAILURE);
@@ -32,7 +34,7 @@ void	sh_loop(void)
 {
 	while (true)
 	{
-		ft_printf("$ ");
+		// sh->input = read_line2();
 		read_line(&sh->input);
 		lexer();
 		execute();

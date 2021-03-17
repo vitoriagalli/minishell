@@ -46,6 +46,13 @@ typedef struct		s_shell {
 	int				status;
 }					t_shell;
 
+typedef struct		s_line {
+	char			*cmd;
+	struct termios	*term;
+	char			*type;
+	unsigned int	pos[2];
+}					t_line;
+
 typedef int			(*builtin_funct)(t_cmd *);
 
 enum				token_type {
@@ -123,5 +130,6 @@ builtin_funct		*is_builldin(char *cmd);
 
 
 void				handle_signal(int sig);
+void				handle_signal2(int sig);
 
 #endif
