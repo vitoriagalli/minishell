@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 12:47:08 by Vs / Rb           #+#    #+#             */
-/*   Updated: 2021/03/18 22:58:00 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/19 00:42:59 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,9 @@ bool	find_path()
 	cmd = g_msh.cmds->head_cmd;
 	while (cmd)
 	{
-		if (ft_strchr("./~", cmd->cmd_name[0]))
+		if (is_buildin_cmd(cmd->cmd_name))
+			ret = ft_strdup(cmd->cmd_name);
+		else if (ft_strchr("./~", cmd->cmd_name[0]))
 			ret = absolute_path(cmd->cmd_name);
 		else
 			ret = relative_path(cmd->cmd_name);
