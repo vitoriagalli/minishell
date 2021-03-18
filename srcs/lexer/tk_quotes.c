@@ -6,109 +6,100 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 19:58:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/02/21 20:37:09 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/17 19:39:16 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_tokens	*activate_quoted_state(t_tokens *tk, t_lexer *lx, int type_quote)
+void	activate_quoted_state(t_tokens *tk, t_lexer *lx, int type_quote)
 {
-	tk = create_new_token(tk, lx);
 	lx->state = type_quote;
-	tk->data[lx->j++] = lx->line[lx->i++];
-	tk->type = DOUBLE_QUOTED;
-	if (type_quote == STATE_SINGLE_QUOTED)
-	{
-		tk->eval = false;
-		tk->type = SINGLE_QUOTED;
-	}
-	return (tk);
-}
-
-void		get_from_stdin(t_tokens *tk, char to_check)
-{
-	char	*line;
-	int		ret;
-	char	quote[2];
-
-	quote[0] = to_check;
-	quote[1] = '\0';
-	ret = 1;
-	while (ret == 1)
-	{
-		ft_printf("> ");
-		if ((ret = get_next_line(STDIN_FILENO, &line)) == -1)
-			exit(EXIT_SUCCESS); // To do: a function Clean exit.
-		tk->data = ft_strjoin(tk->data, line);
-		if (tk->data[ft_strlen(tk->data) - 1] == to_check)
-		{
-			tk->data = ft_strtrim(tk->data, quote);
-			tk->data = ft_strjoin(tk->data, "\n");
-			ret = 0;
-		}
-		free(line);
-	}
-}
-
-void		escape_in_double_quote(t_tokens *tk, t_lexer *lx)
-{
-	if (lx->line[lx->i + 1] == DOUBLE_QUOTE)
-		tk->data[lx->j++] = lx->line[++lx->i];
-	else
-		tk->data[lx->j++] = lx->line[lx->i];
 	lx->i++;
+	tk->type = WORD;
 }
 
-t_tokens	*quoted_state(t_tokens *tk, t_lexer *lx)
+void	get_from_stdin(t_lexer *lx, char to_check)
 {
-	int type;
-
-	type = get_char_type(lx->line[lx->i]);
-	tk->data[lx->j++] = lx->line[lx->i++];
-	tk->type = SINGLE_QUOTED;
-	if (type == TYPE_SINGLE_QUOTE)
+	lx->line = ft_strjoin(lx->line, "\n");
+	ft_printf("> ");
+	while ((read_line()) != 0)
 	{
-		tk->data = ft_strtrim(tk->data, "\'");
-		if (lx->line[lx->i] == NEW_LINE || lx->line[lx->i] == SPACE)
-			tk->data[ft_strlen(tk->data)] = lx->line[lx->i++];
-		else
-			tk->data[lx->j++] = lx->line[lx->i++];
-		tk = create_new_token(tk, lx);
-		lx->i--;
+		g_msh.rd_line = ft_strjoin(g_msh.rd_line, "\n");
+		lx->line = ft_strjoin(lx->line, g_msh.rd_line);
+		if (lx->line[ft_strlen(lx->line) - 2] == to_check)
+			break ;
+		free(g_msh.rd_line);
+		ft_printf("> ");
 	}
-	else if (lx->line[lx->i] == '\0')
-	{
-		get_from_stdin(tk, SINGLE_QUOTE);
-		tk->type = SINGLE_QUOTED;
-	}
-	return (tk);
+	free (g_msh.rd_line);
+	lx->line[ft_strlen(lx->line) - 1] = '\0';
 }
 
-t_tokens	*double_quoted_state(t_tokens *tk, t_lexer *lx, t_env *env)
-{
-	int type;
+//void	get_from_stdin(t_lexer *lx, char to_check)
+//{
+//	char	*line;
+//	int		ret;
+//
+//	ret = 1;
+//	lx->line = ft_strjoin(lx->line, "\n");
+//	while (ret == 1)
+//	{
+//		ft_printf("> ");
+//		if ((ret = get_next_line(STDIN_FILENO, &line)) == -1)
+//			exit(EXIT_SUCCESS); // To do: a function Clean exit.
+//		line = ft_strjoin(line, "\n");
+//		lx->line = ft_strjoin(lx->line, line);
+//		if (lx->line[ft_strlen(lx->line) - 2] == to_check)
+//			ret = 0;
+//		free(line);
+//	}
+//	lx->line[ft_strlen(lx->line) - 1] = '\0';
+//}
 
-	type = get_char_type(lx->line[lx->i]);
-	if (lx->line[lx->i] == ESCAPE)
-		escape_in_double_quote(tk, lx);
+void	quoted_state(t_tokens *tk, t_lexer *lx)
+{
+	bool end_quote;
+	
+	end_quote = false;
+	if (lx->line[lx->i] == SINGLE_QUOTE)
+		end_quote = true;
 	else
-		tk->data[lx->j++] = lx->line[lx->i++];
-	tk->type = DOUBLE_QUOTED;
-	if (type == TYPE_DOUBLE_QUOTE)
+		tk->data[ft_strlen(tk->data)] = lx->line[lx->i++];
+	if (end_quote == true)
 	{
-		tk->data = ft_strtrim(tk->data, "\"");
-		if (lx->line[lx->i] == NEW_LINE || lx->line[lx->i] == SPACE)
-			tk->data[ft_strlen(tk->data)] = lx->line[lx->i++];
-		else
-			tk->data[lx->j++] = lx->line[lx->i++];
-		tk = create_new_token(tk, lx);
-		lx->i--;
+		lx->state = STATE_GENERAL;
+		lx->i++;
 	}
 	else if (lx->line[lx->i] == '\0')
 	{
-		get_from_stdin(tk, DOUBLE_QUOTE);
-		tk->type = DOUBLE_QUOTED;
+		get_from_stdin(lx, SINGLE_QUOTE);
+		lx->i--;
+	}	
+}
+
+void	double_quoted_state(t_tokens *tk, t_lexer *lx)
+{
+	bool end_quote;
+	
+	end_quote = false;
+	if (lx->line[lx->i] == DOUBLE_QUOTE)
+		end_quote = true;
+	else if (lx->line[lx->i] == ESCAPE)
+		escape_in_double_quote(tk, lx);
+	else if (lx->line[lx->i] == DOLLAR)
+		evaluate_dollar(tk, lx);
+	else
+		tk->data[ft_strlen(tk->data)] = lx->line[lx->i++];
+	if (end_quote == true)
+	{
+		lx->state = STATE_GENERAL;
+		lx->i++;
 	}
-	return (tk);
+	else if (lx->line[lx->i] == '\0')
+	{
+		get_from_stdin(lx, DOUBLE_QUOTE);
+		if (lx->line[lx->i] != NEW_LINE)
+			lx->i--;
+	}	
 }

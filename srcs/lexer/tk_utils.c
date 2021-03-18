@@ -6,11 +6,59 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 21:00:02 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/02/21 20:35:13 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/02/24 14:16:46 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		size_token_list(t_tokens *lst)
+{
+	int	i;
+
+	i = 0;
+	while (lst)
+	{
+		i++;
+		lst = (*lst).next;
+	}
+	return (i);
+}
+
+void	add_end_token(t_tokens *head_tk, t_lexer *lx)
+{
+	t_tokens *current;
+
+	if (!head_tk)
+		return ;
+	current = head_tk;
+	while (current->next)
+		current = current->next;
+	current->next = malloc(sizeof(t_tokens));
+	lx->i = 0;
+	init_token(current->next, lx);
+	current->next->data = ft_strdup("newline");
+}
+
+t_tokens	*remove_last_empty_node(t_tokens *head_tk)
+{
+	t_tokens *previous;
+	
+	if (!head_tk)
+		return (NULL);
+	if (!head_tk->next)
+		return (head_tk);
+	previous = head_tk;
+	while (previous->next->next)
+		previous = previous->next;
+	if (!previous->next->data[0])
+	{
+		free(previous->next);
+		previous->next = NULL;
+	}
+	return (head_tk);
+
+}
 
 int			get_char_type(char c)
 {
@@ -20,7 +68,7 @@ int			get_char_type(char c)
 		return (TYPE_DOUBLE_QUOTE);
 	else if (c == VERTICAL_BAR || c == SEMICOLON || c == GREAT || c == LESS)
 		return (TYPE_OPERATOR);
-	else if (c == SPACE || c == TAB || c == NEW_LINE)
+	else if (c == SPACE || c == TAB || c == '\0')
 		return (TYPE_SPACE);
 	else if (c == DOLLAR)
 		return (TYPE_DOLLAR);
@@ -34,8 +82,7 @@ void		init_token(t_tokens *tk, t_lexer *lx)
 {
 	tk->data = malloc(sizeof(char) * (lx->size - lx->i) + 1);
 	ft_bzero(tk->data, lx->size - lx->i + 1);
-	tk->eval = true;
-	tk->type = 0;
+	tk->type = 700;
 	tk->next = NULL;
 }
 
@@ -45,22 +92,12 @@ t_tokens	*create_new_token(t_tokens *tk, t_lexer *lx)
 
 	if (tk->data[0] != '\0')
 	{
-		type = get_char_type(lx->line[lx->i]);
-		if (type == TYPE_SPACE)
-		{
-			if (lx->line[lx->i] == TAB)
-				tk->data[lx->j] = SPACE;
-			else
-				tk->data[lx->j] = lx->line[lx->i];
-		}
 		tk->data[ft_strlen(tk->data)] = '\0';
 		tk->next = malloc(sizeof(t_tokens));
 		tk = tk->next;
 		init_token(tk, lx);
 	}
+	lx->i++;
 	lx->state = STATE_GENERAL;
-	lx->j = 0;
-	if (lx->line[lx->i] == DOLLAR)
-		tk->data[lx->j++] = lx->line[lx->i];
 	return (tk);
 }

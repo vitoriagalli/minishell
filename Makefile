@@ -9,15 +9,27 @@ FT_PRINTF = -L ./ft_printf -lftprintf
 
 SRC_FILES =	main.c \
 			get_next_line.c \
-			inbuild.c \
+			readline/readline.c \
+			readline/history.c \
 			lexer/lexer.c \
 			lexer/tk_utils.c \
 			lexer/tk_escape.c \
 			lexer/tk_operator.c \
 			lexer/tk_general.c \
 			lexer/tk_quotes.c \
+			builtin/builtin.c \
+			builtin/cd.c \
+			builtin/echo.c \
+			builtin/env.c \
+			builtin/exit.c \
+			builtin/export.c \
+			builtin/pwd.c \
+			builtin/unset.c \
 			get_env.c \
-			tokens_substitution.c \
+			syntax_parser.c \
+			create_commands.c \
+			execution_commands.c \
+			error_handling.c 
 
 SRCS = $(addprefix srcs/,$(SRC_FILES))
 OBJS = $(SRCS:.c=.o)
@@ -28,7 +40,7 @@ $(NAME): $(OBJS)
 	@echo ' '
 	@make --no-print-directory -C libft
 	@make --no-print-directory -C ft_printf
-	@clang $(OBJS) $(INCLUDES) $(CFLAGS) $(LIBFT) $(FT_PRINTF) -o $@
+	@clang $(OBJS) $(INCLUDES) $(CFLAGS) $(LIBFT) $(FT_PRINTF) -ltermcap -o $@
 	@echo "\033[1;32m\n[OK]\033[0m    \033[1;33mCreating \033[0m $@"
 
 %.o: %.c
