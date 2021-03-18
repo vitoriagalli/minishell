@@ -6,11 +6,32 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 16:55:29 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/18 03:19:22 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/18 13:16:46 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+char	*ft_strjoin_and_free(char *s1, char *s2)
+{
+	size_t	lens1;
+	size_t	lens2;
+	char	*strjoin;
+
+	if (!s1 || !s2)
+		return (NULL);
+	lens1 = ft_strlen(s1);
+	lens2 = ft_strlen(s2);
+	if (!(strjoin = malloc(sizeof(char) * (lens1 + lens2 + 1))))
+		return (NULL);
+	ft_memcpy(strjoin, s1, lens1);
+	ft_memcpy(&strjoin[lens1], s2, lens2);
+	strjoin[lens1 + lens2] = '\0';
+	free(s1);
+	free(s2);
+	return (strjoin);
+}
 
 char	*subst_value(char *data, char *env_var, char *name, char *value)
 {
@@ -27,25 +48,15 @@ char	*subst_value(char *data, char *env_var, char *name, char *value)
 		after_env = ft_substr(env_var, ft_strlen(name),
 			ft_strlen(env_var) - ft_strlen(name));
 	if (before_env)
-		new_tk_value = ft_strjoin(before_env, ft_strdup(value));
+		new_tk_value = ft_strjoin_and_free(before_env, ft_strdup(value));
 	else
 		new_tk_value = ft_strdup(value);
 	if (after_env)
-		new_tk_value = ft_strjoin(new_tk_value, after_env);
+		new_tk_value = ft_strjoin_and_free(new_tk_value, after_env);
 	return (new_tk_value);
 }
 
-void	store_key_and_value(char **value, char **key, char *str)
-{
-	char *addr;
-
-	addr = ft_strrchr(str, '=');
-	*key = ft_substr(str, 0, addr - str);
-	*value = ft_substr(str, addr - str + 1,
-	ft_strlen(str) - (addr - str));
-}
-
-static char *substitution_env(t_env *env, char *str)
+static char *substitution_env(char *str)
 {
 	char	*temp;
 	char	*env_var;
@@ -97,7 +108,7 @@ void	evaluate_dollar(t_tokens *tk, t_lexer *lx)
 		lx->line[k] != '/')
 			k++;
 		temp = ft_substr(lx->line, lx->i, k - lx->i);
-		temp = substitution_env(g_msh.head_env, temp);
+		temp = substitution_env(temp);
 		tk->data = ft_strjoin(tk->data, temp);
 		lx->i = k;
 		free(temp);

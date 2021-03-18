@@ -3,78 +3,68 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:25:59 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/17 19:29:55 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/18 13:13:50 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static t_env	*create_node(t_env *env, char *envp, int name, int value)
+void	store_key_and_value(char **value, char **key, char *str)
 {
-	char *str_name;
-	char *str_value;
+	char *addr;
 
-	str_name = ft_substr(envp, 0, name);
-	str_value = ft_substr(envp, name + 1, value);
-	ft_strlcpy(env->name, str_name, name + 1);
-	ft_strlcpy(env->value, str_value, value + 1);
-	free(str_name);
-	free(str_value);
-	return (env);
+	addr = ft_strrchr(str, '=');
+	*key = ft_substr(str, 0, addr - str);
+	*value = ft_substr(str, addr - str + 1,
+	ft_strlen(str) - (addr - str));
 }
 
-static void	init_node(t_env *env, int name, int value)
+void	allocate_and_atribute(char **envp)
 {
-	env->name = malloc(sizeof(char) * name + 1);
-	ft_bzero(env->name, name + 1);
-	env->value = malloc(sizeof(char) * value + 1);
-	ft_bzero(env->value, value + 1);
-	env->next = NULL;
-}
+	int		len_arr;
+	int		i;
 
-static void	count_char_name_value(char *envp, int *name, int *value)
-{
-	int n;
-	int v;
-
-	n = 0;
-	while (envp[++n] != '=')
-		;
-	v = n + 1;
-	while (envp[++v] != '\0')
-		;
-	*name = n;
-	*value = v - n - 1;
-}
-
-void	put_envp_in_list(char *envp[])
-{
-	int line;
-	int name;
-	int value;
-	t_env *env;
-
-	line = 0;
-	g_msh.head_env = malloc(sizeof(t_env));
-	env = g_msh.head_env;
-	while (1)
+	len_arr = 0;
+	while (envp[len_arr])
+		len_arr++;
+	g_msh.env = ft_calloc(len_arr + 1, sizeof(char *));
+	i = 0;
+	while (i < len_arr)
 	{
-		count_char_name_value(envp[line], &name, &value);
-		init_node(env, name, value);
-		env = create_node(env, envp[line++], name, value);
-		if (!ft_strncmp(env->name, "PATH", name))
-			g_msh.path_cmd = ft_split(env->value, ':');
-		if (!ft_strncmp(env->name, "HOME", name))
-			g_msh.path_home = ft_strdup(env->value);
-		if (!ft_strncmp(env->name, "TERM", name))
-			g_msh.termtype = ft_strdup(env->value);
-		if (envp[line] == NULL)
-			break;
-		env->next = malloc(sizeof(t_env));
-		env = env->next;
+		g_msh.env[i] = ft_strdup(envp[i]);
+		i++;
 	}
-	env->next = NULL;
 }
+
+void	store_important_values(void)
+{
+	char	*key;
+	char	*value;
+	int		i;
+
+	i = 0;
+	while (g_msh.env[i])
+	{
+		store_key_and_value(&value, &key, g_msh.env[i]);
+		if (!ft_strncmp(key, "PATH", ft_strlen(key)))
+			g_msh.path_cmd = ft_split(value, ':');
+		if (!ft_strncmp(key, "HOME", ft_strlen(key)))
+			g_msh.path_cmd = ft_strdup(value);
+		if (!ft_strncmp(key, "TERM", ft_strlen(key)))
+			g_msh.termtype = ft_strdup(value);
+		free(key);
+		free(value);
+		i++;
+	}
+}
+
+void	init_env(char **envp)
+{
+	allocate_and_atribute(envp);
+	store_important_values();
+}
+
+

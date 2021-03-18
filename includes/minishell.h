@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/18 02:44:12 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/18 13:13:11 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,6 @@ typedef struct	s_tokens
 	struct s_tokens	*next;
 }				t_tokens;
 
-typedef struct	s_env
-{
-	char			*name;
-	char			*value;
-	struct s_env	*next;
-}			t_env;
-
 typedef struct s_cmd
 {
 	char				*cmd_name;
@@ -156,7 +149,6 @@ typedef struct	s_minishell
 	char			**env;
 	t_tokens		*head_tk;
 	t_history		*head_hist;
-	t_env 			*head_env;
 	t_history		*curr_hist;
 	t_lexer			lx;
 	t_cmds			*cmds;
@@ -205,4 +197,8 @@ void 	execution_commands();
 
 bool	is_buildin_cmd(char *cmd);
 void	call_exec_buildin(t_cmd *cmd, t_exec *exec);
+
+
+void	store_key_and_value(char **value, char **key, char *str);
+
 #endif

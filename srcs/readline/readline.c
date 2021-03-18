@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 15:34:42 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/17 19:27:22 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/18 13:05:06 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,13 @@ void	delete_char_left(int size)
 		g_msh.rd_line = ft_realloc(g_msh.rd_line, sizeof(char) * size);
 		tputs(tgetstr("le", NULL), 1, &ft_putchar);
 		tputs(tgetstr("dc", NULL), 1, &ft_putchar);
-	}	
+	}
 }
 
 void	add_char_to_line(int size, char c)
 {
 	char *temp;
-	
+
 	if (!ft_isprint(c))
 		return ;
 	temp = ft_strdup(g_msh.rd_line);
@@ -109,7 +109,7 @@ int	process_newline(int size)
 	g_msh.curr_hist = NULL;
 	insert_cmd_history();
 	g_msh.tmp_line = NULL;
-	
+
 	return (1);
 }
 
@@ -153,7 +153,7 @@ void init_terminal(char *envp[])
 {
 	struct termios term;
 
-	put_envp_in_list(envp);
+	// put_envp_in_list(envp);
 	g_msh.term = &term;
 	if (tgetent(NULL, g_msh.termtype) < 0)
 		exit (0);// Call exit function faillure
