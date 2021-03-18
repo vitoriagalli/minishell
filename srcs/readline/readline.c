@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 15:34:42 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/18 13:05:06 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/18 22:23:07 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,10 +152,11 @@ int	get_input_user()
 void init_terminal(char *envp[])
 {
 	struct termios term;
+	char	**termtype;
 
-	// put_envp_in_list(envp);
+	termtype = get_env_value("TERM");
 	g_msh.term = &term;
-	if (tgetent(NULL, g_msh.termtype) < 0)
+	if (tgetent(NULL, termtype[0]) < 0)
 		exit (0);// Call exit function faillure
 	if (tcgetattr(STDIN_FILENO, &term) == -1)
 		exit (0); // Call exit function faillure
@@ -164,6 +165,7 @@ void init_terminal(char *envp[])
 	term.c_cc[VTIME] = 0;
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
 		exit (0); // Call exit function faillure
+	ft_array_clear(termtype, ft_free);
 }
 
 int read_line()

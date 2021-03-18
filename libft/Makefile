@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+         #
+#    By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/24 15:19:33 by romanbtt          #+#    #+#              #
-#    Updated: 2021/02/24 14:12:13 by romanbtt         ###   ########.fr        #
+#    Updated: 2021/03/18 22:09:39 by vscabell         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,8 +68,9 @@ SRC_FILES =	ft_memset.c \
 			ft_isspace.c \
 			ft_delchar.c \
 			ft_delspace.c \
-			ft_ullitoa_base.c
-			
+			ft_ullitoa_base.c \
+			ft_strcmp.c
+
 SRCS = $(addprefix $(SRC_DIR)/,$(SRC_FILES))
 
 OBJS = $(SRCS:.c=.o)

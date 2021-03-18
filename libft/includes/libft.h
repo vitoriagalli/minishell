@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/15 16:17:38 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/02/10 14:43:07 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/18 22:09:27 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,6 @@ char			**ft_split_isspace(char const *s);
 int				ft_isspace(const char c);
 void			ft_delchar(char *str, char set);
 void			ft_delspace(char *str);
+int				ft_strcmp(const char *s1, const char *s2);
+
 #endif
