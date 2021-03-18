@@ -3,50 +3,91 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 16:55:29 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/17 19:40:27 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/18 03:19:22 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+char	*subst_value(char *data, char *env_var, char *name, char *value)
+{
+	char	*new_tk_value;
+	char	*before_env;
+	char	*after_env;
+
+	new_tk_value = NULL;
+	before_env = NULL;
+	after_env = NULL;
+	if ((env_var - data - 1) > 0)
+		before_env = ft_substr(data, 0, (env_var - data - 1));
+	if ((ft_strlen(env_var) - ft_strlen(name)) > 0)
+		after_env = ft_substr(env_var, ft_strlen(name),
+			ft_strlen(env_var) - ft_strlen(name));
+	if (before_env)
+		new_tk_value = ft_strjoin(before_env, ft_strdup(value));
+	else
+		new_tk_value = ft_strdup(value);
+	if (after_env)
+		new_tk_value = ft_strjoin(new_tk_value, after_env);
+	return (new_tk_value);
+}
+
+void	store_key_and_value(char **value, char **key, char *str)
+{
+	char *addr;
+
+	addr = ft_strrchr(str, '=');
+	*key = ft_substr(str, 0, addr - str);
+	*value = ft_substr(str, addr - str + 1,
+	ft_strlen(str) - (addr - str));
+}
+
 static char *substitution_env(t_env *env, char *str)
 {
-	char *temp;
-	
+	char	*temp;
+	char	*env_var;
+	char	*value;
+	char	*key;
+	int		i;
+
 	if (str[1] == '\0')
 	{
 		temp = ft_strdup("$");
 		return (temp);
-	}	
-	while (env->next)
+	}
+	while (g_msh.env[i])
 	{
-		if (!ft_strncmp(env->name, str + 1, ft_strlen(str) + 1))
+		store_key_and_value(&value, &key, g_msh.env[i]);
+		env_var = ft_strnstr(str, key, ft_strlen(str));
+		if (env_var && *(env_var - 1) == '$')
 		{
-			temp = ft_strdup(env->value);
-			return (temp); //PROBABLE LEAK
-		}	
-		env = env->next;
+			temp = subst_value(str, env_var, key, value);
+			free(key);
+			free(value);
+			return (temp);
+		}
+		i++;
 	}
 	temp = ft_strdup("");
 	return (temp);
 }
 
 void	evaluate_dollar(t_tokens *tk, t_lexer *lx)
-{	
+{
 	int		k;
 	char	*temp;
 	char	*ret_cmd;
-	
+
 	k = lx->i + 1;
 	if (lx->line[lx->i + 1] == '?')
 	{
 		ret_cmd = ft_itoa(g_msh.last_ret_cmd);
 		tk->data = ft_strjoin(tk->data, ret_cmd);
 		lx->i += 2;
-	}	
+	}
 	else
 	{
 		while (lx->line[k] != DOLLAR && lx->line[k] != SPACE &&

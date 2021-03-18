@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/17 19:53:54 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/18 02:44:12 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@
 # define SPACE 32
 # define SEMICOLON 59
 # define TAB 9
-# define NEW_LINE 10 
+# define NEW_LINE 10
 # define GREAT 62
 # define LESS 60
 # define DOLLAR 36
@@ -120,7 +120,7 @@ typedef struct s_cmd
 	int					red_in;
 	int					red_out;
 	int					separator;
-	struct s_cmd		*next;	
+	struct s_cmd		*next;
 }				t_cmd;
 
 typedef struct s_cmds
@@ -153,6 +153,7 @@ typedef struct	s_history
 
 typedef struct	s_minishell
 {
+	char			**env;
 	t_tokens		*head_tk;
 	t_history		*head_hist;
 	t_env 			*head_env;
