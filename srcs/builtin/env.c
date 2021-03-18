@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:45:59 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/17 19:51:02 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/18 02:57:53 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,13 @@
 
 void	ft_env(t_cmd *cmd, t_exec *exec)
 {
-	t_env *line;
-	
+	int		i;
+
+	i = 0;
 	if (exec->child_pid == 0)
 	{
-		line = g_msh.head_env;
-		while (line)
-		{
-			ft_printf("%s=%s\n", line->name, line->value);
-			line = line->next;
-		}
+		while (g_msh.env[i])
+			ft_putendl_fd(g_msh.env[i++], STDOUT_FILENO);
 		exit(EXIT_SUCCESS);
 	}
 }
