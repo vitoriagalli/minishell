@@ -29,7 +29,7 @@ SRC_FILES =	main.c \
 			syntax_parser.c \
 			create_commands.c \
 			execution_commands.c \
-			error_handling.c 
+			error_handling.c
 
 SRCS = $(addprefix srcs/,$(SRC_FILES))
 OBJS = $(SRCS:.c=.o)
@@ -52,7 +52,7 @@ clean:
 	@echo "\033[1;32m[OK]\033[0m    \033[1;33mDeleting \033[0m object files of minishell\n"
 	@make --no-print-directory clean -C libft
 	@make --no-print-directory clean -C ft_printf
-	
+
 
 fclean: clean
 	@$(RM) $(NAME)

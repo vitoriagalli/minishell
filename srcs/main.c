@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/17 20:01:59 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/18 03:04:46 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,26 @@ void update_minishell()
 	free(g_msh.rd_line);
 }
 
+void	init_env(char **envp)
+{
+	int		len_arr;
+	int		i;
+
+	len_arr = 0;
+	while (envp[len_arr])
+		len_arr++;
+	g_msh.env = ft_calloc(len_arr + 1, sizeof(char *));
+	i = 0;
+	while (i < len_arr)
+	{
+		g_msh.env[i] = ft_strdup(envp[i]);
+		i++;
+	}
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
+	init_env(envp);
 	init_terminal(envp);
 	print_prompt();
 	while ((read_line()) != 0)
@@ -55,7 +73,7 @@ int main(int argc, char *argv[], char *envp[])
 		{
 			print_prompt();
 			continue;
-		}	
+		}
 		create_commands();
 		execution_commands();
 		free(g_msh.line);
