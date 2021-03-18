@@ -6,33 +6,11 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:25:59 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/18 22:22:02 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/18 22:59:57 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-void	ft_free(char *elem)
-{
-	if (elem)
-	{
-		free(elem);
-		elem = NULL;
-	}
-}
-
-void	ft_array_clear(char **arr, void (*del)(char *))
-{
-	int		len;
-	int		i;
-
-	len = 0;
-	while (arr[len])
-		len++;
-	i = 0;
-	while (i < len)
-		del(arr[i++]);
-}
 
 void	store_key_and_value(char **value, char **key, char *str)
 {

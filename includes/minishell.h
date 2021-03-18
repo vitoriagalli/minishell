@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/18 22:22:23 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/18 22:58:57 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,5 +203,6 @@ void	store_key_and_value(char **value, char **key, char *str);
 char	**get_env_value(char *key);
 void	ft_array_clear(char **arr, void (*del)(char *));
 void	ft_free(char *elem);
+bool	find_path();
 
 #endif

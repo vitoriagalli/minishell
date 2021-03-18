@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/18 22:30:10 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/18 23:00:56 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,9 @@ int main(int argc, char *argv[], char *envp[])
 	{
 		update_minishell();
 		lexer();
-		if (!syntax_parser())
-		{
-			print_prompt();
-			continue;
-		}
 		create_commands();
+		if (!syntax_parser() || !find_path())
+			continue;
 		execution_commands();
 		free(g_msh.line);
 		print_prompt();

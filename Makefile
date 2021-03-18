@@ -29,7 +29,8 @@ SRC_FILES =	main.c \
 			syntax_parser.c \
 			create_commands.c \
 			execution_commands.c \
-			error_handling.c
+			error_handling.c \
+			find_path.c
 
 SRCS = $(addprefix srcs/,$(SRC_FILES))
 OBJS = $(SRCS:.c=.o)

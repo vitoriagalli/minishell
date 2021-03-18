@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_commands.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:40:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/17 19:50:08 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/18 22:55:56 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ int	exit_status()
 		return (EXIT_FAILURE);
 }
 
-char	*add_path_command(char *path, char *cmd)
-{
-	char *tmp;
-
-	tmp = ft_strjoin("/", cmd);
-	tmp = ft_strjoin(path, tmp);
-	return (tmp);
-}
+//char	*add_path_command(char *path, char *cmd)
+//{
+//	char *tmp;
+//
+//	tmp = ft_strjoin("/", cmd);
+//	tmp = ft_strjoin(path, tmp);
+//	return (tmp);
+//}
 
 void	set_redirection(t_cmd *cmd, t_exec *exec)
 {
@@ -57,40 +57,13 @@ void	set_redirection(t_cmd *cmd, t_exec *exec)
 		else
 			ft_printf("minishell: %s: %s\n", cmd->file_in, strerror(errno));
 		exit(exit_status());
-	}	
-}
-
-void	call_exec_rel_abs(t_cmd *cmd, t_exec *exec, int fd_dup)
-{
-	int i;
-	char *tmp;
-
-	i = 0;
-	exec->child_pid = fork();
-	if (exec->child_pid == 0)
-	{	
-		dup2(exec->pipefds[fd_dup], fd_dup);
-		if (cmd->red_in != 0 || cmd->red_out != 0)
-			set_redirection(cmd, exec);
-		else if (cmd->separator == PIPE)
-			close(exec->pipefds[0]);
-    	if (cmd->cmd_name[0] == '~')
-		{
-			tmp = ft_substr(cmd->cmd_name, 1, ft_strlen(cmd->cmd_name));
-			cmd->cmd_name = ft_strjoin(exec->path_home, tmp);
-			free(tmp);
-		}
-		execve(cmd->cmd_name, cmd->args, __environ);
-		dup2(exec->save_stdout, STDOUT_FILENO);
-		ft_printf("minishell: %s: %s\n",cmd->cmd_name, strerror(errno));
-		exit(exit_status());
 	}
 }
 
-void	call_exec_path(t_cmd *cmd, t_exec *exec, int fd_dup)
+
+void call_exec(t_cmd *cmd, t_exec *exec, int fd_dup)
 {
 	int i;
-	char *tmp;
 
 	i = 0;
 	exec->child_pid = fork();
@@ -103,18 +76,69 @@ void	call_exec_path(t_cmd *cmd, t_exec *exec, int fd_dup)
 			close(exec->pipefds[0]);
 		if (is_buildin_cmd(cmd->cmd_name))
 			call_exec_buildin(cmd, exec);
-    	while (exec->path_cmd[i])
-		{
-			tmp = add_path_command(exec->path_cmd[i++], cmd->cmd_name);
-			execve(tmp, cmd->args, __environ);
-		}
-		free(tmp);
+		else
+			execve(cmd->cmd_name, cmd->args, g_msh.env);
+		ft_printf("minishell: %s: %s\n", cmd->cmd_name, strerror(errno));
 		dup2(exec->save_stdout, STDOUT_FILENO);
-		ft_printf("%s: command not found\n", cmd->cmd_name);
-		// free all
 		exit(exit_status());
 	}
 }
+
+//void	call_exec_rel_abs(t_cmd *cmd, t_exec *exec, int fd_dup)
+//{
+//	int i;
+//	char *tmp;
+//
+//	i = 0;
+//	exec->child_pid = fork();
+//	if (exec->child_pid == 0)
+//	{
+//		dup2(exec->pipefds[fd_dup], fd_dup);
+//		if (cmd->red_in != 0 || cmd->red_out != 0)
+//			set_redirection(cmd, exec);
+//		else if (cmd->separator == PIPE)
+//			close(exec->pipefds[0]);
+//    	if (cmd->cmd_name[0] == '~')
+//		{
+//			tmp = ft_substr(cmd->cmd_name, 1, ft_strlen(cmd->cmd_name));
+//			cmd->cmd_name = ft_strjoin(exec->path_home, tmp);
+//			free(tmp);
+//		}
+//		execve(cmd->cmd_name, cmd->args, __environ);
+//		dup2(exec->save_stdout, STDOUT_FILENO);
+//		ft_printf("minishell: %s: %s\n",cmd->cmd_name, strerror(errno));
+//		exit(exit_status());
+//	}
+//}
+
+//void	call_exec_path(t_cmd *cmd, t_exec *exec, int fd_dup)
+//{
+//	int i;
+//	char *tmp;
+//
+//	i = 0;
+//	exec->child_pid = fork();
+//	if (exec->child_pid == 0)
+//	{
+//		dup2(exec->pipefds[fd_dup], fd_dup);
+//		if (cmd->red_in != 0 || cmd->red_out != 0)
+//			set_redirection(cmd, exec);
+//		else if (cmd->separator == PIPE)
+//			close(exec->pipefds[0]);
+//		if (is_buildin_cmd(cmd->cmd_name))
+//			call_exec_buildin(cmd, exec);
+//    	while (exec->path_cmd[i])
+//		{
+//			tmp = add_path_command(exec->path_cmd[i++], cmd->cmd_name);
+//			execve(tmp, cmd->args, __environ);
+//		}
+//		free(tmp);
+//		dup2(exec->save_stdout, STDOUT_FILENO);
+//		ft_printf("%s: command not found\n", cmd->cmd_name);
+//		// free all
+//		exit(exit_status());
+//	}
+//}
 
 void	execute_command_pipe(t_cmd *cmd, t_exec *exec)
 {
@@ -127,16 +151,16 @@ void	execute_command_pipe(t_cmd *cmd, t_exec *exec)
 		close(exec->pipefds[1]);
 		dup2(exec->pipefds[0], STDIN_FILENO);
 	}
-	pipe(exec->pipefds); 
+	pipe(exec->pipefds);
 	exec->pipe = true;
-	if (strchr("./~", cmd->cmd_name[0]))
-		call_exec_rel_abs(cmd, exec, 1);
-	else
-	{
-		call_exec_path(cmd, exec, 1);
-		if (is_buildin_cmd(cmd->cmd_name))
-			call_exec_buildin(cmd, exec);
-	}	
+	//if (strchr("./~", cmd->cmd_name[0]))
+	//	call_exec_rel_abs(cmd, exec, 1);
+	//else
+	//
+	call_exec(cmd, exec, 1);
+	if (is_buildin_cmd(cmd->cmd_name))
+		call_exec_buildin(cmd, exec);
+	//}
 }
 
 void 	execute_command(t_cmd *cmd, t_exec *exec)
@@ -148,14 +172,14 @@ void 	execute_command(t_cmd *cmd, t_exec *exec)
 		if (exec->pipe == true)
 			dup2(exec->save_stdout, exec->pipefds[1]);
 		exec->pipe = false;
-		if (ft_strchr("./~", cmd->cmd_name[0]))
-			call_exec_rel_abs(cmd, exec, 0);
-		else
-		{
-			call_exec_path(cmd, exec, 0);
-			if (is_buildin_cmd(cmd->cmd_name))
-				call_exec_buildin(cmd, exec);
-		}
+		//if (ft_strchr("./~", cmd->cmd_name[0]))
+		//	call_exec_rel_abs(cmd, exec, 0);
+		//else
+		//{
+		call_exec(cmd, exec, 0);
+		if (is_buildin_cmd(cmd->cmd_name))
+			call_exec_buildin(cmd, exec);
+		//}
 }
 
 void 	execution_commands()
