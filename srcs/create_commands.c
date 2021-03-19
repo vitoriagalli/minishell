@@ -54,7 +54,7 @@ t_cmd	*handle_cmd_separator(t_cmd *cmd, t_tokens *tk)
 t_tokens	*handle_out_append(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">>")));	
-	tk = tk->next;
+	// tk = tk->next;
 	cmds->curr_tk++;
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(tk->data)));
 	return (tk);

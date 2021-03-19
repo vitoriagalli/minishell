@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/19 00:43:37 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/19 23:22:46 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <fcntl.h>
 # include <curses.h>
 # include <term.h>
+# include <signal.h>
 
 # include "libft.h"
 # include "ft_printf.h"
@@ -205,5 +206,7 @@ char	**get_env_value(char *key);
 void	ft_array_clear(char **arr, void (*del)(char *));
 void	ft_free(char *elem);
 bool	find_path();
+int		handle_signals(int signal);
+
 
 #endif

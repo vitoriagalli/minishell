@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/18 21:31:31 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/19 23:36:18 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,13 @@ int main(__attribute__((unused))int argc, __attribute__((unused))char *argv[],
 	{
 		update_minishell();
 		lexer();
+		if (!syntax_parser())
+		{
+			print_prompt();
+			continue;
+		}
 		create_commands();
-		if (!syntax_parser() || !find_path())
+		if (!find_path())
 			continue;
 		execution_commands();
 		free(g_msh.line);
