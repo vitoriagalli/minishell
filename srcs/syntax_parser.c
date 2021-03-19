@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_parser.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:54:34 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/17 19:42:52 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/19 19:43:27 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ bool	syntax_parser()
 		{
 			ft_printf("minishell: syntax error near unexpected token `%s'\n", tk->data);
 			g_msh.last_ret_cmd = 2;
+			print_prompt();
 			return (0);
 		}	
 		type_left = tk->type;
