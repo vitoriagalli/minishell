@@ -34,21 +34,57 @@ t_cmd	*handle_cmd_separator(t_cmd *cmd, t_tokens *tk)
 	return (cmd);
 }
 
-t_tokens	*handle_cmd_input(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
+// t_tokens	*handle_cmd_input(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
+// {	
+// 	cmd->red_in = tk->type;
+// 	tk = tk->next;
+// 	cmd->file_in = ft_strdup(tk->data);
+// 	return (tk);
+// }
+
+// t_tokens	*handle_cmd_output(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
+// {	
+// 	cmd->red_out = tk->type;
+// 	tk = tk->next;
+// 	cmds->curr_tk++;
+// 	cmd->file_out = ft_strdup(tk->data);
+// 	return (tk);
+// }
+
+t_tokens	*handle_out_append(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
-	cmd->red_in = tk->type;
+	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">>")));	
 	tk = tk->next;
-	cmd->file_in = ft_strdup(tk->data);
+	cmds->curr_tk++;
+	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(tk->data)));
 	return (tk);
 }
 
-t_tokens	*handle_cmd_output(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
+t_tokens	*handle_out_overwrite(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
-	cmd->red_out = tk->type;
+	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">")));	
 	tk = tk->next;
 	cmds->curr_tk++;
-	cmd->file_out = ft_strdup(tk->data);
+	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(tk->data)));
 	return (tk);
+}
+
+t_tokens	*handle_out_input(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
+{
+	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup("<")));
+	tk = tk->next;
+	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(tk->data)));
+	return (tk);
+}
+
+t_tokens	*handle_redir(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
+{
+	if (tk->type == OUT_APPEND)
+		return (handle_out_append(cmd, tk, cmds));
+	else if (tk->type == OUT_OVERWRITE)
+		return (handle_out_overwrite(cmd, tk, cmds));
+	else if (tk->type == tk->type == INPUT)
+		return (handle_out_input(cmd, tk, cmds));
 }
 
 void	handle_word(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
@@ -80,10 +116,12 @@ void	create_commands()
 	init_command(cmd);
 	while (tk->next)
 	{
-		if (tk->type == OUT_APPEND || tk->type == OUT_OVERWRITE)
-			tk = handle_cmd_output(cmd, tk, g_msh.cmds);
-		else if (tk->type == INPUT)
-			tk = handle_cmd_input(cmd, tk, g_msh.cmds);
+		// if (tk->type == OUT_APPEND || tk->type == OUT_OVERWRITE)
+		// 	tk = handle_cmd_output(cmd, tk, g_msh.cmds);
+		// else if (tk->type == INPUT)
+		// 	tk = handle_cmd_input(cmd, tk, g_msh.cmds);
+		if (tk->type == OUT_APPEND || tk->type == OUT_OVERWRITE || tk->type == INPUT)
+			tk = handle_redir(cmd, tk, g_msh.cmds);
 		else if (tk->type == PIPE || tk->type == SEPARATOR)
 			cmd = handle_cmd_separator(cmd, tk);
 		else

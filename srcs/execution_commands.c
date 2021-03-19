@@ -33,33 +33,39 @@ int	exit_status()
 
 void	set_redirection(t_cmd *cmd, t_exec *exec)
 {
+	t_list	*tmp;
 	int fd;
 
-	if (cmd->red_in == INPUT)
+	tmp = cmd->redirection;
+	while (tmp && tmp->next)
 	{
-		fd = open(cmd->file_in, O_RDONLY);
-		dup2(fd, STDIN_FILENO);
+		if (!ft_strcmp(tmp->content, "<"))
+		{
+			fd = open(tmp->next->content, O_RDONLY);
+			dup2(fd, STDIN_FILENO);
+		}
+		if (!ft_strcmp(tmp->content, ">"))
+		{
+			fd = open(tmp->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+			dup2(fd, STDOUT_FILENO);
+		}
+		if (!ft_strcmp(tmp->content, ">>"))
+		{
+			fd = open(tmp->next->content, O_WRONLY | O_CREAT | O_APPEND, 0664);
+			dup2(fd, STDOUT_FILENO);
+		}
+		if (fd < 0)
+		{
+			if (!ft_strcmp(tmp->content, "<"))
+				ft_printf("minishell: %s: %s\n", tmp->next->content, "No such file or directory");
+			else
+				ft_printf("minishell: %s: %s\n", tmp->next->content, strerror(errno));
+			exit(exit_status());
+		}
+		tmp = tmp->next->next;
 	}
-	if (cmd->red_out == OUT_OVERWRITE)
-	{
-		fd = open(cmd->file_out, O_WRONLY | O_CREAT, 0664);
-		dup2(fd, STDOUT_FILENO);
-	}
-	if (cmd->red_out == OUT_APPEND)
-	{
-		fd = open(cmd->file_out, O_WRONLY | O_CREAT | O_APPEND, 0664);
-		dup2(fd, STDOUT_FILENO);
-	}
-	if (fd < 0)
-	{
-		if (cmd->red_in == INPUT)
-			ft_printf("minishell: %s: %s\n", cmd->file_in, "No such file or directory");
-		else
-			ft_printf("minishell: %s: %s\n", cmd->file_in, strerror(errno));
-		exit(exit_status());
-	}
+	
 }
-
 
 void call_exec(t_cmd *cmd, t_exec *exec, int fd_dup)
 {
@@ -70,7 +76,8 @@ void call_exec(t_cmd *cmd, t_exec *exec, int fd_dup)
 	if (exec->child_pid == 0)
 	{
 		dup2(exec->pipefds[fd_dup], fd_dup);
-		if (cmd->red_in != 0 || cmd->red_out != 0)
+		// if (cmd->red_in != 0 || cmd->red_out != 0)
+		if (cmd->redirection)
 			set_redirection(cmd, exec);
 		else if (cmd->separator == PIPE)
 			close(exec->pipefds[0]);

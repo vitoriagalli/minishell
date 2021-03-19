@@ -25,8 +25,8 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-#include <curses.h>
-#include <term.h>
+# include <curses.h>
+# include <term.h>
 
 # include "libft.h"
 # include "ft_printf.h"
@@ -108,10 +108,11 @@ typedef struct s_cmd
 {
 	char				*cmd_name;
 	char				**args;
-	char				*file_in;
-	char				*file_out;
-	int					red_in;
-	int					red_out;
+	t_list				*redirection;
+	// char				*file_in;
+	// char				*file_out;
+	// int					red_in;
+	// int					red_out;
 	int					separator;
 	struct s_cmd		*next;
 }				t_cmd;

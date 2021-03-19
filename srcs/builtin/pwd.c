@@ -14,14 +14,14 @@
 
 void 	ft_pwd(t_cmd *cmd, t_exec *exec)
 {
-	char buf[1024];
+	char buf[1024 + 1];
 
 	if (exec->child_pid == 0)
 	{
 		if ((getcwd(buf, 1024)) == NULL)
-		{
 			ft_printf("minishell: pwd: %s\n", strerror(errno));
-			exit(exit_status());
-		}
+		else
+			ft_putendl_fd(buf, STDOUT_FILENO);
+		exit(exit_status());
 	}
 }
