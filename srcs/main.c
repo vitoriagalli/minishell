@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/18 23:00:56 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/18 21:31:31 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void update_minishell()
 	free(g_msh.rd_line);
 }
 
-int main(int argc, char *argv[], char *envp[])
+int main(__attribute__((unused))int argc, __attribute__((unused))char *argv[],
+	char *envp[])
 {
 	init_env(envp);
 	init_terminal(envp);
