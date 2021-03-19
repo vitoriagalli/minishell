@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 12:47:08 by Vs / Rb           #+#    #+#             */
-/*   Updated: 2021/03/19 00:42:59 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/19 19:30:20 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ char *relative_path(char *cmd)
 		}
 	}
 	ft_printf("minishell: %s: command not found\n", cmd);
+	g_msh.last_ret_cmd = 127;
 	return (NULL);
 }
 
@@ -96,11 +97,13 @@ char	*absolute_path(char *cmd)
 	if (!file_exists(cmd))
 	{
 		ft_printf("minishell: %s: command not found\n", cmd);
+		g_msh.last_ret_cmd = 127;
 		return (NULL);
 	}
 	else if (is_directory(cmd))
 	{
 		ft_printf("minishell: %s: Is a directory\n", cmd);
+		g_msh.last_ret_cmd = 126;
 		return (NULL);
 	}
 	return (cmd);
