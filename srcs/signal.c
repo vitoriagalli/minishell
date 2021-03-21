@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 23:12:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/21 15:30:33 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/21 18:26:32 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ void	signal_handler_do_nothing(int sig)
 void	signal_handler_parent(int signal)
 {
 	if (signal == SIGINT)
-		ft_printf("^C\n");
+		ft_printf("\n");
 	if (signal == SIGQUIT)
-		ft_printf("^\\Quit (core dumped)\n");
+		ft_printf("Quit (core dumped)\n");
 }
 
 void	handle_signals(int caller, int pid)

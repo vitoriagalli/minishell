@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/21 01:18:38 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/21 16:33:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ typedef struct	s_minishell
 	t_cmds			*cmds;
 	t_exec			exec;
 	struct termios 	*term;
+	struct termios	*save;
 	char			**path_cmd;
 	char			*path_home;
 	char			*termtype;

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 15:34:42 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/21 15:08:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/21 18:25:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,34 +142,37 @@ int	get_input_user()
 	{
 		ft_bzero(buffer, 3);
 		read(STDIN_FILENO, &buffer, 3);
-		if (buffer[0] == EOT)
+		if (buffer[0] == EOT && g_msh.rd_line[0] == '\0')
 			return (0);
 		send_line = handle_event(buffer);
 	}
 	return (1);
 }
 
-void init_terminal(char *envp[])
+void init_terminal()
 {
 	struct termios term;
 	char	**termtype;
 
+	g_msh.save = ft_calloc(1, sizeof(struct termios));
 	termtype = get_env_value("TERM");
 	g_msh.term = &term;
 	if (tgetent(NULL, termtype[0]) < 0)
 		exit (0);// Call exit function faillure
 	if (tcgetattr(STDIN_FILENO, &term) == -1)
 		exit (0); // Call exit function faillure
+	ft_memcpy(g_msh.save, &term, sizeof(term));
 	term.c_lflag &= ~(ECHO | ICANON);
 	term.c_cc[VMIN] = 1;
 	term.c_cc[VTIME] = 0;
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &term) == -1)
 		exit (0); // Call exit function faillure
 	ft_array_clear(termtype, ft_free);
 }
 
 int read_line()
 {
+	init_terminal();
 	handle_signals(ROOT, 1);
 	if (get_input_user() == 0)
 		return (0);

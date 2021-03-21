@@ -3,17 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/21 10:35:35 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/21 18:28:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	restore_terminal()
+{
+	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, g_msh.save) == -1)
+		exit (0); // Call exit function faillure
+	free(g_msh.save);
+}
+
 void update_minishell()
 {
+	restore_terminal();
 	g_msh.line = ft_strdup(g_msh.rd_line);
 	free(g_msh.rd_line);
 }
@@ -22,7 +30,6 @@ int main(__attribute__((unused))int argc, __attribute__((unused))char *argv[],
 	char *envp[])
 {
 	init_env(envp);
-	init_terminal();
 	print_prompt();
 	while ((read_line()) != 0)
 	{
