@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 15:34:42 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/21 02:17:27 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/21 15:08:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ void init_terminal(char *envp[])
 
 int read_line()
 {
-	handle_signals(ROOT, 0);
+	handle_signals(ROOT, 1);
 	if (get_input_user() == 0)
 		return (0);
 	return (1);
