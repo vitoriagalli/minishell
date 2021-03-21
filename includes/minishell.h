@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/19 23:22:46 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/21 01:18:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@
 # define YELLOW "\033[1;33m"
 # define END_COLOR "\033[0m"
 
-
+# define ROOT 100000
+# define FORK 200000
 
 typedef struct s_lexer
 {
@@ -206,7 +207,8 @@ char	**get_env_value(char *key);
 void	ft_array_clear(char **arr, void (*del)(char *));
 void	ft_free(char *elem);
 bool	find_path();
-int		handle_signals(int signal);
+
+void	handle_signals(int caller, int pid);
 
 
 #endif

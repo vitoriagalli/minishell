@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 15:34:42 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/19 23:37:15 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/21 02:17:27 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,6 @@ int	get_input_user()
 	send_line = 0;
 	while(send_line == 0)
 	{
-		// signal(SIGINT, handle_signals);
 		ft_bzero(buffer, 3);
 		read(STDIN_FILENO, &buffer, 3);
 		if (buffer[0] == EOT)
@@ -171,6 +170,7 @@ void init_terminal(char *envp[])
 
 int read_line()
 {
+	handle_signals(ROOT, 0);
 	if (get_input_user() == 0)
 		return (0);
 	return (1);

@@ -1,7 +1,7 @@
 NAME =		minishell
 
 CC =		clang
-CFLAGS =	-w  -Wall -Wextra -Werror -g # -g to delete
+CFLAGS =	-w -Wall -Wextra -Werror -g # -fsanitize=address # -g to delete
 
 INCLUDES =	-I ./includes -I ./libft/includes -I ./ft_printf/includes
 LIBFT = -L ./libft -lft

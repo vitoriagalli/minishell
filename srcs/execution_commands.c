@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_commands.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:40:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/18 22:55:56 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/21 01:49:01 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void call_exec(t_cmd *cmd, t_exec *exec, int fd_dup)
 
 	i = 0;
 	exec->child_pid = fork();
+	handle_signals(FORK, exec->child_pid);
 	if (exec->child_pid == 0)
 	{
 		dup2(exec->pipefds[fd_dup], fd_dup);
