@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:44:23 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/17 19:52:13 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/21 19:25:15 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@ void 	ft_pwd(t_cmd *cmd, t_exec *exec)
 	if (exec->child_pid == 0)
 	{
 		if ((getcwd(buf, 1024)) == NULL)
+		{
 			ft_printf("minishell: pwd: %s\n", strerror(errno));
-		else
-			ft_putendl_fd(buf, STDOUT_FILENO);
-		exit(exit_status());
+			exit(EXIT_FAILURE);
+		}
+		ft_putendl_fd(buf, STDOUT_FILENO);
+		exit(EXIT_SUCCESS);
 	}
 }

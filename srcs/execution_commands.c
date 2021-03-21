@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:40:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/21 16:30:20 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/21 19:20:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,8 +211,8 @@ void 	execution_commands()
 			g_msh.force_ret_buildin = false;
 		else if (WIFEXITED(status))
 			g_msh.last_ret_cmd = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-  			g_msh.last_ret_cmd =  WTERMSIG(status);
+		// else if (WIFSIGNALED(status))
+		// 	g_msh.last_ret_cmd = WTERMSIG(status);		// nao esta retornando o status esperado
 		cmd = cmd->next;
 	}
 	dup2(exec.save_stdin, 0);
