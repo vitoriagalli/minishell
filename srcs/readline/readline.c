@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 15:34:42 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 11:26:14 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 11:40:46 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	history_down(int size)
 			free(g_msh.tmp_line);
 			g_msh.tmp_line = NULL;
 		}
-
 	}
 }
 
@@ -176,6 +175,7 @@ void init_terminal()
 
 int read_line()
 {
+	print_prompt();
 	init_terminal();
 	handle_signals(ROOT, 1);
 	if (get_input_user() == 0)

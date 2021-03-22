@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 19:54:34 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 11:15:28 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 11:40:05 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ bool	syntax_parser()
 		{
 			ft_printf("minishell: syntax error near unexpected token `%s'\n", tk->data);
 			g_msh.last_ret_cmd = 2;
-			return (0);
+			return (false);
 		}	
 		type_left = tk->type;
 		tk = tk->next;

@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 10:51:34 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 11:26:27 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 11:36:46 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,4 @@ void init_cmd_history(t_minishell *msh)
 	msh->head_hist = malloc(sizeof(t_history));
 	msh->head_hist->next = NULL;
 	msh->head_hist->prev = NULL;
-	
 }

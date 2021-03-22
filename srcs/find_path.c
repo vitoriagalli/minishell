@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 12:47:08 by Vs / Rb           #+#    #+#             */
-/*   Updated: 2021/03/22 00:39:04 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/22 11:41:17 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ bool	find_path()
 			ret = relative_path(cmd->cmd_name);
 		if (ret == NULL)
 		{
-			print_prompt();
+		//	print_prompt();
 			return (false);
 		}
 		cmd->cmd_name = ft_strdup(ret);
