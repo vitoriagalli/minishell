@@ -6,23 +6,22 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 11:53:21 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 12:21:44 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	restore_terminal()
+static void	restore_terminal()
 {
 	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, g_msh.save) == -1)
 		exit (0); // Call exit function faillure
 	free(g_msh.save);
 }
 
-int main(__attribute__((unused))int argc, __attribute__((unused))char *argv[],
-	char *envp[])
+int main(void)
 {
-	init_env(envp);
+	init_env(__environ);
 	while ((read_line()) != 0)
 	{
 		restore_terminal();

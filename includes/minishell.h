@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 11:46:34 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 12:15:02 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,6 @@ void		token_in_quotes(t_tokens *tk, t_lexer *lx);
 void		get_next_char(t_tokens *tk, t_lexer *lx);
 void		token_dollar(t_tokens *tk, t_lexer *lx);
 
-void		get_envp(char *envp[]);
 void		tokens_substitution();
 int			get_char_type(char c);
 void		evaluate_dollar(t_tokens *tk, t_lexer *lx);
