@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 10:51:34 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/20 18:08:56 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/22 11:26:27 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,22 @@ void insert_cmd_history()
 {
 	t_history *hist;
 
-	if (g_msh.rd_line[0] == '\0' || g_msh.rd_line[0] == ' ')
+	if (g_msh.line[0] == '\0' || g_msh.line[0] == ' ')
+	{
+		g_msh.curr_hist = g_msh.head_hist;
 		return ;
+	}	
 	hist = malloc(sizeof(t_history));
 	if (g_msh.head_hist == NULL)
 	{
-		hist->cmd_line = ft_strdup(g_msh.rd_line);
+		hist->cmd_line = ft_strdup(g_msh.line);
 		hist->next = NULL;
 		hist->prev = NULL;
 		g_msh.head_hist = hist;
 	}
 	else
 	{
-		hist->cmd_line = ft_strdup(g_msh.rd_line);
+		hist->cmd_line = ft_strdup(g_msh.line);
 		hist->next = g_msh.head_hist;
 		g_msh.head_hist->prev = hist;
 		hist->prev = NULL;

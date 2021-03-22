@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 00:54:47 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/22 11:21:58 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,6 @@
 # define SQ_BR '['
 # define UP 'A'
 # define DOWN 'B'
-
-
-
-
-
-
-# define BUFF_READ 512
-# define OPEN_MAX 1024
-# define BUFFER_SIZE 32
 
 # define CHAR_GENERAL 1
 # define SINGLE_QUOTE 39
@@ -99,22 +90,18 @@ typedef struct s_lexer
 	int 		state;
 }				t_lexer;
 
-typedef struct	s_tokens
+typedef struct		s_tokens
 {
 	char			*data;
 	int				type;
 	struct s_tokens	*next;
-}				t_tokens;
+}					t_tokens;
 
 typedef struct s_cmd
 {
 	char				*cmd_name;
 	char				**args;
 	t_list				*redirection;
-	// char				*file_in;
-	// char				*file_out;
-	// int					red_in;
-	// int					red_out;
 	int					separator;
 	struct s_cmd		*next;
 }				t_cmd;
@@ -122,7 +109,6 @@ typedef struct s_cmd
 typedef struct s_cmds
 {
 	t_cmd			*head_cmd;
-	int				nb_tk;
 	int				curr_tk;
 	int				curr_arg;
 	bool			got_cmd_name;
@@ -135,8 +121,6 @@ typedef struct s_exec
 	int		save_stdin;
 	int		pipefds[2];
 	pid_t	child_pid;
-	char	**path_cmd;
-	char	*path_home;
 }				t_exec;
 
 typedef struct	s_history
@@ -158,10 +142,6 @@ typedef struct	s_minishell
 	t_exec			exec;
 	struct termios 	*term;
 	struct termios	*save;
-	char			**path_cmd;
-	char			*path_home;
-	char			*termtype;
-	char			*rd_line;
 	char 			*line;
 	char			*tmp_line;
 	int				last_ret_cmd;
@@ -172,44 +152,45 @@ t_minishell g_msh;
 
 typedef void	(*t_inbuild)(t_cmd *, t_exec *);
 
-void	ft_echo(t_cmd *cmd, t_exec *exec);
-void	ft_cd(t_cmd *cmd, t_exec *exec);
-void 	ft_pwd(t_cmd *cmd, t_exec *exec);
-void	ft_export(t_cmd *cmd, t_exec *exec);
-void	ft_unset(t_cmd *cmd, t_exec *exec);
-void	ft_env(t_cmd *cmd, t_exec *exec);
-void	ft_exit(t_cmd *cmd, t_exec *exec);
-int		get_next_line(int fd, char **line);
 
-void	lexer();
+void		ft_echo(t_cmd *cmd, t_exec *exec);
+void		ft_cd(t_cmd *cmd, t_exec *exec);
+void 		ft_pwd(t_cmd *cmd, t_exec *exec);
+void		ft_export(t_cmd *cmd, t_exec *exec);
+void		ft_unset(t_cmd *cmd, t_exec *exec);
+void		ft_env(t_cmd *cmd, t_exec *exec);
+void		ft_exit(t_cmd *cmd, t_exec *exec);
+
+void		lexer();
 void		init_token(t_tokens *tk, t_lexer *lx);
 t_tokens	*next_token(t_tokens *tk, t_lexer *lx);
 t_tokens	*token_special(t_tokens *tk, t_lexer *lx);
 void		token_in_quotes(t_tokens *tk, t_lexer *lx);
 void		get_next_char(t_tokens *tk, t_lexer *lx);
-void	token_dollar(t_tokens *tk, t_lexer *lx);
+void		token_dollar(t_tokens *tk, t_lexer *lx);
 
-void	get_envp(char *envp[]);
-void	tokens_substitution();
-int		get_char_type(char c);
-void	evaluate_dollar(t_tokens *tk, t_lexer *lx);
+void		get_envp(char *envp[]);
+void		tokens_substitution();
+int			get_char_type(char c);
+void		evaluate_dollar(t_tokens *tk, t_lexer *lx);
 
-bool	syntax_parser();
-void	create_commands();
 
-void 	execution_commands();
+bool		syntax_parser();
+void		create_commands();
 
-bool	is_buildin_cmd(char *cmd);
-void	call_exec_buildin(t_cmd *cmd, t_exec *exec);
+void 		execution_commands();
 
-void	init_env(char **envp);
-void	store_key_and_value(char **value, char **key, char *str);
-char	**get_env_value(char *key);
-void	ft_array_clear(char **arr, void (*del)(char *));
-void	ft_free(char *elem);
-bool	find_path();
+bool		is_buildin_cmd(char *cmd);
+void		call_exec_buildin(t_cmd *cmd, t_exec *exec);
 
-void	handle_signals(int caller, int pid);
+void		init_env(char **envp);
+void		store_key_and_value(char **value, char **key, char *str);
+char		**get_env_value(char *key);
+void		ft_array_clear(char **arr, void (*del)(char *));
+void		ft_free(char *elem);
+bool		find_path();
+	
+void		handle_signals(int caller, int pid);
 
 
 #endif

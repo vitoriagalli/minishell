@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:44:02 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/18 21:24:01 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 11:31:27 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,20 @@ void	update_env(char *oldpwd)
 char	*check_replace_path(char **args)
 {
 	char *tmp;
+	char ** path_home;
 	
 	tmp = NULL;
+	path_home = get_env_value("HOME");
 	if (args[1][0] == '~')
 	{
 		tmp = ft_substr(args[1], 1, ft_strlen(args[1]));
-		tmp = ft_strjoin(g_msh.path_home, tmp);
+		tmp = ft_strjoin(path_home[0], tmp);
 	}
 	else if (args[1][0] != '.' && args[1][0] != '/')
 		tmp = ft_strjoin("./", args[1]);
 	else
 		tmp = ft_strdup(args[1]);
+	ft_array_clear(path_home, ft_free);
 	return (tmp);
 }
 

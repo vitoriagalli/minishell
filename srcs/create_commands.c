@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_commands.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:55:53 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 01:01:44 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/22 11:25:37 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 
 void	init_command(t_cmd *cmd)
 {
+	int nb_tk;
+
 	ft_bzero(cmd, sizeof(t_cmd));
-	g_msh.cmds->nb_tk = size_token_list(g_msh.head_tk);
-	cmd->args = malloc(sizeof(char*) * (g_msh.cmds->nb_tk - g_msh.cmds->curr_tk));
-	ft_bzero(cmd->args, sizeof(char*) * (g_msh.cmds->nb_tk - g_msh.cmds->curr_tk));
+	nb_tk = size_token_list(g_msh.head_tk);
+	cmd->args = malloc(sizeof(char*) * (nb_tk - g_msh.cmds->curr_tk));
+	ft_bzero(cmd->args, sizeof(char*) * (nb_tk - g_msh.cmds->curr_tk));
 	cmd->next = NULL;
 	g_msh.cmds->got_cmd_name = false;
 	g_msh.cmds->curr_arg = 0;
@@ -33,23 +35,6 @@ t_cmd	*handle_cmd_separator(t_cmd *cmd, t_tokens *tk)
 	init_command(cmd);
 	return (cmd);
 }
-
-// t_tokens	*handle_cmd_input(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
-// {
-// 	cmd->red_in = tk->type;
-// 	tk = tk->next;
-// 	cmd->file_in = ft_strdup(tk->data);
-// 	return (tk);
-// }
-
-// t_tokens	*handle_cmd_output(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
-// {
-// 	cmd->red_out = tk->type;
-// 	tk = tk->next;
-// 	cmds->curr_tk++;
-// 	cmd->file_out = ft_strdup(tk->data);
-// 	return (tk);
-// }
 
 t_tokens	*handle_out_append(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
@@ -116,10 +101,6 @@ void	create_commands()
 	init_command(cmd);
 	while (tk->next)
 	{
-		// if (tk->type == OUT_APPEND || tk->type == OUT_OVERWRITE)
-		// 	tk = handle_cmd_output(cmd, tk, g_msh.cmds);
-		// else if (tk->type == INPUT)
-		// 	tk = handle_cmd_input(cmd, tk, g_msh.cmds);
 		if (tk->type == OUT_APPEND || tk->type == OUT_OVERWRITE || tk->type == INPUT)
 			tk = handle_redir(cmd, tk, g_msh.cmds);
 		else if (tk->type == PIPE || tk->type == SEPARATOR)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 23:12:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/21 19:28:54 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/22 11:24:05 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	signal_handler_prompt(int sig)
 	{
 		ft_printf("^C\n");
 		g_msh.last_ret_cmd = 130;
-		ft_bzero(g_msh.rd_line, ft_strlen(g_msh.rd_line));
+		ft_bzero(g_msh.line, ft_strlen(g_msh.line));
         print_prompt();
 	}
 }

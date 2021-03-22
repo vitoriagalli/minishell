@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tk_quotes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 19:58:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/17 19:39:16 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/22 11:26:59 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,37 +25,16 @@ void	get_from_stdin(t_lexer *lx, char to_check)
 	ft_printf("> ");
 	while ((read_line()) != 0)
 	{
-		g_msh.rd_line = ft_strjoin(g_msh.rd_line, "\n");
-		lx->line = ft_strjoin(lx->line, g_msh.rd_line);
+		g_msh.line = ft_strjoin(g_msh.line, "\n");
+		lx->line = ft_strjoin(lx->line, g_msh.line);
 		if (lx->line[ft_strlen(lx->line) - 2] == to_check)
 			break ;
-		free(g_msh.rd_line);
+		free(g_msh.line);
 		ft_printf("> ");
 	}
-	free (g_msh.rd_line);
+	free (g_msh.line);
 	lx->line[ft_strlen(lx->line) - 1] = '\0';
 }
-
-//void	get_from_stdin(t_lexer *lx, char to_check)
-//{
-//	char	*line;
-//	int		ret;
-//
-//	ret = 1;
-//	lx->line = ft_strjoin(lx->line, "\n");
-//	while (ret == 1)
-//	{
-//		ft_printf("> ");
-//		if ((ret = get_next_line(STDIN_FILENO, &line)) == -1)
-//			exit(EXIT_SUCCESS); // To do: a function Clean exit.
-//		line = ft_strjoin(line, "\n");
-//		lx->line = ft_strjoin(lx->line, line);
-//		if (lx->line[ft_strlen(lx->line) - 2] == to_check)
-//			ret = 0;
-//		free(line);
-//	}
-//	lx->line[ft_strlen(lx->line) - 1] = '\0';
-//}
 
 void	quoted_state(t_tokens *tk, t_lexer *lx)
 {

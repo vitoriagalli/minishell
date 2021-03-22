@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 00:59:15 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/22 11:24:14 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ void	restore_terminal()
 void update_minishell()
 {
 	restore_terminal();
-	g_msh.line = ft_strdup(g_msh.rd_line);
-	free(g_msh.rd_line);
 }
 
 int main(__attribute__((unused))int argc, __attribute__((unused))char *argv[],

@@ -8,7 +8,6 @@ LIBFT = -L ./libft -lft
 FT_PRINTF = -L ./ft_printf -lftprintf
 
 SRC_FILES =	main.c \
-			get_next_line.c \
 			readline/readline.c \
 			readline/history.c \
 			lexer/lexer.c \

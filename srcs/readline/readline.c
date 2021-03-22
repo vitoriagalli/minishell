@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 15:34:42 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/21 23:28:41 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/22 11:26:14 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	history_up(int size)
 	if (g_msh.head_hist == NULL)
 		return ;
 	if (g_msh.tmp_line == NULL)
-		g_msh.tmp_line = ft_strdup(g_msh.rd_line);
+		g_msh.tmp_line = ft_strdup(g_msh.line);
 	else if (g_msh.curr_hist->next != NULL)
 		g_msh.curr_hist = g_msh.curr_hist->next;
 	else
@@ -43,7 +43,7 @@ void	history_up(int size)
 		size--;
 	}
 	ft_printf("%s", g_msh.curr_hist->cmd_line);
-	g_msh.rd_line = ft_strdup(g_msh.curr_hist->cmd_line);
+	g_msh.line = ft_strdup(g_msh.curr_hist->cmd_line);
 }
 
 void	history_down(int size)
@@ -62,12 +62,12 @@ void	history_down(int size)
 		if (g_msh.curr_hist != NULL)
 		{
 			ft_printf(g_msh.curr_hist->cmd_line);
-			g_msh.rd_line = ft_strdup(g_msh.curr_hist->cmd_line);
+			g_msh.line = ft_strdup(g_msh.curr_hist->cmd_line);
 		}
 		else
 		{
 			ft_printf(g_msh.tmp_line);
-			g_msh.rd_line = ft_strdup(g_msh.tmp_line);
+			g_msh.line = ft_strdup(g_msh.tmp_line);
 			g_msh.curr_hist = g_msh.head_hist;
 			free(g_msh.tmp_line);
 			g_msh.tmp_line = NULL;
@@ -80,8 +80,8 @@ void	delete_char_left(int size)
 {
 	if (size > 0)
 	{
-		g_msh.rd_line[size - 1] = '\0';
-		g_msh.rd_line = ft_realloc(g_msh.rd_line, sizeof(char) * size);
+		g_msh.line[size - 1] = '\0';
+		g_msh.line = ft_realloc(g_msh.line, sizeof(char) * size);
 		tputs(tgetstr("le", NULL), 1, &ft_putchar);
 		tputs(tgetstr("dc", NULL), 1, &ft_putchar);
 	}
@@ -93,12 +93,12 @@ void	add_char_to_line(int size, char c)
 
 	if (!ft_isprint(c))
 		return ;
-	temp = ft_strdup(g_msh.rd_line);
-	free(g_msh.rd_line);
-	g_msh.rd_line = malloc(sizeof(char) * size + 2);
-	ft_bzero(g_msh.rd_line, size + 2);
-	ft_strlcpy(g_msh.rd_line, temp, size + 1);
-	g_msh.rd_line[ft_strlen(g_msh.rd_line)] = c;
+	temp = ft_strdup(g_msh.line);
+	free(g_msh.line);
+	g_msh.line = malloc(sizeof(char) * size + 2);
+	ft_bzero(g_msh.line, size + 2);
+	ft_strlcpy(g_msh.line, temp, size + 1);
+	g_msh.line[ft_strlen(g_msh.line)] = c;
 	// g_msh.rd_line[ft_strlen(g_msh.rd_line) + 1] = '\0';		// get write error
 	ft_printf("%c", c);
 	free(temp);
@@ -118,7 +118,7 @@ int	handle_event(char *buf)
 {
 	int size;
 
-	size = ft_strlen(g_msh.rd_line);
+	size = ft_strlen(g_msh.line);
 	if (buf[0] == LF)
 		return (process_newline(size));
 	else if (buf[0] == DEL)
@@ -137,14 +137,17 @@ int	get_input_user()
 	char buffer[3];
 	int send_line;
 
-	g_msh.rd_line = ft_calloc(sizeof(char), 2);
+	g_msh.line = ft_calloc(sizeof(char), 2);
 	send_line = 0;
 	while(send_line == 0)
 	{
 		ft_bzero(buffer, 3);
 		read(STDIN_FILENO, &buffer, 3);
-		if (buffer[0] == EOT && g_msh.rd_line[0] == '\0')
-			return (0);
+		if (buffer[0] == EOT && g_msh.line[0] == '\0')
+		{
+			ft_printf("exit\n");
+			exit_program();
+		}	
 		send_line = handle_event(buffer);
 	}
 	return (1);
