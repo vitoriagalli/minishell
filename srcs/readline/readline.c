@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 15:34:42 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 13:53:36 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 15:19:38 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,6 @@ void init_terminal()
 
 	g_msh.save = ft_calloc(1, sizeof(struct termios));
 	termtype = get_env_value("TERM");
-	g_msh.term = &term;
 	if (tgetent(NULL, termtype[0]) < 0)
 		exit (0);// Call exit function faillure
 	if (tcgetattr(STDIN_FILENO, &term) == -1)
@@ -179,6 +178,8 @@ int read_line()
 	init_terminal();
 	free_cmds();
 	handle_signals(ROOT, 1);
+	if (g_msh.line != NULL);
+		free(g_msh.line);
 	if (get_input_user() == 0)
 		return (0);
 	return (1);
