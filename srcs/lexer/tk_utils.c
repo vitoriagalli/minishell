@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tk_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 21:00:02 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/21 23:51:48 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/22 13:07:38 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,6 @@ t_tokens	*create_new_token(t_tokens *tk, t_lexer *lx)
 		init_token(tk, lx);
 	}
 	lx->i++;
-	lx->state = STATE_GENERAL;
+	lx->state = STATE_GEN;
 	return (tk);
 }

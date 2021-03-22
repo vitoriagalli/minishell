@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 15:34:42 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 11:40:46 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 13:53:36 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,7 @@ int read_line()
 {
 	print_prompt();
 	init_terminal();
+	free_cmds();
 	handle_signals(ROOT, 1);
 	if (get_input_user() == 0)
 		return (0);

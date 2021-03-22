@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 12:15:02 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 13:44:15 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@
 # define TYPE_ESCAPE 6000
 # define TYPE_DOLLAR 7000
 
-# define STATE_GENERAL 10000
+# define STATE_GEN 10000
 # define STATE_SINGLE_QUOTED 20000
 # define STATE_DOUBLE_QUOTED 30000
 # define STATE_BACKSLASHED 40000
@@ -138,7 +138,7 @@ typedef struct	s_minishell
 	t_history		*head_hist;
 	t_history		*curr_hist;
 	t_lexer			lx;
-	t_cmds			*cmds;
+	t_cmds			cmds;
 	t_exec			exec;
 	struct termios 	*term;
 	struct termios	*save;
@@ -190,6 +190,7 @@ void		ft_free(char *elem);
 bool		find_path();
 	
 void		handle_signals(int caller, int pid);
+void		restore_terminal();
 
 
 #endif

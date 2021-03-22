@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 16:55:29 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/21 20:48:35 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 13:11:00 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,12 +119,12 @@ void	lexer()
 	t_tokens *tk;
 
 	g_msh.head_tk = malloc(sizeof(t_tokens));
-	g_msh.lx = (t_lexer) {0, ft_strlen(g_msh.line), 0, g_msh.line, 10000};
+	g_msh.lx = (t_lexer) {0, ft_strlen(g_msh.line), 0, g_msh.line, STATE_GEN};
 	tk = g_msh.head_tk;
 	init_token(tk, &g_msh.lx);
 	while (g_msh.lx.line[g_msh.lx.i])
 	{
-		if (g_msh.lx.state == STATE_GENERAL)
+		if (g_msh.lx.state == STATE_GEN)
 			tk = general_state(tk, &g_msh.lx);
 		if (g_msh.lx.state == STATE_SINGLE_QUOTED)
 			quoted_state(tk, &g_msh.lx);
@@ -133,4 +133,5 @@ void	lexer()
 	}
 	g_msh.head_tk = remove_last_empty_node(g_msh.head_tk);
 	add_end_token(g_msh.head_tk, &g_msh.lx);
+	ft_bzero(&g_msh.lx, sizeof(t_lexer));
 }

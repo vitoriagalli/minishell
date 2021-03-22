@@ -6,11 +6,24 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:40:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 11:24:56 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 13:55:34 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_cmds()
+{
+	t_cmd *node;
+
+	while (g_msh.cmds.head_cmd != NULL)
+	{
+		node = g_msh.cmds.head_cmd;
+		g_msh.cmds.head_cmd = g_msh.cmds.head_cmd->next;
+		free(node);
+	}
+	ft_bzero(&g_msh.cmds, sizeof(t_cmds));
+}
 
 int	exit_status()
 {
@@ -123,7 +136,7 @@ void 	execution_commands()
 	ft_bzero(&exec, sizeof(t_exec));
 	exec.save_stdin = dup(STDIN_FILENO);
 	exec.save_stdout = dup(STDOUT_FILENO);
-	cmd = g_msh.cmds->head_cmd;
+	cmd = g_msh.cmds.head_cmd;
 	while (cmd)
 	{
 		if (cmd->separator == PIPE)
@@ -135,8 +148,6 @@ void 	execution_commands()
 			g_msh.force_ret_buildin = false;
 		else if (WIFEXITED(status))
 			g_msh.last_ret_cmd = WEXITSTATUS(status);
-		// else if (WIFSIGNALED(status))
-		// 	g_msh.last_ret_cmd = WTERMSIG(status);		// nao esta retornando o status esperado
 		cmd = cmd->next;
 	}
 	dup2(exec.save_stdin, 0);

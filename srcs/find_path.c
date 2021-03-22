@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 12:47:08 by Vs / Rb           #+#    #+#             */
-/*   Updated: 2021/03/22 11:43:24 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 13:46:53 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ bool	find_path()
 	t_cmd *cmd;
 	char *ret;
 
-	cmd = g_msh.cmds->head_cmd;
+	cmd = g_msh.cmds.head_cmd;
 	while (cmd)
 	{
 		if (is_buildin_cmd(cmd->cmd_name))

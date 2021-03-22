@@ -6,11 +6,23 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:55:53 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 11:25:37 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 13:57:45 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_tokens()
+{
+	t_tokens *node;
+
+	while (g_msh.head_tk != NULL)
+	{
+		node = g_msh.head_tk;
+		g_msh.head_tk = g_msh.head_tk->next;
+		free(node);
+	}
+}
 
 void	init_command(t_cmd *cmd)
 {
@@ -18,11 +30,11 @@ void	init_command(t_cmd *cmd)
 
 	ft_bzero(cmd, sizeof(t_cmd));
 	nb_tk = size_token_list(g_msh.head_tk);
-	cmd->args = malloc(sizeof(char*) * (nb_tk - g_msh.cmds->curr_tk));
-	ft_bzero(cmd->args, sizeof(char*) * (nb_tk - g_msh.cmds->curr_tk));
+	cmd->args = malloc(sizeof(char*) * (nb_tk - g_msh.cmds.curr_tk));
+	ft_bzero(cmd->args, sizeof(char*) * (nb_tk - g_msh.cmds.curr_tk));
 	cmd->next = NULL;
-	g_msh.cmds->got_cmd_name = false;
-	g_msh.cmds->curr_arg = 0;
+	g_msh.cmds.got_cmd_name = false;
+	g_msh.cmds.curr_arg = 0;
 }
 
 t_cmd	*handle_cmd_separator(t_cmd *cmd, t_tokens *tk)
@@ -30,7 +42,7 @@ t_cmd	*handle_cmd_separator(t_cmd *cmd, t_tokens *tk)
 	cmd->separator = tk->type;
 	tk = tk->next;
 	cmd->next = malloc(sizeof(t_cmd));
-	cmd->args[g_msh.cmds->curr_arg] = NULL;
+	cmd->args[g_msh.cmds.curr_arg] = NULL;
 	cmd = cmd->next;
 	init_command(cmd);
 	return (cmd);
@@ -93,21 +105,20 @@ void	create_commands()
 	t_tokens *tk;
 	t_cmd *cmd;
 
-	g_msh.cmds = malloc(sizeof(t_cmds));
-	ft_bzero(g_msh.cmds, sizeof(t_cmds));
-	g_msh.cmds->head_cmd = malloc(sizeof(t_cmd));
+	g_msh.cmds.head_cmd = malloc(sizeof(t_cmd));
 	tk = g_msh.head_tk;
-	cmd = g_msh.cmds->head_cmd;
+	cmd = g_msh.cmds.head_cmd;
 	init_command(cmd);
 	while (tk->next)
 	{
 		if (tk->type == OUT_APPEND || tk->type == OUT_OVERWRITE || tk->type == INPUT)
-			tk = handle_redir(cmd, tk, g_msh.cmds);
+			tk = handle_redir(cmd, tk, &g_msh.cmds);
 		else if (tk->type == PIPE || tk->type == SEPARATOR)
 			cmd = handle_cmd_separator(cmd, tk);
 		else
-			handle_word(cmd, tk, g_msh.cmds);
-		g_msh.cmds->curr_tk++;
+			handle_word(cmd, tk, &g_msh.cmds);
+		g_msh.cmds.curr_tk++;
 		tk = tk->next;
 	}
+	free_tokens();
 }

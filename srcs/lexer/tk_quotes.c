@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 19:58:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 11:26:59 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 13:07:46 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	quoted_state(t_tokens *tk, t_lexer *lx)
 		tk->data[ft_strlen(tk->data)] = lx->line[lx->i++];
 	if (end_quote == true)
 	{
-		lx->state = STATE_GENERAL;
+		lx->state = STATE_GEN;
 		lx->i++;
 	}
 	else if (lx->line[lx->i] == '\0')
@@ -72,7 +72,7 @@ void	double_quoted_state(t_tokens *tk, t_lexer *lx)
 		tk->data[ft_strlen(tk->data)] = lx->line[lx->i++];
 	if (end_quote == true)
 	{
-		lx->state = STATE_GENERAL;
+		lx->state = STATE_GEN;
 		lx->i++;
 	}
 	else if (lx->line[lx->i] == '\0')
