@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:55:53 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 15:42:15 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 16:50:36 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_tokens	*handle_redir(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 		return (handle_out_append(cmd, tk, cmds));
 	else if (tk->type == OUT_OVERWRITE)
 		return (handle_out_overwrite(cmd, tk, cmds));
-	else if (tk->type == tk->type == INPUT)
+	else if (tk->type == INPUT)
 		return (handle_out_input(cmd, tk, cmds));
 }
 

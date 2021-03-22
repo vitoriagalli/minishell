@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:40:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 13:55:34 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 16:46:27 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,24 @@ void	set_redirection(t_cmd *cmd, t_exec *exec)
 	{
 		if (!ft_strcmp(tmp->content, "<"))
 		{
-			fd = open(tmp->next->content, O_RDONLY);
-			dup2(fd, STDIN_FILENO);
+			if ((fd = open(tmp->next->content, O_RDONLY)) < 0)
+				exit_msh("open : ", strerror(errno));
+			if (dup2(fd, STDIN_FILENO) < 0)
+				exit_msh("dup2 : ", strerror(errno));
 		}
 		if (!ft_strcmp(tmp->content, ">"))
 		{
-			fd = open(tmp->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-			dup2(fd, STDOUT_FILENO);
+			if ((fd = open(tmp->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0664)) < 0)
+				exit_msh("open : ", strerror(errno));
+			if (dup2(fd, STDOUT_FILENO) < 0)
+				exit_msh("dup2 : ", strerror(errno));
 		}
 		if (!ft_strcmp(tmp->content, ">>"))
 		{
-			fd = open(tmp->next->content, O_WRONLY | O_CREAT | O_APPEND, 0664);
-			dup2(fd, STDOUT_FILENO);
+			if ((fd = open(tmp->next->content, O_WRONLY | O_CREAT | O_APPEND, 0664)) < 0)
+				exit_msh("open : ", strerror(errno));
+			if (dup2(fd, STDOUT_FILENO) < 0)
+				exit_msh("dup2 : ", strerror(errno));
 		}
 		if (fd < 0)
 		{
@@ -76,21 +82,27 @@ void call_exec(t_cmd *cmd, t_exec *exec, int fd_dup)
 	int i;
 
 	i = 0;
-	exec->child_pid = fork();
+	if ((exec->child_pid = fork()) < 0)
+		exit_msh("fork : ", strerror(errno));
 	handle_signals(FORK, exec->child_pid);
 	if (exec->child_pid == 0)
 	{
-		dup2(exec->pipefds[fd_dup], fd_dup);
+		if (dup2(exec->pipefds[fd_dup], fd_dup) < 0)
+			exit_msh("dup2 : ", strerror(errno));
 		if (cmd->redirection)
 			set_redirection(cmd, exec);
 		else if (cmd->separator == PIPE)
-			close(exec->pipefds[0]);
+		{
+			if (close(exec->pipefds[0]) < 0)
+				exit_msh("close : ", strerror(errno));
+		}
 		if (is_buildin_cmd(cmd->cmd_name))
 			call_exec_buildin(cmd, exec);
 		else
 			execve(cmd->cmd_name, cmd->args, g_msh.env);
 		ft_printf("minishell: %s: %s\n", cmd->cmd_name, strerror(errno));
-		dup2(exec->save_stdout, STDOUT_FILENO);
+		if (dup2(exec->save_stdout, STDOUT_FILENO) < 0)
+			exit_msh("dup2 : ", strerror(errno));
 		exit(exit_status());
 	}
 }
@@ -103,10 +115,13 @@ void	execute_command_pipe(t_cmd *cmd, t_exec *exec)
 	i = 0;
 	if (exec->pipe == true)
 	{
-		close(exec->pipefds[1]);
-		dup2(exec->pipefds[0], STDIN_FILENO);
+		if (close(exec->pipefds[1]) < 0)
+			exit_msh("close : ", strerror(errno));
+		if (dup2(exec->pipefds[0], STDIN_FILENO) < 0)
+			exit_msh("dup2 : ", strerror(errno));
 	}
-	pipe(exec->pipefds);
+	if (pipe(exec->pipefds) < 0)
+		exit_msh("pipe : ", strerror(errno));
 	exec->pipe = true;
 	call_exec(cmd, exec, 1);
 	if (is_buildin_cmd(cmd->cmd_name))
@@ -120,7 +135,10 @@ void 	execute_command(t_cmd *cmd, t_exec *exec)
 
 		i = 0;
 		if (exec->pipe == true)
-			dup2(exec->save_stdout, exec->pipefds[1]);
+		{
+			if (dup2(exec->save_stdout, exec->pipefds[1]) < 0)
+				exit_msh("dup2 : ", strerror(errno));
+		}	
 		exec->pipe = false;
 		call_exec(cmd, exec, 0);
 		if (is_buildin_cmd(cmd->cmd_name))
@@ -134,8 +152,10 @@ void 	execution_commands()
 	int			status;
 
 	ft_bzero(&exec, sizeof(t_exec));
-	exec.save_stdin = dup(STDIN_FILENO);
-	exec.save_stdout = dup(STDOUT_FILENO);
+	if (exec.save_stdin = dup(STDIN_FILENO) < 0)
+		exit_msh("dup : ", strerror(errno));	
+	if (exec.save_stdout = dup(STDOUT_FILENO) < 0)
+		exit_msh("dup : ", strerror(errno));
 	cmd = g_msh.cmds.head_cmd;
 	while (cmd)
 	{
@@ -143,13 +163,16 @@ void 	execution_commands()
 			execute_command_pipe(cmd, &exec);
 		else
 			execute_command(cmd, &exec);
-		waitpid(exec.child_pid, &status, 0);
+		if (waitpid(exec.child_pid, &status, 0) < 0)
+			exit_msh("waitpid : ", strerror(errno));	
 		if (g_msh.force_ret_buildin == true)
 			g_msh.force_ret_buildin = false;
 		else if (WIFEXITED(status))
 			g_msh.last_ret_cmd = WEXITSTATUS(status);
 		cmd = cmd->next;
 	}
-	dup2(exec.save_stdin, 0);
-	dup2(exec.save_stdout, 1);
+	if (dup2(exec.save_stdin, 0) < 0)
+			
+	if (dup2(exec.save_stdout, 1) < 0)
+		exit_msh("dup2 : ", strerror(errno));	
 }
