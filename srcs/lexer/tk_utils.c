@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tk_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 21:00:02 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/02/24 14:16:46 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/21 23:51:48 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	add_end_token(t_tokens *head_tk, t_lexer *lx)
 t_tokens	*remove_last_empty_node(t_tokens *head_tk)
 {
 	t_tokens *previous;
-	
+
 	if (!head_tk)
 		return (NULL);
 	if (!head_tk->next)

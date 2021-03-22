@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_commands.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:55:53 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/17 19:46:05 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/22 01:01:44 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_cmd	*handle_cmd_separator(t_cmd *cmd, t_tokens *tk)
 }
 
 // t_tokens	*handle_cmd_input(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
-// {	
+// {
 // 	cmd->red_in = tk->type;
 // 	tk = tk->next;
 // 	cmd->file_in = ft_strdup(tk->data);
@@ -43,7 +43,7 @@ t_cmd	*handle_cmd_separator(t_cmd *cmd, t_tokens *tk)
 // }
 
 // t_tokens	*handle_cmd_output(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
-// {	
+// {
 // 	cmd->red_out = tk->type;
 // 	tk = tk->next;
 // 	cmds->curr_tk++;
@@ -53,8 +53,8 @@ t_cmd	*handle_cmd_separator(t_cmd *cmd, t_tokens *tk)
 
 t_tokens	*handle_out_append(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
-	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">>")));	
-	// tk = tk->next;
+	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">>")));
+	tk = tk->next;
 	cmds->curr_tk++;
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(tk->data)));
 	return (tk);
@@ -62,7 +62,7 @@ t_tokens	*handle_out_append(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 
 t_tokens	*handle_out_overwrite(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
-	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">")));	
+	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">")));
 	tk = tk->next;
 	cmds->curr_tk++;
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(tk->data)));
@@ -95,12 +95,12 @@ void	handle_word(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 		cmd->args[cmds->curr_arg] = ft_strdup(cmd->cmd_name);
 		cmds->curr_arg++;
 		cmds->got_cmd_name = true;
-	}	
+	}
 	else
 	{
 		cmd->args[cmds->curr_arg] = ft_strdup(tk->data);
 		cmds->curr_arg++;
-	}	
+	}
 }
 
 void	create_commands()

@@ -31,7 +31,8 @@ SRC_FILES =	main.c \
 			execution_commands.c \
 			error_handling.c \
 			find_path.c \
-			signal.c
+			signal.c \
+			free_and_quit.c
 
 SRCS = $(addprefix srcs/,$(SRC_FILES))
 OBJS = $(SRCS:.c=.o)

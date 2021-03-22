@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 15:34:42 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/21 18:25:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/21 23:28:41 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,9 @@ void	add_char_to_line(int size, char c)
 	ft_bzero(g_msh.rd_line, size + 2);
 	ft_strlcpy(g_msh.rd_line, temp, size + 1);
 	g_msh.rd_line[ft_strlen(g_msh.rd_line)] = c;
-	g_msh.rd_line[ft_strlen(g_msh.rd_line) + 1] = '\0';
+	// g_msh.rd_line[ft_strlen(g_msh.rd_line) + 1] = '\0';		// get write error
 	ft_printf("%c", c);
+	free(temp);
 }
 
 int	process_newline(int size)

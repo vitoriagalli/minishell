@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:46:30 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/17 19:51:27 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/21 19:42:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ void	ft_exit(t_cmd *cmd, t_exec *exec)
 		if (cmd->args[1] == NULL)
 		{
 			ft_printf("exit\n");
-			exit(g_msh.last_ret_cmd);
+			exit_program();
+			// exit(g_msh.last_ret_cmd);
 		}
 		non_numerical_arg(cmd);
 		if (too_many_args(cmd) == 1)

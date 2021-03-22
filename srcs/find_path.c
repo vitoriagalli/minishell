@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 12:47:08 by Vs / Rb           #+#    #+#             */
-/*   Updated: 2021/03/19 19:30:20 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 00:39:04 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	ft_array_clear(char **arr, void (*del)(char *))
 	i = 0;
 	while (i < len)
 		del(arr[i++]);
+	del(arr);
 }
 
 bool	file_exists(char *filepath)
@@ -86,12 +87,15 @@ char *relative_path(char *cmd)
 char	*absolute_path(char *cmd)
 {
 	char	**home_path;
+	char	*tmp;
 
 	home_path = NULL;
 	if (cmd[0] == '~')
 	{
 		home_path = get_env_value("HOME");
-		cmd = ft_strjoin(home_path[0], cmd);
+		tmp = ft_strjoin(home_path[0], cmd);
+		free (cmd);
+		cmd = tmp;
 		ft_array_clear(home_path, ft_free);
 	}
 	if (!file_exists(cmd))

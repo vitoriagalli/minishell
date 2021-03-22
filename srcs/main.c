@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/21 18:28:38 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/22 00:59:15 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int main(__attribute__((unused))int argc, __attribute__((unused))char *argv[],
 		{
 			print_prompt();
 			continue;
-		}	
+		}
 		create_commands();
 		if (!find_path())
 			continue;
@@ -48,5 +48,6 @@ int main(__attribute__((unused))int argc, __attribute__((unused))char *argv[],
 		print_prompt();
 	}
 	// free everything before quit.
-//	return (msh.last_ret_cmd);
+	// return (msh.last_ret_cmd);
+	// exit_program();
 }

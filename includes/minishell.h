@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/21 16:33:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/22 00:54:47 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ void	lexer();
 void		init_token(t_tokens *tk, t_lexer *lx);
 t_tokens	*next_token(t_tokens *tk, t_lexer *lx);
 t_tokens	*token_special(t_tokens *tk, t_lexer *lx);
-void 		token_in_quotes(t_tokens *tk, t_lexer *lx);
+void		token_in_quotes(t_tokens *tk, t_lexer *lx);
 void		get_next_char(t_tokens *tk, t_lexer *lx);
 void	token_dollar(t_tokens *tk, t_lexer *lx);
 
