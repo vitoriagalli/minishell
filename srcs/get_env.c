@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:25:59 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 11:23:54 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 16:10:00 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@ void	store_key_and_value(char **value, char **key, char *str)
 	char *addr;
 
 	addr = ft_strrchr(str, '=');
-	*key = ft_substr(str, 0, addr - str);
-	*value = ft_substr(str, addr - str + 1, ft_strlen(str) - (addr - str));
+	if (!(*key = ft_substr(str, 0, addr - str)))
+		exit_msh("substr", strerror(errno));
+	if (!(*value = ft_substr(str, addr - str + 1, ft_strlen(str) - (addr - str))))
+		exit_msh("strdup", strerror(errno));
 }
 
 char	**get_env_value(char *key)
@@ -36,7 +38,8 @@ char	**get_env_value(char *key)
 		store_key_and_value(&value, &name, g_msh.env[i]);
 		if (!ft_strcmp(key, name))
 		{
-			env_values = ft_split(value, ':');
+			if (!(env_values = ft_split(value, ':')))
+				exit_msh("split", strerror(errno));
 			free(name);
 			free(value);
 			return (env_values);
@@ -56,11 +59,13 @@ void	allocate_and_atribute(char **envp)
 	len_arr = 0;
 	while (envp[len_arr])
 		len_arr++;
-	g_msh.env = ft_calloc(len_arr + 1, sizeof(char *));
+	if (!(g_msh.env = ft_calloc(len_arr + 1, sizeof(char *))))
+		exit_msh("calloc", strerror(errno));
 	i = 0;
 	while (i < len_arr)
 	{
-		g_msh.env[i] = ft_strdup(envp[i]);
+		if (!(g_msh.env[i] = ft_strdup(envp[i])))
+			exit_msh("strdup", strerror(errno));
 		i++;
 	}
 }

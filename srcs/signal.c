@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 23:12:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/22 11:24:05 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 16:05:24 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	signal_handler_prompt(int sig)
 void	signal_handler_do_nothing(int sig)
 {
 	if (sig == SIGQUIT)
-		sleep(0);
+		sleep(0); // See with Vitoria
 }
 
 void	signal_handler_parent(int signal)
@@ -50,15 +50,19 @@ void	handle_signals(int caller, int pid)
 {
 	if (caller == ROOT)
 	{
-		signal(SIGINT, signal_handler_prompt);
-		signal(SIGQUIT, signal_handler_do_nothing);
-	}
+		if (signal(SIGINT, signal_handler_prompt) == SIG_ERR)
+			exit_msh("signal", strerror(errno));
+		if (signal(SIGQUIT, signal_handler_do_nothing) == SIG_ERR)
+			exit_msh("signal", strerror(errno));
+	}		
 	else if (caller == FORK)
 	{
 		if (pid != 0)
 		{
-			signal(SIGINT, signal_handler_parent);
-			signal(SIGQUIT, signal_handler_parent);
+			if (signal(SIGINT, signal_handler_parent) == SIG_ERR)
+				exit_msh("signal", strerror(errno));
+			if (signal(SIGQUIT, signal_handler_parent) == SIG_ERR)
+				exit_msh("signal", strerror(errno));
 		}
 	}
 }

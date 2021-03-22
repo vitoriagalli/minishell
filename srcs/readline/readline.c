@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 15:34:42 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 15:19:38 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 16:01:08 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	print_prompt()
 
 int		ft_putchar(int c)
 {
-	write(1, &c, 1);
+	if (write(1, &c, 1) < 0)
+		exit_msh("write", strerror(errno));
 	return (1);
 }
 
@@ -31,7 +32,10 @@ void	history_up(int size)
 	if (g_msh.head_hist == NULL)
 		return ;
 	if (g_msh.tmp_line == NULL)
-		g_msh.tmp_line = ft_strdup(g_msh.line);
+	{
+		if (!(g_msh.tmp_line = ft_strdup(g_msh.line)))
+			exit_msh("strdup", strerror(errno));
+	}
 	else if (g_msh.curr_hist->next != NULL)
 		g_msh.curr_hist = g_msh.curr_hist->next;
 	else
@@ -43,7 +47,8 @@ void	history_up(int size)
 		size--;
 	}
 	ft_printf("%s", g_msh.curr_hist->cmd_line);
-	g_msh.line = ft_strdup(g_msh.curr_hist->cmd_line);
+	if (!(g_msh.line = ft_strdup(g_msh.curr_hist->cmd_line)))
+		exit_msh("strdup", strerror(errno));
 }
 
 void	history_down(int size)
@@ -62,12 +67,14 @@ void	history_down(int size)
 		if (g_msh.curr_hist != NULL)
 		{
 			ft_printf(g_msh.curr_hist->cmd_line);
-			g_msh.line = ft_strdup(g_msh.curr_hist->cmd_line);
+			if (!(g_msh.line = ft_strdup(g_msh.curr_hist->cmd_line)))
+				exit_msh("strdup", strerror(errno));
 		}
 		else
 		{
 			ft_printf(g_msh.tmp_line);
-			g_msh.line = ft_strdup(g_msh.tmp_line);
+			if (!(g_msh.line = ft_strdup(g_msh.tmp_line)))
+				exit_msh("strdup", strerror(errno));
 			g_msh.curr_hist = g_msh.head_hist;
 			free(g_msh.tmp_line);
 			g_msh.tmp_line = NULL;
@@ -92,13 +99,13 @@ void	add_char_to_line(int size, char c)
 
 	if (!ft_isprint(c))
 		return ;
-	temp = ft_strdup(g_msh.line);
+	if (!(temp = ft_strdup(g_msh.line)))
+		exit_msh("strdup", strerror(errno));
 	free(g_msh.line);
 	g_msh.line = malloc(sizeof(char) * size + 2);
 	ft_bzero(g_msh.line, size + 2);
 	ft_strlcpy(g_msh.line, temp, size + 1);
 	g_msh.line[ft_strlen(g_msh.line)] = c;
-	// g_msh.rd_line[ft_strlen(g_msh.rd_line) + 1] = '\0';		// get write error
 	ft_printf("%c", c);
 	free(temp);
 }
@@ -136,12 +143,14 @@ int	get_input_user()
 	char buffer[3];
 	int send_line;
 
-	g_msh.line = ft_calloc(sizeof(char), 2);
+	if (!(g_msh.line = ft_calloc(sizeof(char), 2)))
+		exit_msh("tcsetattr", strerror(errno));
 	send_line = 0;
 	while(send_line == 0)
 	{
 		ft_bzero(buffer, 3);
-		read(STDIN_FILENO, &buffer, 3);
+		if (read(STDIN_FILENO, &buffer, 3) < 0)
+			exit_msh("read", strerror(errno));
 		if (buffer[0] == EOT && g_msh.line[0] == '\0')
 		{
 			ft_printf("exit\n");
@@ -157,18 +166,19 @@ void init_terminal()
 	struct termios term;
 	char	**termtype;
 
-	g_msh.save = ft_calloc(1, sizeof(struct termios));
+	if (!(g_msh.save = ft_calloc(1, sizeof(struct termios))))
+		exit_msh("calloc", strerror(errno));
 	termtype = get_env_value("TERM");
 	if (tgetent(NULL, termtype[0]) < 0)
-		exit (0);// Call exit function faillure
+		exit_msh("tgetent", strerror(errno));
 	if (tcgetattr(STDIN_FILENO, &term) == -1)
-		exit (0); // Call exit function faillure
+		exit_msh("tcsetattr", strerror(errno));
 	ft_memcpy(g_msh.save, &term, sizeof(term));
 	term.c_lflag &= ~(ECHO | ICANON);
 	term.c_cc[VMIN] = 1;
 	term.c_cc[VTIME] = 0;
 	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &term) == -1)
-		exit (0); // Call exit function faillure
+		exit_msh("tcsetattr", strerror(errno));
 	ft_array_clear(termtype, ft_free);
 }
 

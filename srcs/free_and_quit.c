@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/21 19:39:03 by user42            #+#    #+#             */
-/*   Updated: 2021/03/22 15:43:27 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 16:10:15 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,5 @@ void	exit_program()
  	if (g_msh.line)
 		ft_strdel(&g_msh.line);
 	restore_terminal(true);
-	
-
-
 	exit(g_msh.last_ret_cmd);
 }

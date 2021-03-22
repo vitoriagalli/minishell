@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 12:47:08 by Vs / Rb           #+#    #+#             */
-/*   Updated: 2021/03/22 13:46:53 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 16:28:24 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ft_array_clear(char **arr, void (*del)(char *))
 bool	file_exists(char *filepath)
 {
 	struct stat		buffer;
-
+	
 	return (stat(filepath, &buffer) == 0);
 }
 
@@ -55,8 +55,10 @@ char	*join_path(char *env, char *path)
 {
 	char	*tmp;
 
-	tmp = ft_strjoin(env, "/");
-	tmp = ft_strjoin(tmp, path);
+	if (!(tmp = ft_strjoin(env, "/")))
+		exit_msh("strjoin", strerror(errno));
+	if (!(tmp = ft_strjoin(tmp, path)))
+		exit_msh("strjoin", strerror(errno));
 	return (tmp);
 }
 
@@ -93,7 +95,8 @@ char	*absolute_path(char *cmd)
 	if (cmd[0] == '~')
 	{
 		home_path = get_env_value("HOME");
-		tmp = ft_strjoin(home_path[0], cmd);
+		if (!(tmp = ft_strjoin(home_path[0], cmd)))
+			exit_msh("strjoin", strerror(errno));
 		free (cmd);
 		cmd = tmp;
 		ft_array_clear(home_path, ft_free);
@@ -122,14 +125,18 @@ bool	find_path()
 	while (cmd)
 	{
 		if (is_buildin_cmd(cmd->cmd_name))
-			ret = ft_strdup(cmd->cmd_name);
+		{
+			if (!(ret = ft_strdup(cmd->cmd_name)))
+				exit_msh("strdup", strerror(errno));
+		}
 		else if (ft_strchr("./~", cmd->cmd_name[0]))
 			ret = absolute_path(cmd->cmd_name);
 		else
 			ret = relative_path(cmd->cmd_name);
 		if (ret == NULL)
 			return (false);
-		cmd->cmd_name = ft_strdup(ret);
+		if (!(cmd->cmd_name = ft_strdup(ret)))
+			exit_msh("strdup", strerror(errno));
 		cmd = cmd->next;
 	}
 	return (true);
