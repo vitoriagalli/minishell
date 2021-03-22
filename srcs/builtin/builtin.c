@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 17:16:25 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/17 19:50:22 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/22 11:51:22 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	call_exec_buildin(t_cmd *cmd, t_exec *exec)
 	while (ft_strncmp(cmd->cmd_name, inbuild[i], len + 1))
 		i++;
 	(*func_inbuild[i])(cmd, exec);
+	ft_array_clear(inbuild, ft_free);
 }
 
 bool	is_buildin_cmd(char *cmd)
@@ -40,7 +41,11 @@ bool	is_buildin_cmd(char *cmd)
 	while (inbuild[i])
 	{
 		if (!(ft_strncmp(inbuild[i++], cmd, len + 1)))
+		{
+			ft_array_clear(inbuild, ft_free);
 			return (true);
+		}	
 	}
+	ft_array_clear(inbuild, ft_free);
 	return (false);
 }

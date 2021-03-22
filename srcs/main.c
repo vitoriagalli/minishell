@@ -6,7 +6,7 @@
 /*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 11:42:17 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 11:53:21 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,13 @@ void	restore_terminal()
 	free(g_msh.save);
 }
 
-void update_minishell()
-{
-	restore_terminal();
-}
-
 int main(__attribute__((unused))int argc, __attribute__((unused))char *argv[],
 	char *envp[])
 {
 	init_env(envp);
 	while ((read_line()) != 0)
 	{
-		update_minishell();
+		restore_terminal();
 		lexer();
 		if (!syntax_parser())
 			continue;
