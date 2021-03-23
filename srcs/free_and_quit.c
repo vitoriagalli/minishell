@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/21 19:39:03 by user42            #+#    #+#             */
-/*   Updated: 2021/03/23 01:03:04 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/23 01:59:56 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,6 @@ void	ft_cmdclear(t_cmd **lst, void (*del)(void*))
 	*lst = NULL;
 }
 
-void	free_loop_stuff(void)
-{
-	ft_tknclear(&g_msh.head_tk, ft_free);
-	ft_cmdclear(&g_msh.cmds.head_cmd, ft_free);
-
-	free(g_msh.save);
-	g_msh.save = NULL;
-}
-
 void	exit_program()
 {
 	ft_tknclear(&g_msh.head_tk, ft_free);
@@ -79,7 +70,6 @@ void	exit_program()
 	ft_array_clear(g_msh.env, ft_free);
 	g_msh.env = NULL;
 	free_history();
-	// free_tokens();
 	if (g_msh.line)
 		ft_strdel(&g_msh.line);
 	restore_terminal(true);

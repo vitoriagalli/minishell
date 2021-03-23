@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:55:53 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/23 00:39:26 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/23 01:56:32 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ t_tokens	*handle_out_append(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">>")));
 	tk = tk->next;
-	// cmds->curr_tk++;
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(tk->data)));
 	return (tk);
 }
@@ -61,7 +60,6 @@ t_tokens	*handle_out_overwrite(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">")));
 	tk = tk->next;
-	// cmds->curr_tk++;
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(tk->data)));
 	return (tk);
 }
@@ -121,4 +119,5 @@ void	create_commands()
 		tk = tk->next;
 	}
 	// free_tokens();
+	ft_tknclear(&g_msh.head_tk, ft_free);
 }

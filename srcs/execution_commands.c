@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:40:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 23:46:58 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/23 02:00:55 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,4 +175,5 @@ void 	execution_commands()
 		exit_msh("dup2 : ", strerror(errno));
 	if (dup2(exec.save_stdout, 1) < 0)
 		exit_msh("dup2 : ", strerror(errno));
+	ft_cmdclear(&g_msh.cmds.head_cmd, ft_free);
 }

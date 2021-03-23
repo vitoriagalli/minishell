@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 16:55:29 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 14:12:38 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/23 01:49:19 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ static char *substitution_env(char *str)
 	char	*key;
 	int		i;
 
+	i = 0;
 	if (str[1] == '\0')
 	{
 		temp = ft_strdup("$");
@@ -88,14 +89,17 @@ static char *substitution_env(char *str)
 void	evaluate_dollar(t_tokens *tk, t_lexer *lx)
 {
 	int		k;
-	char	*temp;
-	char	*ret_cmd;
+	char	*temp1;
+	char	*temp2;
 
 	k = lx->i + 1;
 	if (lx->line[lx->i + 1] == '?')
 	{
-		ret_cmd = ft_itoa(g_msh.last_ret_cmd);
-		tk->data = ft_strjoin(tk->data, ret_cmd);
+		temp1 = ft_itoa(g_msh.last_ret_cmd);
+		temp2 = ft_strjoin(tk->data, temp1);
+		free(tk->data);
+		free(temp1);
+		tk->data = temp2;
 		lx->i += 2;
 	}
 	else
@@ -106,11 +110,14 @@ void	evaluate_dollar(t_tokens *tk, t_lexer *lx)
 		lx->line[k] != SEMICOLON && lx->line[k] != SINGLE_QUOTE &&
 		lx->line[k] != '/')
 			k++;
-		temp = ft_substr(lx->line, lx->i, k - lx->i);
-		temp = substitution_env(temp);
-		tk->data = ft_strjoin(tk->data, temp);
+		temp1 = ft_substr(lx->line, lx->i, k - lx->i);
+		temp2 = substitution_env(temp1);
+		free(temp1);
+		temp1 = tk->data;
+		tk->data = ft_strjoin(temp1, temp2);
 		lx->i = k;
-		free(temp);
+		free(temp1);
+		free(temp2);
 	}
 }
 

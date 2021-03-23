@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/23 01:05:07 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/23 01:58:37 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int main(void)
 		if (!find_path())
 			continue;
 		execution_commands();
-		free_loop_stuff();
+		free(g_msh.save);
+		g_msh.save = NULL;
 	}
 	// free everything before quit.
 	// return (msh.last_ret_cmd);

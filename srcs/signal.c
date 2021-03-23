@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 23:12:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/22 16:05:24 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/23 01:39:05 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,16 @@ void	signal_handler_prompt(int sig)
 		ft_printf("^C\n");
 		g_msh.last_ret_cmd = 130;
 		ft_bzero(g_msh.line, ft_strlen(g_msh.line));
-        print_prompt();
+		print_prompt();
 	}
 }
 
 void	signal_handler_do_nothing(int sig)
 {
+	char	do_nothing;
+
 	if (sig == SIGQUIT)
-		sleep(0); // See with Vitoria
+		do_nothing = '\0';
 }
 
 void	signal_handler_parent(int signal)
@@ -54,7 +56,7 @@ void	handle_signals(int caller, int pid)
 			exit_msh("signal", strerror(errno));
 		if (signal(SIGQUIT, signal_handler_do_nothing) == SIG_ERR)
 			exit_msh("signal", strerror(errno));
-	}		
+	}
 	else if (caller == FORK)
 	{
 		if (pid != 0)
