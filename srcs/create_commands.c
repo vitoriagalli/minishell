@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_commands.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:55:53 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 16:50:36 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/23 00:39:26 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_tokens	*handle_out_append(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">>")));
 	tk = tk->next;
-	cmds->curr_tk++;
+	// cmds->curr_tk++;
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(tk->data)));
 	return (tk);
 }
@@ -61,7 +61,7 @@ t_tokens	*handle_out_overwrite(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">")));
 	tk = tk->next;
-	cmds->curr_tk++;
+	// cmds->curr_tk++;
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(tk->data)));
 	return (tk);
 }
@@ -120,5 +120,5 @@ void	create_commands()
 		g_msh.cmds.curr_tk++;
 		tk = tk->next;
 	}
-	free_tokens();
+	// free_tokens();
 }

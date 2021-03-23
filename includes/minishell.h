@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 15:49:33 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/23 01:02:47 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ typedef struct s_exec
 
 typedef struct	s_history
 {
-	char 				*cmd_line;
+	char				*cmd_line;
 	struct s_history	*next;
 	struct s_history	*prev;
 }				t_history;
@@ -184,9 +184,10 @@ char		**get_env_value(char *key);
 void		ft_array_clear(char **arr, void (*del)(char *));
 void		ft_free(char *elem);
 bool		find_path();
-	
-void		handle_signals(int caller, int pid);
-void	restore_terminal(bool from_exit);
 
+void		handle_signals(int caller, int pid);
+void		restore_terminal(bool from_exit);
+
+void		free_loop_stuff(void);
 
 #endif

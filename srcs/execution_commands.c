@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_commands.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:40:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 16:46:27 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/22 23:46:58 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	set_redirection(t_cmd *cmd, t_exec *exec)
 		}
 		tmp = tmp->next->next;
 	}
-	
+
 }
 
 void call_exec(t_cmd *cmd, t_exec *exec, int fd_dup)
@@ -138,7 +138,7 @@ void 	execute_command(t_cmd *cmd, t_exec *exec)
 		{
 			if (dup2(exec->save_stdout, exec->pipefds[1]) < 0)
 				exit_msh("dup2 : ", strerror(errno));
-		}	
+		}
 		exec->pipe = false;
 		call_exec(cmd, exec, 0);
 		if (is_buildin_cmd(cmd->cmd_name))
@@ -153,7 +153,7 @@ void 	execution_commands()
 
 	ft_bzero(&exec, sizeof(t_exec));
 	if (exec.save_stdin = dup(STDIN_FILENO) < 0)
-		exit_msh("dup : ", strerror(errno));	
+		exit_msh("dup : ", strerror(errno));
 	if (exec.save_stdout = dup(STDOUT_FILENO) < 0)
 		exit_msh("dup : ", strerror(errno));
 	cmd = g_msh.cmds.head_cmd;
@@ -164,7 +164,7 @@ void 	execution_commands()
 		else
 			execute_command(cmd, &exec);
 		if (waitpid(exec.child_pid, &status, 0) < 0)
-			exit_msh("waitpid : ", strerror(errno));	
+			exit_msh("waitpid : ", strerror(errno));
 		if (g_msh.force_ret_buildin == true)
 			g_msh.force_ret_buildin = false;
 		else if (WIFEXITED(status))
@@ -172,7 +172,7 @@ void 	execution_commands()
 		cmd = cmd->next;
 	}
 	if (dup2(exec.save_stdin, 0) < 0)
-			
+		exit_msh("dup2 : ", strerror(errno));
 	if (dup2(exec.save_stdout, 1) < 0)
-		exit_msh("dup2 : ", strerror(errno));	
+		exit_msh("dup2 : ", strerror(errno));
 }

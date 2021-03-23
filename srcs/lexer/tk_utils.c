@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tk_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 21:00:02 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 13:07:38 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/23 00:14:36 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ void	add_end_token(t_tokens *head_tk, t_lexer *lx)
 		current = current->next;
 	current->next = malloc(sizeof(t_tokens));
 	lx->i = 0;
-	init_token(current->next, lx);
 	current->next->data = ft_strdup("newline");
+	current->next->type = 700;
+	current->next->next = NULL;
 }
 
 t_tokens	*remove_last_empty_node(t_tokens *head_tk)

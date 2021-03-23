@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 10:51:34 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 12:10:39 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/23 00:12:06 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ bool jump_cmd_line()
 			free(cmd_line);
 			return (true);
 		}
+		free(cmd_line);
 	}
 	return (false);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 12:47:08 by Vs / Rb           #+#    #+#             */
-/*   Updated: 2021/03/22 16:28:24 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/23 01:00:16 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ft_array_clear(char **arr, void (*del)(char *))
 bool	file_exists(char *filepath)
 {
 	struct stat		buffer;
-	
+
 	return (stat(filepath, &buffer) == 0);
 }
 
@@ -53,13 +53,15 @@ bool	is_directory(char *filepath)
 
 char	*join_path(char *env, char *path)
 {
-	char	*tmp;
+	char	*tmp1;
+	char	*tmp2;
 
-	if (!(tmp = ft_strjoin(env, "/")))
+	if (!(tmp1 = ft_strjoin(env, "/")))
 		exit_msh("strjoin", strerror(errno));
-	if (!(tmp = ft_strjoin(tmp, path)))
+	if (!(tmp2 = ft_strjoin(tmp1, path)))
 		exit_msh("strjoin", strerror(errno));
-	return (tmp);
+	free(tmp1);
+	return (tmp2);
 }
 
 char *relative_path(char *cmd)
@@ -76,11 +78,15 @@ char *relative_path(char *cmd)
 		{
 			tmp = join_path(env_path[i], cmd);
 			if (file_exists(tmp))
+			{
+				ft_array_clear(env_path, ft_free);
 				return (tmp);
+			}
 			free(tmp);
 			i++;
 		}
 	}
+	ft_array_clear(env_path, ft_free);
 	ft_printf("minishell: %s: command not found\n", cmd);
 	g_msh.last_ret_cmd = 127;
 	return (NULL);
@@ -135,9 +141,12 @@ bool	find_path()
 			ret = relative_path(cmd->cmd_name);
 		if (ret == NULL)
 			return (false);
+		free(cmd->cmd_name);
 		if (!(cmd->cmd_name = ft_strdup(ret)))
 			exit_msh("strdup", strerror(errno));
+		free(ret);
 		cmd = cmd->next;
+
 	}
 	return (true);
 }
