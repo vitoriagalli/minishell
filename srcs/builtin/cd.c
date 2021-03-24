@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:44:02 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 15:56:09 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/24 23:16:06 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char	*check_replace_path(char **args)
 	char *tmp;
 	char *tmp2;
 	char **path_home;
-	
+
 	tmp = NULL;
 	path_home = get_env_value("HOME");
 	if (!args[1])
@@ -75,7 +75,7 @@ void	ft_cd(t_cmd *cmd, t_exec *exec)
 	{
 		free_after_fork();
 		exit(EXIT_SUCCESS);
-	}	
+	}
 	if (cmd->separator == 0 || cmd->separator == SEPARATOR)
 	{
 		if (!cmd->args[1])
@@ -83,7 +83,11 @@ void	ft_cd(t_cmd *cmd, t_exec *exec)
 		tmp = check_replace_path(cmd->args);
 		getcwd(oldpwd, PATH_MAX);
 		if (cmd->args[2])
+		{
 			ft_printf("minishell: cd: too many arguments\n");
+			g_msh.force_ret_buildin = true;
+			g_msh.last_ret_cmd = 1;
+		}
 		else if ((chdir(tmp)) < 0)
 		{
 			if (cmd->args[1][0] == '~')
@@ -95,5 +99,5 @@ void	ft_cd(t_cmd *cmd, t_exec *exec)
 		}
 		update_env(oldpwd);
 		free(tmp);
-	}	
+	}
 }

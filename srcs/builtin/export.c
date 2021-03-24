@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:45:23 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 15:55:57 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/24 23:39:42 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	ft_sort_string_arr(char **arr)
+static void		ft_sort_string_arr(char **arr)
 {
 	int		i;
 	int		j;
@@ -38,7 +38,7 @@ static void	ft_sort_string_arr(char **arr)
 	}
 }
 
-static char	**duplicate_array(char **buffer, int len_arr)
+static char		**duplicate_array(char **buffer, int len_arr)
 {
 	char	**new_buffer;
 	int		i;
@@ -55,7 +55,7 @@ static char	**duplicate_array(char **buffer, int len_arr)
 	return (new_buffer);
 }
 
-static char	**reallocate_array(char **buffer, char *new_string)
+static char		**reallocate_array(char **buffer, char *new_string)
 {
 	char	**new_buffer;
 	int		len_arr;
@@ -85,37 +85,50 @@ static void		print_env_declare_mode(void)
 	free(sorted_env);
 }
 
-void	ft_export(t_cmd *cmd, t_exec *exec)
+void			look_for_env(char *env_str)
 {
 	bool	exist;
 	int		len;
 	int		i;
 
+	if ((len = ft_strrchr(env_str, '=') - env_str) < 0)
+		return ;
+	i = 0;
+	exist = false;
+	while (g_msh.env[i])
+	{
+		if (!ft_strncmp(g_msh.env[i], env_str, len + 1))
+		{
+			free(g_msh.env[i]);
+			g_msh.env[i] = ft_strdup(env_str);
+			exist = true;
+		}
+		i++;
+	}
+	if (exist == false)
+		g_msh.env = reallocate_array(g_msh.env, env_str);
+}
+
+void			ft_export(t_cmd *cmd, t_exec *exec)
+{
+	int		i;
+
+	i = 1;
+	g_msh.force_ret_buildin = true;
+	g_msh.last_ret_cmd = EXIT_SUCCESS;
 	if (exec->child_pid == 0)
 	{
 		free_after_fork();
-		exit(EXIT_SUCCESS);
-	}	
-	if (!cmd->args[1])
+		exit(g_msh.last_ret_cmd);
+	}
+	if (!cmd->args[i])
 		print_env_declare_mode();
 	else
 	{
-		if ((len = ft_strrchr(cmd->args[1], '=') - cmd->args[1]) < 0)
-			return ;
-		i = 0;
-		exist = false;
-		while (g_msh.env[i])
+		while (cmd->args[i])
 		{
-			if (!ft_strncmp(g_msh.env[i], cmd->args[1], len + 1))
-			{
-				free(g_msh.env[i]);
-				g_msh.env[i] = ft_strdup(cmd->args[1]);
-				exist = true;
-			}
+			look_for_env(cmd->args[i]);
 			i++;
 		}
-		if (exist == false)
-			g_msh.env = reallocate_array(g_msh.env, cmd->args[1]);
 	}
-
 }
