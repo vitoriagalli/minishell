@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/23 01:58:37 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/24 16:12:51 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ void	restore_terminal(bool from_exit)
 	}
 }
 
-int main(void)
+int		main(void)
 {
 	init_env(__environ);
-	while ((read_line()) != 0)
+	while ((read_line(true)) != 0)
 	{
 		restore_terminal(false);
 		lexer();
@@ -43,53 +43,6 @@ int main(void)
 		if (!find_path())
 			continue;
 		execution_commands();
-		free(g_msh.save);
-		g_msh.save = NULL;
 	}
-	// free everything before quit.
-	// return (msh.last_ret_cmd);
-	// exit_program();
+	exit_program();
 }
-
-
-
-
-
-
-
-// void	ft_lst_print(t_list *lst)
-// {
-// 	int count;
-
-// 	count = 0;
-// 	while (lst)
-// 	{
-// 		ft_printf("lst %i: %s\n", count, lst->content);
-// 		lst = lst->next;
-// 		count++;
-// 	}
-// }
-
-// void	ft_cmd_print(t_cmd *lst)
-// {
-// 	int	count;
-// 	int	i;
-
-// 	i = 0;
-// 	count = 0;
-// 	while (lst)
-// 	{
-// 		ft_printf("-------- command %i ---------\n", count);
-// 		ft_printf("cmd: %s\n", lst->cmd_name);
-// 		ft_printf("sep: %i\n", lst->separator);
-// 		while (lst->args[i])
-// 		{
-// 			ft_printf("arg %i: %s\n", i, lst->args[i]);
-// 			i++;
-// 		}
-// 		ft_lst_print(lst->redirection);
-// 		i = 0;
-// 		lst = lst->next;
-// 		count++;
-// 	}
-// }

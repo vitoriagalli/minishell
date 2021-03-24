@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/19 23:12:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/23 01:39:05 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/24 16:09:51 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// Ctrl+C - SIGINT
-// Ctrl+\ - SIGQUIT
 
 void	signal_handler_prompt(int sig)
 {
@@ -28,10 +25,8 @@ void	signal_handler_prompt(int sig)
 
 void	signal_handler_do_nothing(int sig)
 {
-	char	do_nothing;
-
-	if (sig == SIGQUIT)
-		do_nothing = '\0';
+	(void)sig;
+	return ;
 }
 
 void	signal_handler_parent(int signal)
@@ -53,18 +48,18 @@ void	handle_signals(int caller, int pid)
 	if (caller == ROOT)
 	{
 		if (signal(SIGINT, signal_handler_prompt) == SIG_ERR)
-			exit_msh("signal", strerror(errno));
+			exit_msh("signal: ", strerror(errno));
 		if (signal(SIGQUIT, signal_handler_do_nothing) == SIG_ERR)
-			exit_msh("signal", strerror(errno));
+			exit_msh("signal: ", strerror(errno));
 	}
 	else if (caller == FORK)
 	{
 		if (pid != 0)
 		{
 			if (signal(SIGINT, signal_handler_parent) == SIG_ERR)
-				exit_msh("signal", strerror(errno));
+				exit_msh("signal: ", strerror(errno));
 			if (signal(SIGQUIT, signal_handler_parent) == SIG_ERR)
-				exit_msh("signal", strerror(errno));
+				exit_msh("signal: ", strerror(errno));
 		}
 	}
 }

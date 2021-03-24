@@ -3,19 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:44:02 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 11:31:27 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/24 15:56:09 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	update_env(char *oldpwd)
+
+static void	update_env(char *oldpwd)
 {
 	int i;
 	char pwd[PATH_MAX];
+	char *tmp;
 
 	i = 0;
 	getcwd(pwd, PATH_MAX);
@@ -24,28 +26,37 @@ void	update_env(char *oldpwd)
 		if (!ft_strncmp(g_msh.env[i], "PWD", 3))
 		{
 			free(g_msh.env[i]);
-			g_msh.env[i] = ft_strdup(ft_strjoin("PWD=", pwd));
+			tmp = ft_strjoin("PWD=", pwd);
+			g_msh.env[i] = ft_strdup(tmp);
+			ft_strdel(&tmp);
 		}
 		else if (!ft_strncmp(g_msh.env[i], "OLDPWD", 6))
 		{
-			free(g_msh.env[i]);
-			g_msh.env[i] = ft_strdup(ft_strjoin("OLDPWD=", oldpwd));
+			ft_strdel(&g_msh.env[i]);
+			//free(g_msh.env[i]);
+			tmp = ft_strjoin("OLDPWD=", oldpwd);
+			g_msh.env[i] = ft_strdup(tmp);
+			ft_strdel(&tmp);
 		}
 		i++;
 	}
 }
 
-char	*check_replace_path(char **args)
+static char	*check_replace_path(char **args)
 {
 	char *tmp;
-	char ** path_home;
+	char *tmp2;
+	char **path_home;
 	
 	tmp = NULL;
 	path_home = get_env_value("HOME");
+	if (!args[1])
+		return (NULL);
 	if (args[1][0] == '~')
 	{
-		tmp = ft_substr(args[1], 1, ft_strlen(args[1]));
-		tmp = ft_strjoin(path_home[0], tmp);
+		tmp2 = ft_substr(args[1], 1, ft_strlen(args[1]));
+		tmp = ft_strjoin(path_home[0], tmp2);
+		free(tmp2);
 	}
 	else if (args[1][0] != '.' && args[1][0] != '/')
 		tmp = ft_strjoin("./", args[1]);
@@ -61,12 +72,17 @@ void	ft_cd(t_cmd *cmd, t_exec *exec)
 	char oldpwd[PATH_MAX];
 
 	if (exec->child_pid == 0)
+	{
+		free_after_fork();
 		exit(EXIT_SUCCESS);
+	}	
 	if (cmd->separator == 0 || cmd->separator == SEPARATOR)
 	{
+		if (!cmd->args[1])
+			return ;
 		tmp = check_replace_path(cmd->args);
 		getcwd(oldpwd, PATH_MAX);
-		if (cmd->args[2] != NULL)
+		if (cmd->args[2])
 			ft_printf("minishell: cd: too many arguments\n");
 		else if ((chdir(tmp)) < 0)
 		{

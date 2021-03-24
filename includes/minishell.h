@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/23 01:02:47 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/24 16:31:07 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@
 # define YELLOW "\033[1;33m"
 # define END_COLOR "\033[0m"
 
+# define UNUSED __attribute__((unused))
+
 typedef struct s_lexer
 {
 	int 		i;
@@ -149,45 +151,185 @@ t_minishell g_msh;
 typedef void	(*t_inbuild)(t_cmd *, t_exec *);
 
 
-void		ft_echo(t_cmd *cmd, t_exec *exec);
-void		ft_cd(t_cmd *cmd, t_exec *exec);
-void 		ft_pwd(t_cmd *cmd, t_exec *exec);
-void		ft_export(t_cmd *cmd, t_exec *exec);
-void		ft_unset(t_cmd *cmd, t_exec *exec);
-void		ft_env(t_cmd *cmd, t_exec *exec);
-void		ft_exit(t_cmd *cmd, t_exec *exec);
+/*
+** syntax_parser.c
+*/
 
-void		lexer();
-void		init_token(t_tokens *tk, t_lexer *lx);
-t_tokens	*next_token(t_tokens *tk, t_lexer *lx);
-t_tokens	*token_special(t_tokens *tk, t_lexer *lx);
-void		token_in_quotes(t_tokens *tk, t_lexer *lx);
-void		get_next_char(t_tokens *tk, t_lexer *lx);
-void		token_dollar(t_tokens *tk, t_lexer *lx);
+bool	syntax_parser();
 
-void		tokens_substitution();
+/*
+** signal.c
+*/
+
+void	handle_signals(int caller, int pid);
+void	signal_handler_parent(int signal);
+void	signal_handler_do_nothing(int sig);
+void	signal_handler_prompt(int sig);
+
+/*
+** main.c
+*/
+
+void	restore_terminal(bool from_exit);
+
+/*
+** get_env.c
+*/
+
+void	init_env(char **envp);
+char	**get_env_value(char *key);
+void	store_key_and_value(char **value, char **key, char *str);
+
+/*
+** free_and_quit.c
+*/
+
+void	exit_program();
+void	ft_cmdclear(t_cmd **lst, void (*del)(void*));
+void	ft_tknclear(t_tokens **lst, void (*del)(void*));
+void 	free_history();
+void	free_after_fork();
+
+/*
+** find_path.c
+*/
+
+bool	find_path();
+void	ft_array_clear(char **arr, void (*del)(void*));
+void	ft_free(void *elem);
+
+/*
+** execution_commands.c
+*/
+
+void 	execution_commands();
+
+/*
+** error_handling.c
+*/
+
+void	exit_msh(char *function, char *str_err);
+
+/*
+** create_commands.c
+*/
+
+void	create_commands();
+
+/*
+** readline.c
+*/
+
+int read_line(bool from_main);
+int	get_input_user();
+void	print_prompt();
+
+/*
+** history.c 
+*/
+
+void init_cmd_history();
+void insert_cmd_history();
+
+/*
+** lexer.c
+*/
+
+void	lexer();
+void	evaluate_dollar(t_tokens *tk, t_lexer *lx);
+
+/*
+** tk_escape.c 
+*/
+
+void	escape_in_double_quote(t_tokens *tk, t_lexer *lx);
+void	handle_escape_in_general(t_tokens *tk, t_lexer *lx);
+
+/*
+** tk_general.c 
+*/
+
+t_tokens	*general_state(t_tokens *tk, t_lexer *lx);
+
+/*
+** tk_operator.c     
+*/
+
+t_tokens	*put_in_token_operator(t_tokens *tk, t_lexer *lx);
+
+/*
+** tk_quotes.c     
+*/
+
+void	double_quoted_state(t_tokens *tk, t_lexer *lx);
+void	quoted_state(t_tokens *tk, t_lexer *lx);
+void	activate_quoted_state(t_tokens *tk, t_lexer *lx, int type_quote);
+
+/*
+** tk_utils.c 
+*/
+
+t_tokens	*create_new_token(t_tokens *tk, t_lexer *lx);
 int			get_char_type(char c);
-void		evaluate_dollar(t_tokens *tk, t_lexer *lx);
+t_tokens	*remove_last_empty_node(t_tokens *head_tk);
+void		add_end_token(t_tokens *head_tk, t_lexer *lx);
+int			size_token_list(t_tokens *lst);
+void		init_token(t_tokens *tk, t_lexer *lx);
+
+/*
+** builtin.c 
+*/
+
+bool	is_buildin_cmd(char *cmd);
+void	call_exec_buildin(t_cmd *cmd, t_exec *exec);
+
+/*
+** cd.c 
+*/
+
+void	ft_cd(t_cmd *cmd, t_exec *exec);
+
+/*
+** echo.c 
+*/
+
+void	ft_echo(t_cmd *cmd, t_exec *exec);
+
+/*
+** env.c 
+*/
+
+void	ft_env(t_cmd *cmd, t_exec *exec);
+
+/*
+** exit.c 
+*/
+
+void	ft_exit(t_cmd *cmd, t_exec *exec);
+
+/*
+** export.c 
+*/
+
+void	ft_export(t_cmd *cmd, t_exec *exec);
+
+/*
+** pwd.c
+*/
+
+void 	ft_pwd(t_cmd *cmd, t_exec *exec);
+
+/*
+** unset.c
+*/
+
+void	ft_unset(t_cmd *cmd, t_exec *exec);
 
 
-bool		syntax_parser();
-void		create_commands();
 
-void 		execution_commands();
 
-bool		is_buildin_cmd(char *cmd);
-void		call_exec_buildin(t_cmd *cmd, t_exec *exec);
-
-void		init_env(char **envp);
-void		store_key_and_value(char **value, char **key, char *str);
-char		**get_env_value(char *key);
-void		ft_array_clear(char **arr, void (*del)(char *));
-void		ft_free(char *elem);
-bool		find_path();
-
-void		handle_signals(int caller, int pid);
-void		restore_terminal(bool from_exit);
-
-void		free_loop_stuff(void);
+char	*relative_path(char *cmd);
+char	*absolute_path(char *cmd);
+bool	file_exists(char *filepath);
 
 #endif

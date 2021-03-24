@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 10:02:49 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/18 13:12:15 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/23 22:30:37 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,16 @@ void	ft_unset(t_cmd *cmd, t_exec *exec)
 	int		l;
 
 	if (exec->child_pid == 0)
+	{
+		free_after_fork();
 		exit(EXIT_SUCCESS);
+	}	
 	if (!cmd->args[1])
-		exit(EXIT_SUCCESS);
+		return ;
 	if (ft_strrchr(cmd->args[1], '='))
 	{
 		ft_printf("bash: unset: %s: not a valid identifier\n", cmd->args[1]);
-		exit(EXIT_FAILURE);
+		return ;
 	}
 	i = 0;
 	l = ft_strlen(cmd->args[1]);

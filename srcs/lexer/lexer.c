@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 16:55:29 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/23 01:49:19 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/23 18:11:12 by Vs-Rb            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strjoin_and_free(char *s1, char *s2)
+static char	*ft_strjoin_and_free(char *s1, char *s2)
 {
 	size_t	lens1;
 	size_t	lens2;
@@ -32,7 +32,7 @@ char	*ft_strjoin_and_free(char *s1, char *s2)
 	return (strjoin);
 }
 
-char	*subst_value(char *data, char *env_var, char *name, char *value)
+static char	*subst_value(char *data, char *env_var, char *name, char *value)
 {
 	char	*new_tk_value;
 	char	*before_env;
@@ -80,6 +80,8 @@ static char *substitution_env(char *str)
 			free(value);
 			return (temp);
 		}
+		free(key);
+		free(value);
 		i++;
 	}
 	temp = ft_strdup("");
@@ -127,10 +129,10 @@ void	lexer()
 	t_lexer lx;
 
 	g_msh.head_tk = malloc(sizeof(t_tokens));
-	lx = (t_lexer) {0, ft_strlen(g_msh.line), 0, g_msh.line, STATE_GEN};
+	lx = (t_lexer) {0, ft_strlen(g_msh.line), 0, ft_strdup(g_msh.line), STATE_GEN};
 	tk = g_msh.head_tk;
 	init_token(tk, &lx);
-	while (lx.line[lx.i])
+	while (lx.line[lx.i] || lx.state != STATE_GEN)
 	{
 		if (lx.state == STATE_GEN)
 			tk = general_state(tk, &lx);
@@ -141,4 +143,5 @@ void	lexer()
 	}
 	g_msh.head_tk = remove_last_empty_node(g_msh.head_tk);
 	add_end_token(g_msh.head_tk, &lx);
+	ft_strdel(&lx.line);
 }

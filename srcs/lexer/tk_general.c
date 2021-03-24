@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   tk_general.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 20:02:49 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 13:07:19 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/24 15:55:51 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		put_in_token_word(t_tokens *tk, t_lexer *lx)
+static void		put_in_token_word(t_tokens *tk, t_lexer *lx)
 {
 	if (lx->line[lx->i] == DOLLAR)
 		evaluate_dollar(tk, lx);

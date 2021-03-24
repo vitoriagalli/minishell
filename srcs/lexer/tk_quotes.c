@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tk_quotes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 19:58:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 13:07:46 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/24 15:55:48 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,33 @@ void	activate_quoted_state(t_tokens *tk, t_lexer *lx, int type_quote)
 	tk->type = WORD;
 }
 
-void	get_from_stdin(t_lexer *lx, char to_check)
+static void	get_from_stdin(t_lexer *lx, t_tokens *tk, char to_check)
 {
-	lx->line = ft_strjoin(lx->line, "\n");
+	char *tmp;
+	char *tmp2;
+	
+	//lx->line = ft_strjoin(lx->line, "\n");
+	tmp = ft_strjoin(tk->data, "\n");
+	ft_strdel(&lx->line);
 	ft_printf("> ");
-	while ((read_line()) != 0)
+	while ((read_line(false)) != 0)
 	{
-		g_msh.line = ft_strjoin(g_msh.line, "\n");
-		lx->line = ft_strjoin(lx->line, g_msh.line);
+		//g_msh.line = ft_strjoin(g_msh.line, "\n");
+		tmp2 = ft_strjoin(g_msh.line, "\n");
+		lx->line = ft_strjoin(tmp, tmp2);
+		free(tmp);
+		free(tmp2);
+		tmp = ft_strdup(lx->line);
 		if (lx->line[ft_strlen(lx->line) - 2] == to_check)
 			break ;
-		free(g_msh.line);
+		ft_strdel(&lx->line);
+		//free(g_msh.line);
 		ft_printf("> ");
 	}
-	free (g_msh.line);
+	ft_strdel(&g_msh.line);
 	lx->line[ft_strlen(lx->line) - 1] = '\0';
+	lx->size = ft_strlen(lx->line);
+	free(tmp);
 }
 
 void	quoted_state(t_tokens *tk, t_lexer *lx)
@@ -52,8 +64,12 @@ void	quoted_state(t_tokens *tk, t_lexer *lx)
 	}
 	else if (lx->line[lx->i] == '\0')
 	{
-		get_from_stdin(lx, SINGLE_QUOTE);
-		lx->i--;
+		get_from_stdin(lx, tk, SINGLE_QUOTE);
+		free(tk->data);
+		tk->data = malloc(sizeof(char) * lx->size + 1);
+		ft_bzero(tk->data, lx->size + 1);
+		lx->i = 0;
+		//lx->i--;
 	}	
 }
 
@@ -75,10 +91,14 @@ void	double_quoted_state(t_tokens *tk, t_lexer *lx)
 		lx->state = STATE_GEN;
 		lx->i++;
 	}
-	else if (lx->line[lx->i] == '\0')
+	else if (lx->line[lx->i - 1] == '\0')
 	{
-		get_from_stdin(lx, DOUBLE_QUOTE);
-		if (lx->line[lx->i] != NEW_LINE)
-			lx->i--;
+		get_from_stdin(lx, tk, DOUBLE_QUOTE);
+		free(tk->data);
+		tk->data = malloc(sizeof(char) * lx->size + 1);
+		ft_bzero(tk->data, lx->size + 1);
+		lx->i = 0;
+		//if (lx->line[lx->i] != NEW_LINE)
+		//	lx->i--;
 	}	
 }

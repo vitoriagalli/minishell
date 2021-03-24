@@ -1,7 +1,7 @@
 NAME =		minishell
 
 CC =		clang
-CFLAGS =	-w -Wall -Wextra -Werror -g # -fsanitize=address # -g to delete
+CFLAGS =	-Wall -Wextra -Werror -g -fsanitize=address # -g to delete
 
 INCLUDES =	-I ./includes -I ./libft/includes -I ./ft_printf/includes
 LIBFT = -L ./libft -lft
@@ -31,7 +31,10 @@ SRC_FILES =	main.c \
 			error_handling.c \
 			find_path.c \
 			signal.c \
-			free_and_quit.c
+			free_and_quit.c \
+			free_utils.c \
+			check_absolute_path.c \
+			check_relative_path.c
 
 SRCS = $(addprefix srcs/,$(SRC_FILES))
 OBJS = $(SRCS:.c=.o)

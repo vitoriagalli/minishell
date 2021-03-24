@@ -3,41 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   create_commands.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:55:53 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/23 01:56:32 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/24 16:54:51 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_tokens()
-{
-	t_tokens *node;
-
-	while (g_msh.head_tk != NULL)
-	{
-		node = g_msh.head_tk;
-		g_msh.head_tk = g_msh.head_tk->next;
-		free(node);
-	}
-}
-
-void	init_command(t_cmd *cmd)
+static void	init_command(t_cmd *cmd)
 {
 	int nb_tk;
 
 	ft_bzero(cmd, sizeof(t_cmd));
 	nb_tk = size_token_list(g_msh.head_tk);
-	cmd->args = malloc(sizeof(char*) * (nb_tk - g_msh.cmds.curr_tk));
-	ft_bzero(cmd->args, sizeof(char*) * (nb_tk - g_msh.cmds.curr_tk));
+	cmd->args = malloc(sizeof(char*) * (nb_tk - g_msh.cmds.curr_tk) + 1);
+	ft_bzero(cmd->args, sizeof(char*) * (nb_tk - g_msh.cmds.curr_tk) + 1);
 	cmd->next = NULL;
 	g_msh.cmds.got_cmd_name = false;
 	g_msh.cmds.curr_arg = 0;
 }
 
-t_cmd	*handle_cmd_separator(t_cmd *cmd, t_tokens *tk)
+static t_cmd	*handle_cmd_separator(t_cmd *cmd, t_tokens *tk)
 {
 	cmd->separator = tk->type;
 	tk = tk->next;
@@ -48,7 +36,7 @@ t_cmd	*handle_cmd_separator(t_cmd *cmd, t_tokens *tk)
 	return (cmd);
 }
 
-t_tokens	*handle_out_append(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
+static t_tokens	*handle_out_append(t_cmd *cmd, t_tokens *tk)
 {
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">>")));
 	tk = tk->next;
@@ -56,7 +44,7 @@ t_tokens	*handle_out_append(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 	return (tk);
 }
 
-t_tokens	*handle_out_overwrite(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
+static t_tokens	*handle_out_overwrite(t_cmd *cmd, t_tokens *tk)
 {
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">")));
 	tk = tk->next;
@@ -64,7 +52,7 @@ t_tokens	*handle_out_overwrite(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 	return (tk);
 }
 
-t_tokens	*handle_out_input(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
+static t_tokens	*handle_out_input(t_cmd *cmd, t_tokens *tk)
 {
 	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup("<")));
 	tk = tk->next;
@@ -72,17 +60,18 @@ t_tokens	*handle_out_input(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 	return (tk);
 }
 
-t_tokens	*handle_redir(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
+static t_tokens	*handle_redir(t_cmd *cmd, t_tokens *tk)
 {
 	if (tk->type == OUT_APPEND)
-		return (handle_out_append(cmd, tk, cmds));
+		return (handle_out_append(cmd, tk));
 	else if (tk->type == OUT_OVERWRITE)
-		return (handle_out_overwrite(cmd, tk, cmds));
+		return (handle_out_overwrite(cmd, tk));
 	else if (tk->type == INPUT)
-		return (handle_out_input(cmd, tk, cmds));
+		return (handle_out_input(cmd, tk));
+	return (NULL);
 }
 
-void	handle_word(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
+static void	handle_word(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
 	if (cmds->got_cmd_name == false)
 	{
@@ -110,7 +99,7 @@ void	create_commands()
 	while (tk->next)
 	{
 		if (tk->type == OUT_APPEND || tk->type == OUT_OVERWRITE || tk->type == INPUT)
-			tk = handle_redir(cmd, tk, &g_msh.cmds);
+			tk = handle_redir(cmd, tk);
 		else if (tk->type == PIPE || tk->type == SEPARATOR)
 			cmd = handle_cmd_separator(cmd, tk);
 		else
@@ -118,6 +107,6 @@ void	create_commands()
 		g_msh.cmds.curr_tk++;
 		tk = tk->next;
 	}
-	// free_tokens();
+	cmd->args[g_msh.cmds.curr_arg] = NULL;
 	ft_tknclear(&g_msh.head_tk, ft_free);
 }

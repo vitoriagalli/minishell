@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 10:51:34 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/23 00:12:06 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/24 15:55:43 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool jump_cmd_line()
+static bool jump_cmd_line()
 {
 	char *cmd_line;
 	int len_cmd;
@@ -62,9 +62,9 @@ void insert_cmd_history()
 	g_msh.curr_hist = g_msh.head_hist;
 }
 
-void init_cmd_history(t_minishell *msh)
+void init_cmd_history()
 {
-	msh->head_hist = malloc(sizeof(t_history));
-	msh->head_hist->next = NULL;
-	msh->head_hist->prev = NULL;
+	//msh->head_hist = malloc(sizeof(t_history));
+	//msh->head_hist->next = NULL;
+	//msh->head_hist->prev = NULL;
 }

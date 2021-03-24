@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:45:23 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/18 13:12:03 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/24 15:55:57 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_sort_string_arr(char **arr)
+static void	ft_sort_string_arr(char **arr)
 {
 	int		i;
 	int		j;
@@ -38,7 +38,7 @@ void	ft_sort_string_arr(char **arr)
 	}
 }
 
-char	**duplicate_array(char **buffer, int len_arr)
+static char	**duplicate_array(char **buffer, int len_arr)
 {
 	char	**new_buffer;
 	int		i;
@@ -55,7 +55,7 @@ char	**duplicate_array(char **buffer, int len_arr)
 	return (new_buffer);
 }
 
-char	**reallocate_array(char **buffer, char *new_string)
+static char	**reallocate_array(char **buffer, char *new_string)
 {
 	char	**new_buffer;
 	int		len_arr;
@@ -64,12 +64,12 @@ char	**reallocate_array(char **buffer, char *new_string)
 	while (buffer[len_arr])
 		len_arr++;
 	new_buffer = duplicate_array(buffer, len_arr + 1);
-	new_buffer[len_arr] = new_string;
+	new_buffer[len_arr] = ft_strdup(new_string);
 	free(buffer);
 	return (new_buffer);
 }
 
-void		print_env_declare_mode(void)
+static void		print_env_declare_mode(void)
 {
 	char	**sorted_env;
 	int		i;
@@ -82,6 +82,7 @@ void		print_env_declare_mode(void)
 	i = 0;
 	while (sorted_env[i])
 		ft_printf("declare -x %s\n", sorted_env[i++]);
+	free(sorted_env);
 }
 
 void	ft_export(t_cmd *cmd, t_exec *exec)
@@ -91,7 +92,10 @@ void	ft_export(t_cmd *cmd, t_exec *exec)
 	int		i;
 
 	if (exec->child_pid == 0)
+	{
+		free_after_fork();
 		exit(EXIT_SUCCESS);
+	}	
 	if (!cmd->args[1])
 		print_env_declare_mode();
 	else

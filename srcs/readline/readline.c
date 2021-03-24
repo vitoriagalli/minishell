@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 15:34:42 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 16:01:08 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/24 15:55:41 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void	print_prompt()
 	ft_printf("%s%s %s>%s ",BLUE ,cwd ,YELLOW, END_COLOR);
 }
 
-int		ft_putchar(int c)
+static int		ft_putchar(int c)
 {
 	if (write(1, &c, 1) < 0)
 		exit_msh("write", strerror(errno));
 	return (1);
 }
 
-void	history_up(int size)
+static void	history_up(int size)
 {
 	if (g_msh.head_hist == NULL)
 		return ;
@@ -47,11 +47,12 @@ void	history_up(int size)
 		size--;
 	}
 	ft_printf("%s", g_msh.curr_hist->cmd_line);
+	ft_strdel(&g_msh.line);
 	if (!(g_msh.line = ft_strdup(g_msh.curr_hist->cmd_line)))
 		exit_msh("strdup", strerror(errno));
 }
 
-void	history_down(int size)
+static void	history_down(int size)
 {
 	if (g_msh.head_hist == NULL || g_msh.tmp_line == NULL)
 		return ;
@@ -67,22 +68,23 @@ void	history_down(int size)
 		if (g_msh.curr_hist != NULL)
 		{
 			ft_printf(g_msh.curr_hist->cmd_line);
+			ft_strdel(&g_msh.line);
 			if (!(g_msh.line = ft_strdup(g_msh.curr_hist->cmd_line)))
 				exit_msh("strdup", strerror(errno));
 		}
 		else
 		{
 			ft_printf(g_msh.tmp_line);
+			ft_strdel(&g_msh.line);
 			if (!(g_msh.line = ft_strdup(g_msh.tmp_line)))
 				exit_msh("strdup", strerror(errno));
 			g_msh.curr_hist = g_msh.head_hist;
-			free(g_msh.tmp_line);
-			g_msh.tmp_line = NULL;
+			ft_strdel(&g_msh.tmp_line);
 		}
 	}
 }
 
-void	delete_char_left(int size)
+static void	delete_char_left(int size)
 {
 	if (size > 0)
 	{
@@ -93,7 +95,7 @@ void	delete_char_left(int size)
 	}
 }
 
-void	add_char_to_line(int size, char c)
+static void	add_char_to_line(int size, char c)
 {
 	char *temp;
 
@@ -110,23 +112,22 @@ void	add_char_to_line(int size, char c)
 	free(temp);
 }
 
-int	process_newline(int size)
+int	process_newline()
 {
 	ft_printf("\n");
-	g_msh.curr_hist = NULL;
+	//g_msh.curr_hist = NULL;
 	insert_cmd_history();
-	g_msh.tmp_line = NULL;
-
+	ft_strdel(&g_msh.tmp_line);
 	return (1);
 }
 
-int	handle_event(char *buf)
+static int	handle_event(char *buf)
 {
 	int size;
 
 	size = ft_strlen(g_msh.line);
 	if (buf[0] == LF)
-		return (process_newline(size));
+		return (process_newline());
 	else if (buf[0] == DEL)
 		delete_char_left(size);
 	else if (buf[0] == ESC && buf[1] == SQ_BR && buf[2] == UP)
@@ -151,6 +152,7 @@ int	get_input_user()
 		ft_bzero(buffer, 3);
 		if (read(STDIN_FILENO, &buffer, 3) < 0)
 			exit_msh("read", strerror(errno));
+		
 		if (buffer[0] == EOT && g_msh.line[0] == '\0')
 		{
 			ft_printf("exit\n");
@@ -161,7 +163,7 @@ int	get_input_user()
 	return (1);
 }
 
-void init_terminal()
+static void init_terminal()
 {
 	struct termios term;
 	char	**termtype;
@@ -180,15 +182,26 @@ void init_terminal()
 	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &term) == -1)
 		exit_msh("tcsetattr", strerror(errno));
 	ft_array_clear(termtype, ft_free);
+	
 }
 
-int read_line()
+int read_line(bool from_main)
 {
-	print_prompt();
+	if (g_msh.save)
+	{
+		free(g_msh.save);
+		g_msh.save = NULL;
+	}
+	if (from_main == true)
+	{
+		ft_tknclear(&g_msh.head_tk, ft_free);
+		print_prompt();
+	}	
 	init_terminal();
-	free_cmds();
+	ft_cmdclear(&g_msh.cmds.head_cmd, ft_free);
+	ft_bzero(&g_msh.cmds, sizeof(t_cmds));
 	handle_signals(ROOT, 1);
-	if (g_msh.line != NULL);
+	if (g_msh.line != NULL)
 		free(g_msh.line);
 	if (get_input_user() == 0)
 		return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tk_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 21:00:02 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/23 00:14:36 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/24 16:58:48 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ t_tokens	*remove_last_empty_node(t_tokens *head_tk)
 		previous = previous->next;
 	if (!previous->next->data[0])
 	{
+		free(previous->next->data);
 		free(previous->next);
 		previous->next = NULL;
 	}
 	return (head_tk);
-
 }
 
 int			get_char_type(char c)
@@ -89,8 +89,6 @@ void		init_token(t_tokens *tk, t_lexer *lx)
 
 t_tokens	*create_new_token(t_tokens *tk, t_lexer *lx)
 {
-	int type;
-
 	if (tk->data[0] != '\0')
 	{
 		tk->data[ft_strlen(tk->data)] = '\0';

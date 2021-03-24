@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   tk_operator.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Vs-Rb <marvin@student.42sp.org.br>         +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 20:01:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/22 13:07:27 by Vs-Rb            ###   ########.fr       */
+/*   Updated: 2021/03/24 15:55:49 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	precise_type_operator(t_tokens *tk)
+static void	precise_type_operator(t_tokens *tk)
 {
 	if (tk->data[0] == VERTICAL_BAR)
 		tk->type = PIPE;

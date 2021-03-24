@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:46:30 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/21 19:42:20 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/24 15:56:00 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exit_with_arg(t_cmd *cmd)
+static void	exit_with_arg(t_cmd *cmd)
 {
 	int ret;
 	
@@ -24,7 +24,7 @@ void	exit_with_arg(t_cmd *cmd)
 		exit (ret % 256);
 }
 
-int		too_many_args(t_cmd *cmd)
+static int		too_many_args(t_cmd *cmd)
 {
 	if (cmd->args[2] != NULL)
 	{
@@ -36,7 +36,7 @@ int		too_many_args(t_cmd *cmd)
 	return (0);
 }
 
-void	non_numerical_arg(t_cmd *cmd)
+static void	non_numerical_arg(t_cmd *cmd)
 {
 	int i;
 
@@ -63,14 +63,16 @@ void	non_numerical_arg(t_cmd *cmd)
 void	ft_exit(t_cmd *cmd, t_exec *exec)
 {
 	if (exec->child_pid == 0)
+	{
+		free_after_fork();
 		exit(EXIT_SUCCESS);
+	}
 	if (cmd->separator == 0 || cmd->separator == SEPARATOR)
 	{
 		if (cmd->args[1] == NULL)
 		{
 			ft_printf("exit\n");
 			exit_program();
-			// exit(g_msh.last_ret_cmd);
 		}
 		non_numerical_arg(cmd);
 		if (too_many_args(cmd) == 1)
