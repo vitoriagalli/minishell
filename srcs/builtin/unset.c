@@ -6,13 +6,13 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 10:02:49 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 23:27:58 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/25 22:04:51 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	valid_chars(char *str)
+static bool	unset_valid_chars(char *str)
 {
 	int	i;
 
@@ -26,7 +26,7 @@ bool	valid_chars(char *str)
 	return (true);
 }
 
-void	check_env_var(char *env_var)
+static void	check_env_var(char *env_var)
 {
 	int		i;
 	int		l;
@@ -50,7 +50,7 @@ void	check_env_var(char *env_var)
 	return ;
 }
 
-void	ft_unset(t_cmd *cmd, t_exec *exec)
+void		ft_unset(t_cmd *cmd, t_exec *exec)
 {
 	int		arg;
 
@@ -64,7 +64,7 @@ void	ft_unset(t_cmd *cmd, t_exec *exec)
 	arg = 1;
 	while (cmd->args[arg])
 	{
-		if (valid_chars(cmd->args[arg]))
+		if (unset_valid_chars(cmd->args[arg]))
 			check_env_var(cmd->args[arg]);
 		else
 		{

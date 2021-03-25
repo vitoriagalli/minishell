@@ -3,14 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:45:23 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 15:56:10 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 22:00:55 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static bool		export_valid_chars(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_' && str[i] != '=')
+			return (false);
+		i++;
+	}
+	return (true);
+}
 
 static void		ft_sort_string_arr(char **arr)
 {
@@ -92,13 +106,17 @@ void			ft_export(t_cmd *cmd, t_exec *exec)
 		exit(g_msh.last_ret_cmd);
 	}
 	if (!cmd->args[i])
-		print_env_declare_mode();
-	else
+		return (print_env_declare_mode());
+	while (cmd->args[i])
 	{
-		while (cmd->args[i])
-		{
+		if (export_valid_chars(cmd->args[i]))
 			look_for_env(cmd->args[i]);
-			i++;
+		else
+		{
+			ft_printf("bash: unset: %s: not a valid identifier\n",
+														cmd->args[i]);
+			g_msh.last_ret_cmd = EXIT_FAILURE;
 		}
+		i++;
 	}
 }
