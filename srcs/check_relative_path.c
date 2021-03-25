@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:21:08 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 16:21:51 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/24 20:34:25 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ static char	*join_path(char *env, char *path)
 	char	*tmp2;
 
 	if (!(tmp1 = ft_strjoin(env, "/")))
-		exit_msh("strjoin", strerror(errno));
+		exit_msh("strjoin: ", strerror(errno));
 	if (!(tmp2 = ft_strjoin(tmp1, path)))
-		exit_msh("strjoin", strerror(errno));
+		exit_msh("strjoin: ", strerror(errno));
 	free(tmp1);
 	return (tmp2);
 }

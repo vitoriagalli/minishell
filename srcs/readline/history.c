@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 10:51:34 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 15:55:43 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/24 19:12:50 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static bool jump_cmd_line()
 	}
 	if (g_msh.head_hist)
 	{
-		cmd_line = ft_strdup(g_msh.head_hist->cmd_line);
+		if (!(cmd_line = ft_strdup(g_msh.head_hist->cmd_line)))
+			exit_msh("ft_strdup: ", strerror(errno));
 		len_cmd = ft_strlen(g_msh.line) + 1;
 		if (!ft_strncmp(cmd_line, g_msh.line, len_cmd + 1))
 		{
@@ -43,28 +44,24 @@ void insert_cmd_history()
 
 	if (jump_cmd_line() == true)
 		return ;
-	hist = malloc(sizeof(t_history));
+	if (!(hist = malloc(sizeof(t_history))))
+		exit_msh("malloc: ", strerror(errno));
 	if (g_msh.head_hist == NULL)
 	{
-		hist->cmd_line = ft_strdup(g_msh.line);
+		if (!(hist->cmd_line = ft_strdup(g_msh.line)))
+			exit_msh("ft_strdup: ", strerror(errno));
 		hist->next = NULL;
 		hist->prev = NULL;
 		g_msh.head_hist = hist;
 	}
 	else
 	{
-		hist->cmd_line = ft_strdup(g_msh.line);
+		if (!(hist->cmd_line = ft_strdup(g_msh.line)))
+			exit_msh("ft_strdup: ", strerror(errno));
 		hist->next = g_msh.head_hist;
 		g_msh.head_hist->prev = hist;
 		hist->prev = NULL;
 		g_msh.head_hist = hist;
 	}
 	g_msh.curr_hist = g_msh.head_hist;
-}
-
-void init_cmd_history()
-{
-	//msh->head_hist = malloc(sizeof(t_history));
-	//msh->head_hist->next = NULL;
-	//msh->head_hist->prev = NULL;
 }

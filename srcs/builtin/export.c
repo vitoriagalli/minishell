@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:45:23 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 23:39:42 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/24 20:37:55 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ static char		**duplicate_array(char **buffer, int len_arr)
 
 	if (!buffer || !(*buffer))
 		return (NULL);
-	new_buffer = ft_calloc(len_arr + 1, sizeof(char *));
+	if (!(new_buffer = ft_calloc(len_arr + 1, sizeof(char *))))
+		exit_msh("ft_calloc: ", strerror(errno));
 	i = 0;
 	while (i < len_arr)
 	{
@@ -64,7 +65,8 @@ static char		**reallocate_array(char **buffer, char *new_string)
 	while (buffer[len_arr])
 		len_arr++;
 	new_buffer = duplicate_array(buffer, len_arr + 1);
-	new_buffer[len_arr] = ft_strdup(new_string);
+	if (!(new_buffer[len_arr] = ft_strdup(new_string)))
+		exit_msh("ft_strdup: ", strerror(errno));
 	free(buffer);
 	return (new_buffer);
 }
@@ -100,7 +102,8 @@ void			look_for_env(char *env_str)
 		if (!ft_strncmp(g_msh.env[i], env_str, len + 1))
 		{
 			free(g_msh.env[i]);
-			g_msh.env[i] = ft_strdup(env_str);
+			if (!(g_msh.env[i] = ft_strdup(env_str)))
+				exit_msh("ft_strdup: ", strerror(errno));
 			exist = true;
 		}
 		i++;

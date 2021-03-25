@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:55:53 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 16:54:51 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/24 19:07:32 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static void	init_command(t_cmd *cmd)
 
 	ft_bzero(cmd, sizeof(t_cmd));
 	nb_tk = size_token_list(g_msh.head_tk);
-	cmd->args = malloc(sizeof(char*) * (nb_tk - g_msh.cmds.curr_tk) + 1);
+	if (!(cmd->args = malloc(sizeof(char*) * (nb_tk - g_msh.cmds.curr_tk) + 1)))
+		exit_msh("malloc: ", strerror(errno));
 	ft_bzero(cmd->args, sizeof(char*) * (nb_tk - g_msh.cmds.curr_tk) + 1);
 	cmd->next = NULL;
 	g_msh.cmds.got_cmd_name = false;
@@ -29,7 +30,8 @@ static t_cmd	*handle_cmd_separator(t_cmd *cmd, t_tokens *tk)
 {
 	cmd->separator = tk->type;
 	tk = tk->next;
-	cmd->next = malloc(sizeof(t_cmd));
+	if (!(cmd->next = malloc(sizeof(t_cmd))))
+		exit_msh("malloc: ", strerror(errno));
 	cmd->args[g_msh.cmds.curr_arg] = NULL;
 	cmd = cmd->next;
 	init_command(cmd);
@@ -75,14 +77,17 @@ static void	handle_word(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
 	if (cmds->got_cmd_name == false)
 	{
-		cmd->cmd_name = ft_strdup(tk->data);
-		cmd->args[cmds->curr_arg] = ft_strdup(cmd->cmd_name);
+		if (!(cmd->cmd_name = ft_strdup(tk->data)))
+			exit_msh("ft_strdup: ", strerror(errno));
+		if (!(cmd->args[cmds->curr_arg] = ft_strdup(cmd->cmd_name)))
+			exit_msh("ft_strdup: ", strerror(errno));
 		cmds->curr_arg++;
 		cmds->got_cmd_name = true;
 	}
 	else
 	{
-		cmd->args[cmds->curr_arg] = ft_strdup(tk->data);
+		if (!(cmd->args[cmds->curr_arg] = ft_strdup(tk->data)))
+			exit_msh("ft_strdup: ", strerror(errno));
 		cmds->curr_arg++;
 	}
 }
@@ -92,7 +97,8 @@ void	create_commands()
 	t_tokens *tk;
 	t_cmd *cmd;
 
-	g_msh.cmds.head_cmd = malloc(sizeof(t_cmd));
+	if(!(g_msh.cmds.head_cmd = malloc(sizeof(t_cmd))))
+		exit_msh("malloc: ", strerror(errno));
 	tk = g_msh.head_tk;
 	cmd = g_msh.cmds.head_cmd;
 	init_command(cmd);

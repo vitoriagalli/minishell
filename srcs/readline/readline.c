@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 15:34:42 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 15:55:41 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/24 20:36:15 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ static void	delete_char_left(int size)
 	if (size > 0)
 	{
 		g_msh.line[size - 1] = '\0';
-		g_msh.line = ft_realloc(g_msh.line, sizeof(char) * size);
+		if (!(g_msh.line = ft_realloc(g_msh.line, sizeof(char) * size)))
+			exit_msh("ft_realloc: ", strerror(errno));
 		tputs(tgetstr("le", NULL), 1, &ft_putchar);
 		tputs(tgetstr("dc", NULL), 1, &ft_putchar);
 	}
@@ -102,9 +103,10 @@ static void	add_char_to_line(int size, char c)
 	if (!ft_isprint(c))
 		return ;
 	if (!(temp = ft_strdup(g_msh.line)))
-		exit_msh("strdup", strerror(errno));
+		exit_msh("strdup: ", strerror(errno));
 	free(g_msh.line);
-	g_msh.line = malloc(sizeof(char) * size + 2);
+	if (!(g_msh.line = malloc(sizeof(char) * size + 2)))
+		exit_msh("malloc: ", strerror(errno));
 	ft_bzero(g_msh.line, size + 2);
 	ft_strlcpy(g_msh.line, temp, size + 1);
 	g_msh.line[ft_strlen(g_msh.line)] = c;
@@ -115,7 +117,6 @@ static void	add_char_to_line(int size, char c)
 int	process_newline()
 {
 	ft_printf("\n");
-	//g_msh.curr_hist = NULL;
 	insert_cmd_history();
 	ft_strdel(&g_msh.tmp_line);
 	return (1);

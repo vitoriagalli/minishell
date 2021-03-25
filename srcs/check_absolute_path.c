@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:20:14 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 16:23:08 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/24 20:34:33 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,10 @@ char	*absolute_path(char *cmd)
 	{
 		home_path = get_env_value("HOME");
 		if (!(tmp = ft_strjoin(home_path[0], cmd + 1)))
-			exit_msh("strjoin", strerror(errno));
+			exit_msh("strjoin: ", strerror(errno));
 		ft_strdel(&cmd);
-		cmd = ft_strdup(tmp);
+		if (!(cmd = ft_strdup(tmp)))
+			exit_msh("ft_strdup: ", strerror(errno));
 		ft_strdel(&tmp);
 		ft_array_clear(home_path, ft_free);
 	}

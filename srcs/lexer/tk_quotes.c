@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 19:58:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 15:55:48 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/24 19:17:02 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,23 @@ static void	get_from_stdin(t_lexer *lx, t_tokens *tk, char to_check)
 	char *tmp;
 	char *tmp2;
 	
-	//lx->line = ft_strjoin(lx->line, "\n");
-	tmp = ft_strjoin(tk->data, "\n");
+	if (!(tmp = ft_strjoin(tk->data, "\n")))
+		exit_msh("ft_strdup: ", strerror(errno));
 	ft_strdel(&lx->line);
 	ft_printf("> ");
 	while ((read_line(false)) != 0)
 	{
-		//g_msh.line = ft_strjoin(g_msh.line, "\n");
-		tmp2 = ft_strjoin(g_msh.line, "\n");
-		lx->line = ft_strjoin(tmp, tmp2);
+		if (!(tmp2 = ft_strjoin(g_msh.line, "\n")))
+			exit_msh("ft_strjoin: ", strerror(errno));
+		if (!(lx->line = ft_strjoin(tmp, tmp2)))
+			exit_msh("ft_strjoin: ", strerror(errno));
 		free(tmp);
 		free(tmp2);
-		tmp = ft_strdup(lx->line);
+		if (!(tmp = ft_strdup(lx->line)))
+			exit_msh("ft_strdup: ", strerror(errno));
 		if (lx->line[ft_strlen(lx->line) - 2] == to_check)
 			break ;
 		ft_strdel(&lx->line);
-		//free(g_msh.line);
 		ft_printf("> ");
 	}
 	ft_strdel(&g_msh.line);
@@ -66,10 +67,10 @@ void	quoted_state(t_tokens *tk, t_lexer *lx)
 	{
 		get_from_stdin(lx, tk, SINGLE_QUOTE);
 		free(tk->data);
-		tk->data = malloc(sizeof(char) * lx->size + 1);
+		if (!(tk->data = malloc(sizeof(char) * lx->size + 1)))
+			exit_msh("malloc: ", strerror(errno));
 		ft_bzero(tk->data, lx->size + 1);
 		lx->i = 0;
-		//lx->i--;
 	}	
 }
 
@@ -95,10 +96,9 @@ void	double_quoted_state(t_tokens *tk, t_lexer *lx)
 	{
 		get_from_stdin(lx, tk, DOUBLE_QUOTE);
 		free(tk->data);
-		tk->data = malloc(sizeof(char) * lx->size + 1);
+		if (!(tk->data = malloc(sizeof(char) * lx->size + 1)))
+			exit_msh("malloc: ", strerror(errno));
 		ft_bzero(tk->data, lx->size + 1);
 		lx->i = 0;
-		//if (lx->line[lx->i] != NEW_LINE)
-		//	lx->i--;
 	}	
 }

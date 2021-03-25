@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 16:12:51 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/24 19:00:19 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	restore_terminal(bool from_exit)
 	else
 	{
 		if (tcsetattr(STDIN_FILENO, TCSAFLUSH, g_msh.save) == -1)
-			exit_msh("tcsetattr", strerror(errno));
+			exit_msh("tcsetattr: ", strerror(errno));
 	}
 }
 

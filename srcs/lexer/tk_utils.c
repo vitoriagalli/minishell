@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 21:00:02 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 16:58:48 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/24 19:14:33 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,11 @@ void	add_end_token(t_tokens *head_tk, t_lexer *lx)
 	current = head_tk;
 	while (current->next)
 		current = current->next;
-	current->next = malloc(sizeof(t_tokens));
+	if (!(current->next = malloc(sizeof(t_tokens))))
+		exit_msh("malloc: ", strerror(errno));
 	lx->i = 0;
-	current->next->data = ft_strdup("newline");
+	if (!(current->next->data = ft_strdup("newline")))
+		exit_msh("ft_strdup: ", strerror(errno));
 	current->next->type = 700;
 	current->next->next = NULL;
 }
@@ -81,7 +83,8 @@ int			get_char_type(char c)
 
 void		init_token(t_tokens *tk, t_lexer *lx)
 {
-	tk->data = malloc(sizeof(char) * (lx->size - lx->i) + 1);
+	if (!(tk->data = malloc(sizeof(char) * (lx->size - lx->i) + 1)))
+		exit_msh("malloc: ", strerror(errno));
 	ft_bzero(tk->data, lx->size - lx->i + 1);
 	tk->type = 700;
 	tk->next = NULL;
@@ -92,7 +95,8 @@ t_tokens	*create_new_token(t_tokens *tk, t_lexer *lx)
 	if (tk->data[0] != '\0')
 	{
 		tk->data[ft_strlen(tk->data)] = '\0';
-		tk->next = malloc(sizeof(t_tokens));
+		if (!(tk->next = malloc(sizeof(t_tokens))))
+			exit_msh("malloc: ", strerror(errno));
 		tk = tk->next;
 		init_token(tk, lx);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:44:02 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 23:16:06 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/24 20:30:23 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,19 @@ static void	update_env(char *oldpwd)
 		if (!ft_strncmp(g_msh.env[i], "PWD", 3))
 		{
 			free(g_msh.env[i]);
-			tmp = ft_strjoin("PWD=", pwd);
-			g_msh.env[i] = ft_strdup(tmp);
+			if (!(tmp = ft_strjoin("PWD=", pwd)))
+				exit_msh("ft_strjoin: ", strerror(errno));
+			if (!(g_msh.env[i] = ft_strdup(tmp)))
+				exit_msh("ft_strdup: ", strerror(errno));
 			ft_strdel(&tmp);
 		}
 		else if (!ft_strncmp(g_msh.env[i], "OLDPWD", 6))
 		{
 			ft_strdel(&g_msh.env[i]);
-			//free(g_msh.env[i]);
-			tmp = ft_strjoin("OLDPWD=", oldpwd);
-			g_msh.env[i] = ft_strdup(tmp);
+			if (!(tmp = ft_strjoin("OLDPWD=", oldpwd)))
+				exit_msh("ft_strjoin: ", strerror(errno));
+			if (!(g_msh.env[i] = ft_strdup(tmp)))
+				exit_msh("ft_strdup: ", strerror(errno));
 			ft_strdel(&tmp);
 		}
 		i++;
@@ -54,14 +57,20 @@ static char	*check_replace_path(char **args)
 		return (NULL);
 	if (args[1][0] == '~')
 	{
-		tmp2 = ft_substr(args[1], 1, ft_strlen(args[1]));
-		tmp = ft_strjoin(path_home[0], tmp2);
+		if (!(tmp2 = ft_substr(args[1], 1, ft_strlen(args[1]))))
+			exit_msh("ft_substr: ", strerror(errno));
+		if (!(tmp = ft_strjoin(path_home[0], tmp2)))
+			exit_msh("ft_strjoin: ", strerror(errno));
 		free(tmp2);
 	}
 	else if (args[1][0] != '.' && args[1][0] != '/')
-		tmp = ft_strjoin("./", args[1]);
+	{
+		if (!(tmp = ft_strjoin("./", args[1])))
+			exit_msh("ft_strjoin: ", strerror(errno));
+	}	
 	else
-		tmp = ft_strdup(args[1]);
+		if (!(tmp = ft_strdup(args[1])))
+			exit_msh("ft_strdup: ", strerror(errno));
 	ft_array_clear(path_home, ft_free);
 	return (tmp);
 }
