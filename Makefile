@@ -12,7 +12,6 @@ SRC_FILES =	main.c \
 			readline/readline_utils.c \
 			readline/history.c \
 			lexer/lexer.c \
-			lexer/lexer_env.c \
 			lexer/tk_utils.c \
 			lexer/tk_escape.c \
 			lexer/tk_operator.c \

@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 16:55:29 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 23:03:06 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/25 23:45:25 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void		evaluate_dollar(t_tokens *tk, t_lexer *lx)
 {
 	int		k;
 	char	*temp1;
-	char	*temp2;
+	char	**temp2;
 
 	k = lx->i + 1;
 	if (lx->line[lx->i + 1] == '?')
@@ -63,14 +63,14 @@ void		evaluate_dollar(t_tokens *tk, t_lexer *lx)
 			k++;
 		if (!(temp1 = ft_substr(lx->line, lx->i, k - lx->i)))
 			exit_msh("ft_substr: ", strerror(errno));
-		temp2 = substitution_env(temp1);
+		temp2 = get_env_value(temp1 + 1);
 		free(temp1);
 		temp1 = tk->data;
-		if (!(tk->data = ft_strjoin_gambiarra(temp1, temp2)))
+		if (!(tk->data = ft_strjoin_gambiarra(temp1, temp2[0])))
 			exit_msh("ft_strjoin: ", strerror(errno));
 		lx->i = k;
 		free(temp1);
-		free(temp2);
+		ft_array_clear(temp2, ft_free);
 	}
 }
 

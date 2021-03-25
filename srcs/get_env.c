@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 16:25:59 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 19:01:16 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 23:55:53 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,14 @@ void		store_key_and_value(char **value, char **key, char *str)
 	if (!(*value = ft_substr(str, addr - str + 1,
 	ft_strlen(str) - (addr - str))))
 		exit_msh("ft_strdup: ", strerror(errno));
+}
+
+static void	free_name_and_value(char *name, char *value)
+{
+	free(name);
+	name = NULL;
+	free(value);
+	value = NULL;
 }
 
 char		**get_env_value(char *key)
@@ -41,18 +49,18 @@ char		**get_env_value(char *key)
 		{
 			if (!(env_values = ft_split(value, ':')))
 				exit_msh("ft_split: ", strerror(errno));
-			free(name);
-			free(value);
+			free_name_and_value(name, value);
 			return (env_values);
 		}
-		free(name);
-		free(value);
+		free_name_and_value(name, value);
 		i++;
 	}
-	return (NULL);
+	env_values = ft_split(" -", '-');
+	env_values[0][0] = '\0';
+	return (env_values);
 }
 
-static void	allocate_and_atribute(char **envp)
+void		init_env(char **envp)
 {
 	int		len_arr;
 	int		i;
@@ -69,9 +77,4 @@ static void	allocate_and_atribute(char **envp)
 			exit_msh("ft_strdup: ", strerror(errno));
 		i++;
 	}
-}
-
-void		init_env(char **envp)
-{
-	allocate_and_atribute(envp);
 }
