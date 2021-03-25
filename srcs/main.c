@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 19:00:19 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 02:26:20 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ int		main(void)
 		if (!syntax_parser())
 			continue;
 		create_commands();
-		if (!find_path())
-			continue;
 		execution_commands();
 	}
 	exit_program();

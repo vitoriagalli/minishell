@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:17:05 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 20:32:47 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 02:33:21 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,27 +28,21 @@ static char	*dispatch_check_function(t_cmd *cmd)
 	return (ret);
 }
 
-bool		find_path(void)
+bool		find_path(t_cmd *cmd)
 {
-	t_cmd	*cmd;
 	char	*ret;
 
-	cmd = g_msh.cmds.head_cmd;
-	while (cmd)
+	ret = dispatch_check_function(cmd);
+	if (ret == NULL)
 	{
-		ret = dispatch_check_function(cmd);
-		if (ret == NULL)
-		{
-			free(ret);
-			if (!(cmd->cmd_name = ft_strdup("NULL")))
-				exit_msh("ft_strdup: ", strerror(errno));
-			return (false);
-		}
-		free(cmd->cmd_name);
-		if (!(cmd->cmd_name = ft_strdup(ret)))
-			exit_msh("ft_strdup: ", strerror(errno));
 		free(ret);
-		cmd = cmd->next;
+		if (!(cmd->cmd_name = ft_strdup("NULL")))
+			exit_msh("ft_strdup: ", strerror(errno));
+		return (false);
 	}
+	free(cmd->cmd_name);
+	if (!(cmd->cmd_name = ft_strdup(ret)))
+		exit_msh("ft_strdup: ", strerror(errno));
+	free(ret);
 	return (true);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_commands.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:40:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 20:33:51 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 02:28:42 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,11 +125,26 @@ static void	execute_command(t_cmd *cmd, t_exec *exec)
 		call_exec_buildin(cmd, exec);
 }
 
+void		prepare_command(t_cmd *cmd, t_exec *exec)
+{
+	int		status;
+
+	if (cmd->separator == PIPE)
+		execute_command_pipe(cmd, exec);
+	else
+		execute_command(cmd, exec);
+	if (waitpid(exec->child_pid, &status, 0) < 0)
+		exit_msh("waitpid: ", strerror(errno));
+	if (g_msh.force_ret_buildin == true)
+		g_msh.force_ret_buildin = false;
+	else if (WIFEXITED(status))
+		g_msh.last_ret_cmd = WEXITSTATUS(status);
+}
+
 void		execution_commands(void)
 {
 	t_cmd	*cmd;
 	t_exec	exec;
-	int		status;
 
 	ft_bzero(&exec, sizeof(t_exec));
 	if ((exec.save_stdin = dup(STDIN_FILENO)) < 0)
@@ -139,16 +154,8 @@ void		execution_commands(void)
 	cmd = g_msh.cmds.head_cmd;
 	while (cmd)
 	{
-		if (cmd->separator == PIPE)
-			execute_command_pipe(cmd, &exec);
-		else
-			execute_command(cmd, &exec);
-		if (waitpid(exec.child_pid, &status, 0) < 0)
-			exit_msh("waitpid: ", strerror(errno));
-		if (g_msh.force_ret_buildin == true)
-			g_msh.force_ret_buildin = false;
-		else if (WIFEXITED(status))
-			g_msh.last_ret_cmd = WEXITSTATUS(status);
+		if (find_path(cmd))
+			prepare_command(cmd, &exec);
 		cmd = cmd->next;
 	}
 	if (dup2(exec.save_stdin, 0) < 0)
