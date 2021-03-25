@@ -6,13 +6,13 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 21:00:02 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 19:14:33 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 15:04:38 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		size_token_list(t_tokens *lst)
+int			size_token_list(t_tokens *lst)
 {
 	int	i;
 
@@ -25,7 +25,7 @@ int		size_token_list(t_tokens *lst)
 	return (i);
 }
 
-void	add_end_token(t_tokens *head_tk, t_lexer *lx)
+void		add_end_token(t_tokens *head_tk, t_lexer *lx)
 {
 	t_tokens *current;
 
@@ -61,24 +61,6 @@ t_tokens	*remove_last_empty_node(t_tokens *head_tk)
 		previous->next = NULL;
 	}
 	return (head_tk);
-}
-
-int			get_char_type(char c)
-{
-	if (c == SINGLE_QUOTE)
-		return (TYPE_SINGLE_QUOTE);
-	else if (c == DOUBLE_QUOTE)
-		return (TYPE_DOUBLE_QUOTE);
-	else if (c == VERTICAL_BAR || c == SEMICOLON || c == GREAT || c == LESS)
-		return (TYPE_OPERATOR);
-	else if (c == SPACE || c == TAB || c == '\0')
-		return (TYPE_SPACE);
-	else if (c == DOLLAR)
-		return (TYPE_DOLLAR);
-	else if (c == ESCAPE)
-		return (TYPE_ESCAPE);
-	else
-		return (TYPE_GENERAL);
 }
 
 void		init_token(t_tokens *tk, t_lexer *lx)

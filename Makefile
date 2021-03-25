@@ -9,8 +9,10 @@ FT_PRINTF = -L ./ft_printf -lftprintf
 
 SRC_FILES =	main.c \
 			readline/readline.c \
+			readline/readline_utils.c \
 			readline/history.c \
 			lexer/lexer.c \
+			lexer/lexer_env.c \
 			lexer/tk_utils.c \
 			lexer/tk_escape.c \
 			lexer/tk_operator.c \
@@ -18,16 +20,20 @@ SRC_FILES =	main.c \
 			lexer/tk_quotes.c \
 			builtin/builtin.c \
 			builtin/cd.c \
+			builtin/cd_utils.c \
 			builtin/echo.c \
 			builtin/env.c \
 			builtin/exit.c \
 			builtin/export.c \
+			builtin/export_utils.c \
 			builtin/pwd.c \
 			builtin/unset.c \
 			get_env.c \
-			syntax_parser.c \
-			create_commands.c \
-			execution_commands.c \
+			parser.c \
+			create_cmds.c \
+			create_cmds_utils.c \
+			execution.c \
+			execution_utils.c \
 			error_handling.c \
 			find_path.c \
 			signal.c \

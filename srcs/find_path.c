@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:17:05 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 02:33:21 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/25 13:09:24 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ bool		find_path(t_cmd *cmd)
 			exit_msh("ft_strdup: ", strerror(errno));
 		return (false);
 	}
-	free(cmd->cmd_name);
+	ft_strdel(&cmd->cmd_name);
 	if (!(cmd->cmd_name = ft_strdup(ret)))
 		exit_msh("ft_strdup: ", strerror(errno));
-	free(ret);
+	ft_strdel(&ret);
 	return (true);
 }

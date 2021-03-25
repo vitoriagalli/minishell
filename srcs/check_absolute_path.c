@@ -6,13 +6,13 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:20:14 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 20:34:33 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 13:26:39 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	file_exists(char *filepath)
+bool		file_exists(char *filepath)
 {
 	struct stat		buffer;
 
@@ -28,23 +28,28 @@ static bool	is_directory(char *filepath)
 	return (S_ISDIR(buffer.st_mode));
 }
 
-char	*absolute_path(char *cmd)
+static char	*check_tild(char *cmd)
 {
 	char	**home_path;
 	char	*tmp;
 
-	home_path = NULL;
+	home_path = get_env_value("HOME");
+	if (!(tmp = ft_strjoin(home_path[0], cmd + 1)))
+		exit_msh("strjoin: ", strerror(errno));
+	ft_strdel(&cmd);
+	if (!(cmd = ft_strdup(tmp)))
+		exit_msh("ft_strdup: ", strerror(errno));
+	ft_strdel(&tmp);
+	ft_array_clear(home_path, ft_free);
+	return (cmd);
+}
+
+char		*absolute_path(char *cmd)
+{
+	char	*tmp;
+
 	if (cmd[0] == '~')
-	{
-		home_path = get_env_value("HOME");
-		if (!(tmp = ft_strjoin(home_path[0], cmd + 1)))
-			exit_msh("strjoin: ", strerror(errno));
-		ft_strdel(&cmd);
-		if (!(cmd = ft_strdup(tmp)))
-			exit_msh("ft_strdup: ", strerror(errno));
-		ft_strdel(&tmp);
-		ft_array_clear(home_path, ft_free);
-	}
+		cmd = check_tild(cmd);
 	if (!file_exists(cmd))
 	{
 		ft_printf("minishell: %s: command not found\n", cmd);
@@ -59,5 +64,7 @@ char	*absolute_path(char *cmd)
 		ft_strdel(&cmd);
 		return (NULL);
 	}
-	return (cmd);
+	if (!(tmp = ft_strdup(cmd)))
+		exit_msh("ft_strdup: ", strerror(errno));
+	return (tmp);
 }

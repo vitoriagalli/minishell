@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:46:30 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 20:01:06 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 15:54:10 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 static void	exit_with_arg(t_cmd *cmd)
 {
 	int ret;
-	
+
 	if (!(ret = ft_atoi(cmd->args[1])))
 		exit_msh("ft_atoi: ", strerror(errno));
 	ft_printf("exit\n");
 	if (ret >= 0 && ret <= 255)
 		exit(ret);
 	else
-		exit (ret % 256);
+		exit(ret % 256);
 }
 
-static int		too_many_args(t_cmd *cmd)
+static int	too_many_args(t_cmd *cmd)
 {
 	if (cmd->args[2] != NULL)
 	{
@@ -61,7 +61,7 @@ static void	non_numerical_arg(t_cmd *cmd)
 	}
 }
 
-void	ft_exit(t_cmd *cmd, t_exec *exec)
+void		ft_exit(t_cmd *cmd, t_exec *exec)
 {
 	if (exec->child_pid == 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 20:00:18 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 15:55:53 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 14:57:58 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	handle_escape_in_general(t_tokens *tk, t_lexer *lx)
 	tk->type = WORD;
 }
 
-void		escape_in_double_quote(t_tokens *tk, t_lexer *lx)
+void	escape_in_double_quote(t_tokens *tk, t_lexer *lx)
 {
 	if (lx->line[lx->i + 1] == ESCAPE || lx->line[lx->i + 1] == DOUBLE_QUOTE ||
 	lx->line[lx->i + 1] == DOLLAR)

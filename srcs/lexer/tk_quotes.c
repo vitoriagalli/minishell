@@ -6,13 +6,13 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 19:58:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 19:17:02 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 15:01:10 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	activate_quoted_state(t_tokens *tk, t_lexer *lx, int type_quote)
+void		activate_quoted_state(t_tokens *tk, t_lexer *lx, int type_quote)
 {
 	lx->state = type_quote;
 	lx->i++;
@@ -23,11 +23,10 @@ static void	get_from_stdin(t_lexer *lx, t_tokens *tk, char to_check)
 {
 	char *tmp;
 	char *tmp2;
-	
+
 	if (!(tmp = ft_strjoin(tk->data, "\n")))
 		exit_msh("ft_strdup: ", strerror(errno));
 	ft_strdel(&lx->line);
-	ft_printf("> ");
 	while ((read_line(false)) != 0)
 	{
 		if (!(tmp2 = ft_strjoin(g_msh.line, "\n")))
@@ -41,7 +40,6 @@ static void	get_from_stdin(t_lexer *lx, t_tokens *tk, char to_check)
 		if (lx->line[ft_strlen(lx->line) - 2] == to_check)
 			break ;
 		ft_strdel(&lx->line);
-		ft_printf("> ");
 	}
 	ft_strdel(&g_msh.line);
 	lx->line[ft_strlen(lx->line) - 1] = '\0';
@@ -49,10 +47,10 @@ static void	get_from_stdin(t_lexer *lx, t_tokens *tk, char to_check)
 	free(tmp);
 }
 
-void	quoted_state(t_tokens *tk, t_lexer *lx)
+void		quoted_state(t_tokens *tk, t_lexer *lx)
 {
 	bool end_quote;
-	
+
 	end_quote = false;
 	if (lx->line[lx->i] == SINGLE_QUOTE)
 		end_quote = true;
@@ -71,13 +69,13 @@ void	quoted_state(t_tokens *tk, t_lexer *lx)
 			exit_msh("malloc: ", strerror(errno));
 		ft_bzero(tk->data, lx->size + 1);
 		lx->i = 0;
-	}	
+	}
 }
 
-void	double_quoted_state(t_tokens *tk, t_lexer *lx)
+void		double_quoted_state(t_tokens *tk, t_lexer *lx)
 {
 	bool end_quote;
-	
+
 	end_quote = false;
 	if (lx->line[lx->i] == DOUBLE_QUOTE)
 		end_quote = true;
@@ -100,5 +98,5 @@ void	double_quoted_state(t_tokens *tk, t_lexer *lx)
 			exit_msh("malloc: ", strerror(errno));
 		ft_bzero(tk->data, lx->size + 1);
 		lx->i = 0;
-	}	
+	}
 }

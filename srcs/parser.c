@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_parser.c                                    :+:      :+:    :+:   */
+/*   parser.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -51,7 +51,7 @@ static bool	dispatch_checker_function(t_tokens *tk, int type_left)
 	return (syntax_ok);
 }
 
-bool		syntax_parser(void)
+bool		parser(void)
 {
 	t_tokens	*tk;
 	int			type_left;

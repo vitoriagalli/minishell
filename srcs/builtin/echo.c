@@ -6,13 +6,25 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:44:48 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 20:01:31 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 15:48:27 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int handle_flag_no_newline(char *args)
+static void	print_last(char *arg, int no_newline)
+{
+	if (arg && no_newline == 1)
+		ft_printf("%s", arg);
+	else if (!arg && no_newline == 1)
+		ft_printf("");
+	else if (arg && (no_newline == 0 || no_newline == 2))
+		ft_printf("%s\n", arg);
+	else if (!arg && (no_newline == 0 || no_newline == 2))
+		ft_printf("\n");
+}
+
+static int	handle_flag_no_newline(char *args)
 {
 	int i;
 
@@ -25,7 +37,7 @@ static int handle_flag_no_newline(char *args)
 	return (1);
 }
 
-void	ft_echo(t_cmd *cmd, t_exec *exec)
+void		ft_echo(t_cmd *cmd, t_exec *exec)
 {
 	int i;
 	int no_newline;
@@ -44,15 +56,8 @@ void	ft_echo(t_cmd *cmd, t_exec *exec)
 				ft_printf("%s", cmd->args[i++]);
 			else
 				ft_printf("%s ", cmd->args[i++]);
-		}	
-		if (cmd->args[i] && no_newline == 1)
-			ft_printf("%s", cmd->args[i]);
-		else if (!cmd->args[i] && no_newline == 1)
-			ft_printf("");
-		else if (cmd->args[i] && (no_newline == 0 || no_newline == 2))
-			ft_printf("%s\n", cmd->args[i]);
-		else if (!cmd->args[i] && (no_newline == 0 || no_newline == 2))
-			ft_printf("\n");
+		}
+		print_last(cmd->args[i], no_newline);
 		free_after_fork();
 		exit(EXIT_SUCCESS);
 	}

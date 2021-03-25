@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:21:08 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 20:34:25 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 13:14:23 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char	*join_path(char *env, char *path)
 	return (tmp2);
 }
 
-char	*relative_path(char *cmd)
+char		*relative_path(char *cmd)
 {
 	char	**env_path;
 	char	*tmp;
@@ -37,14 +37,13 @@ char	*relative_path(char *cmd)
 	{
 		while (env_path[i])
 		{
-			tmp = join_path(env_path[i], cmd);
+			tmp = join_path(env_path[i++], cmd);
 			if (file_exists(tmp))
 			{
 				ft_array_clear(env_path, ft_free);
 				return (tmp);
 			}
 			free(tmp);
-			i++;
 		}
 	}
 	if (env_path)

@@ -1,69 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution_commands.c                               :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/25 10:40:58 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 02:28:42 by vscabell         ###   ########.fr       */
+/*   Created: 2021/03/25 12:05:16 by romanbtt          #+#    #+#             */
+/*   Updated: 2021/03/25 12:51:32 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	exit_status(void)
-{
-	if (errno == EACCES)
-		return (126);
-	if (errno == ENOENT)
-		return (127);
-	else
-		return (EXIT_FAILURE);
-}
-
-static void	set_redirection(t_cmd *cmd)
-{
-	t_list	*tmp;
-	int		fd;
-
-	tmp = cmd->redirection;
-	while (tmp && tmp->next)
-	{
-		if (!ft_strcmp(tmp->content, "<"))
-		{
-			fd = open(tmp->next->content, O_RDONLY);
-			dup2(fd, STDIN_FILENO);
-		}
-		if (!ft_strcmp(tmp->content, ">"))
-		{
-			fd = open(tmp->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-			dup2(fd, STDOUT_FILENO);
-		}
-		if (!ft_strcmp(tmp->content, ">>"))
-		{
-			fd = open(tmp->next->content, O_WRONLY | O_CREAT | O_APPEND, 0664);
-			dup2(fd, STDOUT_FILENO);
-		}
-		if (fd < 0)
-		{
-			if (!ft_strcmp(tmp->content, "<"))
-				ft_printf("minishell: %s: %s\n", tmp->next->content,
-					"No such file or directory");
-			else
-				ft_printf("minishell: %s: %s\n", tmp->next->content,
-					strerror(errno));
-			exit(exit_status());
-		}
-		tmp = tmp->next->next;
-	}
-}
-
 static void	call_exec(t_cmd *cmd, t_exec *exec, int fd_dup)
 {
-	int i;
-
-	i = 0;
 	if ((exec->child_pid = fork()) < 0)
 		exit_msh("fork: ", strerror(errno));
 	handle_signals(FORK, exec->child_pid);
@@ -91,9 +41,6 @@ static void	call_exec(t_cmd *cmd, t_exec *exec, int fd_dup)
 
 static void	execute_command_pipe(t_cmd *cmd, t_exec *exec)
 {
-	int i;
-
-	i = 0;
 	if (exec->pipe == true)
 	{
 		if (close(exec->pipefds[1]) < 0)
@@ -111,9 +58,6 @@ static void	execute_command_pipe(t_cmd *cmd, t_exec *exec)
 
 static void	execute_command(t_cmd *cmd, t_exec *exec)
 {
-	int i;
-
-	i = 0;
 	if (exec->pipe == true)
 	{
 		if (dup2(exec->save_stdout, exec->pipefds[1]) < 0)
@@ -141,7 +85,7 @@ void		prepare_command(t_cmd *cmd, t_exec *exec)
 		g_msh.last_ret_cmd = WEXITSTATUS(status);
 }
 
-void		execution_commands(void)
+void		execution_cmds(void)
 {
 	t_cmd	*cmd;
 	t_exec	exec;

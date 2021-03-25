@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_commands.c                                  :+:      :+:    :+:   */
+/*   create_cmds.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:55:53 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 19:07:32 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 12:55:49 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	init_command(t_cmd *cmd)
+static void		init_command(t_cmd *cmd)
 {
 	int nb_tk;
 
@@ -38,30 +38,6 @@ static t_cmd	*handle_cmd_separator(t_cmd *cmd, t_tokens *tk)
 	return (cmd);
 }
 
-static t_tokens	*handle_out_append(t_cmd *cmd, t_tokens *tk)
-{
-	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">>")));
-	tk = tk->next;
-	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(tk->data)));
-	return (tk);
-}
-
-static t_tokens	*handle_out_overwrite(t_cmd *cmd, t_tokens *tk)
-{
-	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(">")));
-	tk = tk->next;
-	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(tk->data)));
-	return (tk);
-}
-
-static t_tokens	*handle_out_input(t_cmd *cmd, t_tokens *tk)
-{
-	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup("<")));
-	tk = tk->next;
-	ft_lstadd_back(&cmd->redirection, ft_lstnew(ft_strdup(tk->data)));
-	return (tk);
-}
-
 static t_tokens	*handle_redir(t_cmd *cmd, t_tokens *tk)
 {
 	if (tk->type == OUT_APPEND)
@@ -73,7 +49,7 @@ static t_tokens	*handle_redir(t_cmd *cmd, t_tokens *tk)
 	return (NULL);
 }
 
-static void	handle_word(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
+static void		handle_word(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
 	if (cmds->got_cmd_name == false)
 	{
@@ -92,19 +68,20 @@ static void	handle_word(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 	}
 }
 
-void	create_commands()
+void			create_cmds(void)
 {
-	t_tokens *tk;
-	t_cmd *cmd;
+	t_tokens	*tk;
+	t_cmd		*cmd;
 
-	if(!(g_msh.cmds.head_cmd = malloc(sizeof(t_cmd))))
+	if (!(g_msh.cmds.head_cmd = malloc(sizeof(t_cmd))))
 		exit_msh("malloc: ", strerror(errno));
 	tk = g_msh.head_tk;
 	cmd = g_msh.cmds.head_cmd;
 	init_command(cmd);
 	while (tk->next)
 	{
-		if (tk->type == OUT_APPEND || tk->type == OUT_OVERWRITE || tk->type == INPUT)
+		if (tk->type == OUT_APPEND || tk->type == OUT_OVERWRITE ||
+		tk->type == INPUT)
 			tk = handle_redir(cmd, tk);
 		else if (tk->type == PIPE || tk->type == SEPARATOR)
 			cmd = handle_cmd_separator(cmd, tk);

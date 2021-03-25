@@ -6,13 +6,31 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 20:02:49 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/24 15:55:51 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 15:02:37 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void		put_in_token_word(t_tokens *tk, t_lexer *lx)
+static int	get_char_type(char c)
+{
+	if (c == SINGLE_QUOTE)
+		return (TYPE_SINGLE_QUOTE);
+	else if (c == DOUBLE_QUOTE)
+		return (TYPE_DOUBLE_QUOTE);
+	else if (c == VERTICAL_BAR || c == SEMICOLON || c == GREAT || c == LESS)
+		return (TYPE_OPERATOR);
+	else if (c == SPACE || c == TAB || c == '\0')
+		return (TYPE_SPACE);
+	else if (c == DOLLAR)
+		return (TYPE_DOLLAR);
+	else if (c == ESCAPE)
+		return (TYPE_ESCAPE);
+	else
+		return (TYPE_GENERAL);
+}
+
+static void	put_in_token_word(t_tokens *tk, t_lexer *lx)
 {
 	if (lx->line[lx->i] == DOLLAR)
 		evaluate_dollar(tk, lx);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:03:35 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 02:26:20 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/25 12:52:15 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ int		main(void)
 	{
 		restore_terminal(false);
 		lexer();
-		if (!syntax_parser())
+		if (!parser())
 			continue;
-		create_commands();
-		execution_commands();
+		create_cmds();
+		execution_cmds();
 	}
 	exit_program();
 }
