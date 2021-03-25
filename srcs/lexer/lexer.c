@@ -3,14 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 16:55:29 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 14:43:32 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 23:03:06 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static char	*ft_strjoin_gambiarra(char *s1, char *s2)
+{
+	size_t	lens1;
+	size_t	lens2;
+	char	*str;
+
+	if (!s1 || !s2)
+		return (NULL);
+	lens1 = ft_strlen(s1);
+	lens2 = ft_strlen(s2);
+	if (!(str = ft_calloc(lens1 + lens2 + ft_strlen(g_msh.line), sizeof(char))))
+		return (NULL);
+	ft_memcpy(str, s1, lens1);
+	ft_memcpy(&str[lens1], s2, lens2);
+	str[lens1 + lens2] = '\0';
+	return (str);
+}
 
 static void	replace_exit_status(t_tokens *tk, t_lexer *lx)
 {
@@ -48,7 +66,7 @@ void		evaluate_dollar(t_tokens *tk, t_lexer *lx)
 		temp2 = substitution_env(temp1);
 		free(temp1);
 		temp1 = tk->data;
-		if (!(tk->data = ft_strjoin(temp1, temp2)))
+		if (!(tk->data = ft_strjoin_gambiarra(temp1, temp2)))
 			exit_msh("ft_strjoin: ", strerror(errno));
 		lx->i = k;
 		free(temp1);
