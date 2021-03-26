@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 16:55:29 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/26 09:22:50 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/26 11:08:14 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_strjoin_realloc(char *s1, char *s2)
 	if (!(str = ft_calloc(lens1 + lens2 + ft_strlen(g_msh.line), sizeof(char))))
 		return (NULL);
 	ft_memcpy(str, s1, lens1);
-	free(s1);
+	//free(s1);
 	ft_memcpy(&str[lens1], s2, lens2);
 	str[lens1 + lens2] = '\0';
 	return (str);

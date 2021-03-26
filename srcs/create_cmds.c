@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/24 11:55:53 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 12:55:49 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/26 10:58:37 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,30 @@ static t_tokens	*handle_redir(t_cmd *cmd, t_tokens *tk)
 
 static void		handle_word(t_cmd *cmd, t_tokens *tk, t_cmds *cmds)
 {
+	char *tmp; //LAST CHANGE
+	
+	tmp = NULL;
 	if (cmds->got_cmd_name == false)
 	{
-		if (!(cmd->cmd_name = ft_strdup(tk->data)))
+		tmp = ft_strtrim(tk->data, " "); //LAST CHANGE
+		if (!(cmd->cmd_name = ft_strdup(tmp))) //LAST CHANGE
 			exit_msh("ft_strdup: ", strerror(errno));
 		if (!(cmd->args[cmds->curr_arg] = ft_strdup(cmd->cmd_name)))
 			exit_msh("ft_strdup: ", strerror(errno));
 		cmds->curr_arg++;
 		cmds->got_cmd_name = true;
+		free(tmp); //LAST CHANGE
 	}
 	else
 	{
-		if (!(cmd->args[cmds->curr_arg] = ft_strdup(tk->data)))
+		if (ft_strncmp(cmd->cmd_name, "echo", 5))
+			tmp = ft_strtrim(tk->data, " ");
+		else
+			tmp = ft_strdup(tk->data);
+		if (!(cmd->args[cmds->curr_arg] = ft_strdup(tmp)))
 			exit_msh("ft_strdup: ", strerror(errno));
 		cmds->curr_arg++;
+		free(tmp);
 	}
 }
 

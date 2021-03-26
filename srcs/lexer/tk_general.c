@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 20:02:49 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/26 09:22:30 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/26 11:10:17 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	replace_tild_lexer(t_tokens *tk, t_lexer *lx)
 {
 	char **path_home;
+	char *tmp;
 	
 	if ((lx->line[lx->i + 1] == ' ' || lx->line[lx->i + 1] == 0) &&
 	(lx->i == 0 || lx->line[lx->i - 1] == ' '))
@@ -22,7 +23,10 @@ static void	replace_tild_lexer(t_tokens *tk, t_lexer *lx)
 		path_home = get_env_value("HOME");
 		if (!path_home[0])
 			return ;
-		tk->data = ft_strjoin_realloc(tk->data, path_home[0]);
+		tmp = ft_strjoin_realloc(tk->data, path_home[0]);
+		ft_strdel(&tk->data);
+		tk->data = ft_strdup(tmp);
+		free(tmp);
 		ft_array_clear(path_home, ft_free);
 	}
 	else
@@ -69,7 +73,11 @@ t_tokens	*general_state(t_tokens *tk, t_lexer *lx)
 	else if (lx->type == TYPE_OPERATOR)
 		tk = put_in_token_operator(tk, lx);
 	else if (lx->type == TYPE_SPACE)
+	{
+		if (lx->i && lx->line[lx->i - 1] != ' ')
+			tk->data[ft_strlen(tk->data)] = ' ';  // LAST CHANGE
 		tk = create_new_token(tk, lx);
+	}	
 	else if (lx->type == TYPE_ESCAPE)
 		handle_escape_in_general(tk, lx);
 	else
