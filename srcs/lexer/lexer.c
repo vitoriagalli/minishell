@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 16:55:29 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 21:17:06 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 21:26:32 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void		evaluate_dollar(t_tokens *tk, t_lexer *lx)
 	k = lx->i + 1;
 	if (lx->line[lx->i + 1] == '?')
 		replace_exit_status(tk, lx);
+	else if (ft_isdigit(lx->line[lx->i + 1]))
+		lx->i = k + 1;
 	else
 	{
 		while (lx->line[k] != DOLLAR && lx->line[k] != SPACE &&
