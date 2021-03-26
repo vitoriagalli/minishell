@@ -6,13 +6,13 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 16:55:29 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 21:26:32 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/25 22:06:47 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*ft_strjoin_gambiarra(char *s1, char *s2)
+static char	*ft_strjoin_realloc(char *s1, char *s2)
 {
 	size_t	lens1;
 	size_t	lens2;
@@ -68,7 +68,7 @@ void		evaluate_dollar(t_tokens *tk, t_lexer *lx)
 		temp2 = get_env_value(temp1 + 1);
 		free(temp1);
 		temp1 = tk->data;
-		if (!(tk->data = ft_strjoin_gambiarra(temp1, temp2[0])))
+		if (!(tk->data = ft_strjoin_realloc(temp1, temp2[0])))
 			exit_msh("ft_strjoin: ", strerror(errno));
 		lx->i = k;
 		free(temp1);
