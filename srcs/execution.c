@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 21:21:34 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/26 13:51:59 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 static void	call_exec(t_cmd *cmd, t_exec *exec, int fd_dup)
 {
+	char buf[1024];
+
+	ft_bzero(&buf, 1024);
 	if ((exec->child_pid = fork()) < 0)
 		exit_msh("fork: ", strerror(errno));
 	handle_signals(FORK, exec->child_pid);
@@ -32,6 +35,9 @@ static void	call_exec(t_cmd *cmd, t_exec *exec, int fd_dup)
 			call_exec_buildin(cmd, exec);
 		else
 			execve(cmd->cmd_name, cmd->args, g_msh.env);
+			//read(0, buf, 1024);
+			
+			
 		ft_printf("minishell: %s: %s\n", cmd->cmd_name, strerror(errno));
 		if (dup2(exec->save_stdout, STDOUT_FILENO) < 0)
 			exit_msh("dup2: ", strerror(errno));
@@ -53,7 +59,11 @@ static void	execute_command_pipe(t_cmd *cmd, t_exec *exec)
 	exec->pipe = true;
 	call_exec(cmd, exec, 1);
 	if (is_buildin_cmd(cmd->cmd_name))
+	{
+		if (dup2(exec->pipefds[1], 1) < 0)
+			exit_msh("dup2: ", strerror(errno));
 		call_exec_buildin(cmd, exec);
+	}	
 }
 
 static void	execute_command(t_cmd *cmd, t_exec *exec)
@@ -66,7 +76,11 @@ static void	execute_command(t_cmd *cmd, t_exec *exec)
 	exec->pipe = false;
 	call_exec(cmd, exec, 0);
 	if (is_buildin_cmd(cmd->cmd_name))
+	{
+		if (cmd->redirection)
+			set_redirection(cmd);
 		call_exec_buildin(cmd, exec);
+	}	
 }
 
 void		prepare_command(t_cmd *cmd, t_exec *exec)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:44:02 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/26 01:48:44 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/26 13:17:19 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,6 @@ void		ft_cd(t_cmd *cmd, t_exec *exec)
 		free_after_fork();
 		exit(EXIT_SUCCESS);
 	}
-	if (cmd->separator == 0 || cmd->separator == SEPARATOR)
+	//if (cmd->separator == 0 || cmd->separator == SEPARATOR || cmd-)
 		exec_cd(cmd);
 }
