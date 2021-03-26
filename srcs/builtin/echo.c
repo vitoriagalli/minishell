@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:44:48 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/26 10:21:03 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:29:44 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ void		ft_echo(t_cmd *cmd, t_exec *exec)
 	int no_newline;
 
 	no_newline = 2;
-	if (exec->child_pid == 0)
-	{
+	//if (exec->child_pid == 0)
+	//{
 		i = 1;
 		while (cmd->args[i] && cmd->args[i][0] == '-')
 			no_newline = handle_flag_no_newline(cmd->args[i++]);
@@ -60,7 +60,7 @@ void		ft_echo(t_cmd *cmd, t_exec *exec)
 			//	ft_printf("%s", cmd->args[i++]); //LAST CHANGE
 		}
 		print_last(cmd->args[i], no_newline);
-		free_after_fork();
-		exit(EXIT_SUCCESS);
-	}
+		//free_after_fork();
+		//exit(EXIT_SUCCESS);
+	//}
 }

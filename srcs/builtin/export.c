@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:45:23 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 22:00:55 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:51:40 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,11 +100,11 @@ void			ft_export(t_cmd *cmd, t_exec *exec)
 	i = 1;
 	g_msh.force_ret_buildin = true;
 	g_msh.last_ret_cmd = EXIT_SUCCESS;
-	if (exec->child_pid == 0)
-	{
-		free_after_fork();
-		exit(g_msh.last_ret_cmd);
-	}
+	//if (exec->child_pid == 0)
+	//{
+	//	free_after_fork();
+	//	exit(g_msh.last_ret_cmd);
+	//}
 	if (!cmd->args[i])
 		return (print_env_declare_mode());
 	while (cmd->args[i])

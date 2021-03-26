@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:44:23 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 15:59:28 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:11:24 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	ft_pwd(t_cmd *cmd, t_exec *exec)
 	char buf[PATH_MAX];
 
 	(void)cmd;
-	if (exec->child_pid == 0)
-	{
+	//if (exec->child_pid == 0)
+	//{
 		if ((getcwd(buf, PATH_MAX)) == NULL)
 		{
 			ft_printf("minishell: pwd: %s\n", strerror(errno));
@@ -27,5 +27,5 @@ void	ft_pwd(t_cmd *cmd, t_exec *exec)
 		ft_putendl_fd(buf, STDOUT_FILENO);
 		free_after_fork();
 		exit(EXIT_SUCCESS);
-	}
+	//}
 }
