@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 16:55:29 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 23:45:25 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/25 21:17:06 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void		evaluate_dollar(t_tokens *tk, t_lexer *lx)
 	{
 		while (lx->line[k] != DOLLAR && lx->line[k] != SPACE &&
 		lx->line[k] != '\0' && lx->line[k] != ESCAPE && lx->line[k] != '/' &&
-		lx->line[k] != DOUBLE_QUOTE && lx->line[k] != ESCAPE &&
+		lx->line[k] != DOUBLE_QUOTE && lx->line[k] != '=' &&
 		lx->line[k] != SEMICOLON && lx->line[k] != SINGLE_QUOTE)
 			k++;
 		if (!(temp1 = ft_substr(lx->line, lx->i, k - lx->i)))
