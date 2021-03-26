@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 21:55:07 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/26 09:21:25 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,19 @@
 # define DOWN 'B'
 
 # define CHAR_GENERAL 1
-# define SINGLE_QUOTE 39
-# define DOUBLE_QUOTE 34
-# define ESCAPE 92
-# define VERTICAL_BAR 124
-# define SPACE 32
-# define SEMICOLON 59
-# define TAB 9
-# define NEW_LINE 10
-# define GREAT 62
-# define LESS 60
-# define DOLLAR 36
+# define SINGLE_QUOTE '\''
+# define DOUBLE_QUOTE '"'
+# define ESCAPE '\\'
+# define VERTICAL_BAR '|'
+# define SPACE ' '
+# define SEMICOLON ';'
+# define TAB '	'
+# define NEW_LINE '\n'
+# define GREAT '>'
+# define LESS '<'
+# define DOLLAR '$'
 # define EOT 4
+# define TILD '~'
 
 # define WORD 100
 # define PIPE 200
@@ -274,6 +275,7 @@ void					history_down(int size);
 
 void					lexer();
 void					evaluate_dollar(t_tokens *tk, t_lexer *lx);
+char					*ft_strjoin_realloc(char *s1, char *s2);
 
 /*
 ** lexer_env.c

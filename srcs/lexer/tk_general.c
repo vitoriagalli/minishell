@@ -6,11 +6,29 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 20:02:49 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 15:02:37 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/26 09:22:30 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	replace_tild_lexer(t_tokens *tk, t_lexer *lx)
+{
+	char **path_home;
+	
+	if ((lx->line[lx->i + 1] == ' ' || lx->line[lx->i + 1] == 0) &&
+	(lx->i == 0 || lx->line[lx->i - 1] == ' '))
+	{
+		path_home = get_env_value("HOME");
+		if (!path_home[0])
+			return ;
+		tk->data = ft_strjoin_realloc(tk->data, path_home[0]);
+		ft_array_clear(path_home, ft_free);
+	}
+	else
+		tk->data[ft_strlen(tk->data)] = lx->line[lx->i];
+	lx->i++;
+}
 
 static int	get_char_type(char c)
 {
@@ -34,6 +52,8 @@ static void	put_in_token_word(t_tokens *tk, t_lexer *lx)
 {
 	if (lx->line[lx->i] == DOLLAR)
 		evaluate_dollar(tk, lx);
+	else if (lx->line[lx->i] == TILD)
+		replace_tild_lexer(tk, lx);
 	else
 		tk->data[ft_strlen(tk->data)] = lx->line[lx->i++];
 	tk->type = WORD;
