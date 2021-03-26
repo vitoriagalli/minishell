@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:44:02 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 15:43:06 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/26 01:48:44 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,31 +62,40 @@ static void	chdir_fail(char *arg, char *tmp)
 	g_msh.last_ret_cmd = 1;
 }
 
+void		exec_cd(t_cmd *cmd)
+{
+	char	**ptr;
+	char	*tmp;
+	char	oldpwd[PATH_MAX];
+
+	tmp = check_replace_path(cmd->args);
+	getcwd(oldpwd, PATH_MAX);
+	if (!cmd->args[1])
+	{
+		ptr = get_env_value("HOME");
+		if ((chdir(ptr[0])) < 0)
+			chdir_fail(ptr[0], tmp);
+		ft_array_clear(ptr, ft_free);
+	}
+	else if (cmd->args[1] && cmd->args[2])
+	{
+		ft_printf("minishell: cd: too many arguments\n");
+		g_msh.force_ret_buildin = true;
+		g_msh.last_ret_cmd = 1;
+	}
+	else if ((chdir(tmp)) < 0)
+		chdir_fail(cmd->args[1], tmp);
+	update_env(oldpwd);
+	free(tmp);
+}
+
 void		ft_cd(t_cmd *cmd, t_exec *exec)
 {
-	char *tmp;
-	char oldpwd[PATH_MAX];
-
 	if (exec->child_pid == 0)
 	{
 		free_after_fork();
 		exit(EXIT_SUCCESS);
 	}
 	if (cmd->separator == 0 || cmd->separator == SEPARATOR)
-	{
-		if (!cmd->args[1])
-			return ;
-		tmp = check_replace_path(cmd->args);
-		getcwd(oldpwd, PATH_MAX);
-		if (cmd->args[2])
-		{
-			ft_printf("minishell: cd: too many arguments\n");
-			g_msh.force_ret_buildin = true;
-			g_msh.last_ret_cmd = 1;
-		}
-		else if ((chdir(tmp)) < 0)
-			chdir_fail(cmd->args[1], tmp);
-		update_env(oldpwd);
-		free(tmp);
-	}
+		exec_cd(cmd);
 }
