@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 20:02:49 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/26 11:10:17 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/26 11:44:47 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,9 @@ t_tokens	*general_state(t_tokens *tk, t_lexer *lx)
 		tk = put_in_token_operator(tk, lx);
 	else if (lx->type == TYPE_SPACE)
 	{
-		if (lx->i && lx->line[lx->i - 1] != ' ')
+		if (lx->i && lx->line[lx->i - 1] != ' ' && lx->line[lx->i - 1] != '|'
+		&& lx->line[lx->i - 1] != ';' && lx->line[lx->i - 1] != '<'
+		&& lx->line[lx->i - 1] != '>')
 			tk->data[ft_strlen(tk->data)] = ' ';  // LAST CHANGE
 		tk = create_new_token(tk, lx);
 	}	
