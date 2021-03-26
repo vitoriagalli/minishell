@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:46:30 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/25 15:54:10 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/26 09:38:27 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ static void	exit_with_arg(t_cmd *cmd)
 {
 	int ret;
 
-	if (!(ret = ft_atoi(cmd->args[1])))
-		exit_msh("ft_atoi: ", strerror(errno));
+	ret = ft_atoi(cmd->args[1]);
 	ft_printf("exit\n");
 	if (ret >= 0 && ret <= 255)
 		exit(ret);
@@ -29,7 +28,7 @@ static int	too_many_args(t_cmd *cmd)
 {
 	if (cmd->args[2] != NULL)
 	{
-		ft_printf("minishell: exit: too many argument\n");
+		ft_printf("exit\nminishell: exit: too many arguments\n");
 		g_msh.force_ret_buildin = true;
 		g_msh.last_ret_cmd = 1;
 		return (1);
@@ -45,7 +44,7 @@ static void	non_numerical_arg(t_cmd *cmd)
 	if ((cmd->args[1][0] == '-' && !ft_isdigit(cmd->args[1][1])) ||
 	(cmd->args[1][0] == '+' && !ft_isdigit(cmd->args[1][1])))
 	{
-		ft_printf("minishell: exit: %s: numeric argument required\n",
+		ft_printf("exit\nminishell: exit: %s: numeric argument required\n",
 		cmd->args[1]);
 		exit(2);
 	}
@@ -54,7 +53,7 @@ static void	non_numerical_arg(t_cmd *cmd)
 		if (!ft_isdigit(cmd->args[1][i++]) &&
 		(cmd->args[1][0] != '-' && cmd->args[1][0] != '+'))
 		{
-			ft_printf("minishell: exit: %s: numeric argument required\n",
+			ft_printf("exit\nminishell: exit: %s: numeric argument required\n",
 			cmd->args[1]);
 			exit(2);
 		}
