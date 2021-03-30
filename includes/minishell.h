@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/30 14:24:55 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/30 22:45:39 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,12 +133,11 @@ typedef struct			s_history
 	struct s_history	*prev;
 }						t_history;
 
-typedef struct 			s_stream
+typedef struct			s_stream
 {
 	char				*line;
 	int					exit_status;
 }						t_stream;
-
 
 typedef struct			s_msh
 {
@@ -194,7 +193,6 @@ void					exit_program(t_msh *msh);
 void					ft_cmdclear(t_cmd **lst, void (*del)(void*));
 void					ft_tknclear(t_tokens **lst, void (*del)(void*));
 void					free_history(t_msh *msh);
-//void					free_after_fork();
 
 /*
 ** find_path.c
@@ -247,8 +245,10 @@ void					create_cmds(t_msh *msh);
 ** create_cmds_utils.c
 */
 
-t_tokens				*handle_out_append(t_msh *msh, t_cmd *cmd, t_tokens *tk);
-t_tokens				*handle_out_overwrite(t_msh *msh, t_cmd *cmd, t_tokens *tk);
+t_tokens				*handle_out_append(t_msh *msh, t_cmd *cmd,
+							t_tokens *tk);
+t_tokens				*handle_out_overwrite(t_msh *msh, t_cmd *cmd,
+							t_tokens *tk);
 t_tokens				*handle_out_input(t_msh *msh, t_cmd *cmd, t_tokens *tk);
 void					del_last_empty_node(t_msh *msh);
 
@@ -307,13 +307,15 @@ t_tokens				*general_state(t_msh *msh, t_tokens *tk, t_lexer *lx);
 ** tk_operator.c
 */
 
-t_tokens				*put_in_token_operator(t_msh *msh, t_tokens *tk, t_lexer *lx);
+t_tokens				*put_in_token_operator(t_msh *msh, t_tokens *tk,
+							t_lexer *lx);
 
 /*
 ** tk_quotes.c
 */
 
-void					double_quoted_state(t_msh *msh, t_tokens *tk, t_lexer *lx);
+void					double_quoted_state(t_msh *msh, t_tokens *tk,
+							t_lexer *lx);
 void					quoted_state(t_msh *msh, t_tokens *tk, t_lexer *lx);
 void					activate_quoted_state(t_tokens *tk, t_lexer *lx,
 							int type_quote);
@@ -322,9 +324,11 @@ void					activate_quoted_state(t_tokens *tk, t_lexer *lx,
 ** tk_utils.c
 */
 
-t_tokens				*create_new_token(t_msh *msh, t_tokens *tk, t_lexer *lx);
+t_tokens				*create_new_token(t_msh *msh, t_tokens *tk,
+							t_lexer *lx);
 t_tokens				*remove_last_empty_node(t_tokens *head_tk);
-void					add_end_token(t_msh *msh, t_tokens *head_tk, t_lexer *lx);
+void					add_end_token(t_msh *msh, t_tokens *head_tk,
+							t_lexer *lx);
 int						size_token_list(t_tokens *lst);
 void					init_token(t_msh *msh, t_tokens *tk, t_lexer *lx);
 
@@ -366,8 +370,10 @@ void					ft_exit(t_msh *msh, t_cmd *cmd);
 */
 
 void					ft_export(t_msh *msh, t_cmd *cmd);
-char					**reallocate_array(t_msh *msh, char **buffer, char *new_string);
-char					**duplicate_array(t_msh *msh, char **buffer, int len_arr);
+char					**reallocate_array(t_msh *msh, char **buffer,
+							char *new_string);
+char					**duplicate_array(t_msh *msh, char **buffer,
+							int len_arr);
 
 /*
 ** pwd.c
