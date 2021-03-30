@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/30 15:44:57 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/31 00:22:20 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,15 +97,13 @@ void	exec_commands_loop(t_msh *msh, t_exec *exec)
 			{
 				if ((exec->fdin = dup(exec->save_stdin)) < 0)
 					exit_msh(msh, "dup: ", strerror(errno));
+				while (cmd && cmd->separator == PIPE)
+					cmd = cmd->next;
 			}
 			else
 			{
-				if (set_output(msh, cmd, exec) == -1)
-				{
-					cmd = cmd->next;
-					continue ;
-				}
-				call_command(msh, cmd, exec);
+				if (set_output(msh, cmd, exec) >= 0)
+					call_command(msh, cmd, exec);
 			}
 		}
 		cmd = cmd->next;
