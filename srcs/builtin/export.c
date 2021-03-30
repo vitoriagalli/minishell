@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/04 09:45:23 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/30 16:12:03 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/30 22:37:51 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@ static bool		export_valid_chars(char *str)
 {
 	int	i;
 
-	i = 0;
-	if (ft_isdigit(str[i]) || str[0] == '=')
+	if (ft_isdigit(str[0]) || str[0] == '=')
 		return (false);
+	i = 0;
 	while (str[i])
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '_' && str[i] != '=')
+		if (str[i] == '=')
+			break ;
+		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (false);
 		i++;
 	}
