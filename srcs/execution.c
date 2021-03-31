@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/31 16:19:19 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/31 11:00:47 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		set_input(t_msh *msh, t_cmd *cmd, t_exec *exec)
 	static bool	comes_from_pipe;
 
 	if (cmd->red_in)
-		if ((exec->fdin = set_input_red(cmd)) < 0)
+		if ((exec->fdin = set_input_red(msh, cmd, exec)) < 0)
 			return (-1);
 	if (comes_from_pipe == true || cmd->red_in)
 	{
@@ -45,7 +45,7 @@ int		set_output(t_msh *msh, t_cmd *cmd, t_exec *exec)
 	{
 		if (cmd->red_out)
 		{
-			if ((exec->fdout = set_output_red(cmd)) < 0)
+			if ((exec->fdout = set_output_red(msh, cmd, exec)) < 0)
 				return (-1);
 		}
 		else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/30 22:45:39 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/31 11:00:33 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,8 +226,8 @@ int						exit_status(void);
 ** execution.c
 */
 
-int						set_input_red(t_cmd *cmd);
-int						set_output_red(t_cmd *cmd);
+int						set_input_red(t_msh *msh, t_cmd *cmd, t_exec *exec);
+int						set_output_red(t_msh *msh, t_cmd *cmd, t_exec *exec);
 
 /*
 ** error_handling.c
