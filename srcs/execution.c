@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/31 12:08:36 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/31 12:29:59 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int		set_output(t_msh *msh, t_cmd *cmd, t_exec *exec)
 		if ((exec->fdout = set_output_red(msh, cmd, exec)) < 0)
 			return (-1);
 	}
-	if (!cmd->separator && !cmd->red_out)
+	if (cmd->separator != PIPE && !cmd->red_out)
 	{
 		if (dup2(exec->save_stdout, 1) < 0)
 			exit_msh(msh, "dup2: ", strerror(errno));
