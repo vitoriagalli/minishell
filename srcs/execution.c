@@ -6,7 +6,7 @@
 /*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/31 11:00:47 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/31 12:08:36 by romanbtt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,23 @@ int		set_output(t_msh *msh, t_cmd *cmd, t_exec *exec)
 		exec->fdout = exec->pipefds[1];
 		exec->fdin = exec->pipefds[0];
 	}
+	if (cmd->red_out)
+	{
+		if ((exec->fdout = set_output_red(msh, cmd, exec)) < 0)
+			return (-1);
+	}
+	if (!cmd->separator && !cmd->red_out)
+	{
+		if (dup2(exec->save_stdout, 1) < 0)
+			exit_msh(msh, "dup2: ", strerror(errno));
+	}
 	else
 	{
-		if (cmd->red_out)
-		{
-			if ((exec->fdout = set_output_red(msh, cmd, exec)) < 0)
-				return (-1);
-		}
-		else
-		{
-			if ((exec->fdout = dup(exec->save_stdout)) < 0)
-				exit_msh(msh, "dup: ", strerror(errno));
-		}
+		if (dup2(exec->fdout, 1) < 0)
+			exit_msh(msh, "dup2: ", strerror(errno));
+		if (close(exec->fdout) < 0)
+			exit_msh(msh, "close: ", strerror(errno));
 	}
-	if (dup2(exec->fdout, 1) < 0)
-		exit_msh(msh, "dup2: ", strerror(errno));
-	if (close(exec->fdout) < 0)
-		exit_msh(msh, "close: ", strerror(errno));
 	return (0);
 }
 
