@@ -6,7 +6,7 @@
 /*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 12:05:16 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/31 00:22:20 by vscabell         ###   ########.fr       */
+/*   Updated: 2021/03/31 16:19:19 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,20 +91,18 @@ void	exec_commands_loop(t_msh *msh, t_exec *exec)
 	cmd = msh->cmds.head_cmd;
 	while (cmd)
 	{
-		if (find_path(msh, cmd, exec))
+		if (set_input(msh, cmd, exec) < 0)
 		{
-			if (set_input(msh, cmd, exec) < 0)
-			{
-				if ((exec->fdin = dup(exec->save_stdin)) < 0)
-					exit_msh(msh, "dup: ", strerror(errno));
-				while (cmd && cmd->separator == PIPE)
-					cmd = cmd->next;
-			}
-			else
-			{
-				if (set_output(msh, cmd, exec) >= 0)
+			if ((exec->fdin = dup(exec->save_stdin)) < 0)
+				exit_msh(msh, "dup: ", strerror(errno));
+			while (cmd && cmd->separator == PIPE)
+				cmd = cmd->next;
+		}
+		else
+		{
+			if (set_output(msh, cmd, exec) >= 0)
+				if (cmd->cmd_name && find_path(msh, cmd, exec))
 					call_command(msh, cmd, exec);
-			}
 		}
 		cmd = cmd->next;
 	}
