@@ -1,7 +1,7 @@
 NAME =		minishell
 
 CC =		clang
-CFLAGS =	-Wall -Wextra -Werror -g
+CFLAGS =	-Wall -Wextra -Werror
 
 INCLUDES =	-I ./includes -I ./libft/includes -I ./ft_printf/includes
 LIBFT = -L ./libft -lft

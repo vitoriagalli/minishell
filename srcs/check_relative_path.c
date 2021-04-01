@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_relative_path.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romanbtt <marvin@student.42sp.org.br>      +#+  +:+       +#+        */
+/*   By: vscabell <vscabell@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/24 16:21:08 by romanbtt          #+#    #+#             */
-/*   Updated: 2021/03/30 15:48:21 by romanbtt         ###   ########.fr       */
+/*   Updated: 2021/03/30 22:52:13 by vscabell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
